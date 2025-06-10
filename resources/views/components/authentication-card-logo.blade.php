@@ -1,6 +1,11 @@
 <a href="/">
-    <svg class="size-16" viewbox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M11.395 44.428C4.557 40.198 0 32.632 0 24 0 10.745 10.745 0 24 0a23.891 23.891 0 0113.997 4.502c-.2 17.907-11.097 33.245-26.602 39.926z" fill="#6875F5"/>
-        <path d="M14.134 45.885A23.914 23.914 0 0024 48c13.255 0 24-10.745 24-24 0-3.516-.756-6.856-2.115-9.866-4.659 15.143-16.608 27.092-31.75 31.751z" fill="#6875F5"/>
+    <svg xmlns="http://www.w3.org/2000/svg" width="102" height="102" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+        class="icon icon-tabler icons-tabler-outline icon-tabler-photo">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M15 8h.01" />
+        <path d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12z" />
+        <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" />
+        <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" />
     </svg>
 </a>

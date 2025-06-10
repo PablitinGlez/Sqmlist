@@ -12,6 +12,29 @@
             </div>
         @endsession
 
+        @session('error')
+            <div class="mb-4 font-medium text-sm text-red-600">
+                {{ $value }}
+            </div>
+        @endsession
+
+        {{-- Botón de Google --}}
+        <div class="mb-6">
+            <x-google-button>
+                Iniciar sesión con Google
+            </x-google-button>
+        </div>
+
+        {{-- Separador --}}
+        <div class="relative mb-6">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-center text-sm">
+                <span class="px-2 bg-white text-gray-500">O continúa con</span>
+            </div>
+        </div>
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -42,6 +65,13 @@
                 <x-button class="ms-4">
                     {{ __('Log in') }}
                 </x-button>
+            </div>
+
+            <div class="text-center mt-6">
+                <span class="text-sm text-gray-600">{{ __("¿No tienes cuenta?") }}</span>
+                <a class="underline text-sm text-indigo-600 hover:text-indigo-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-1" href="{{ route('register') }}">
+                    {{ __('Regístrate aquí') }}
+                </a>
             </div>
         </form>
     </x-authentication-card>
