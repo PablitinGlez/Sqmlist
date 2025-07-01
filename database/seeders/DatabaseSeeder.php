@@ -12,11 +12,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RoleSeeder::class,      // Primero los roles y permisos
-            UserSeeder::class,      // Luego los usuarios
-            CategorySeeder::class,  // Después las categorías
-            PropertyTypeSeeder::class, // ¡Y finalmente los tipos de propiedad!
-            // Aquí puedes añadir llamadas a otros seeders si los tienes
+            RoleSeeder::class,      
+            UserSeeder::class,      
+            CategorySeeder::class,  
+            PropertyTypeSeeder::class, 
+           
         ]);
     }
 }

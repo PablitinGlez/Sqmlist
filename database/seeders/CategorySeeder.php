@@ -13,30 +13,30 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        // Categoría Residencial (tono azul pastel)
+       
         Category::firstOrCreate(
             ['name' => 'Residencial'],
             [
                 'description' => 'Propiedades destinadas a vivienda, como casas, apartamentos, y condominios.',
-                'color' => '#A7C7E7', // Azul cielo suave
+                'color' => '#A7C7E7', 
             ]
         );
 
-        // Categoría Comercial (tono verde pastel)
+        
         Category::firstOrCreate(
             ['name' => 'Comercial'],
             [
                 'description' => 'Propiedades para negocios y empresas, incluyendo locales, oficinas y centros comerciales.',
-                'color' => '#B3E0B3', // Verde menta suave
+                'color' => '#B3E0B3', 
             ]
         );
 
-        // Categoría Industrial (tono naranja/melocotón pastel)
+        
         Category::firstOrCreate(
             ['name' => 'Industrial'],
             [
                 'description' => 'Propiedades para actividades industriales, como naves, almacenes y fábricas.',
-                'color' => '#FFDAB9', // Melocotón suave
+                'color' => '#FFDAB9', 
             ]
         );
 
