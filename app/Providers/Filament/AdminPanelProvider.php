@@ -2,8 +2,8 @@
 
 namespace App\Providers\Filament;
 
-use App\Http\Middleware\AdminMiddleware; // Asegúrate de importar tu AdminMiddleware
-use Filament\Http\Middleware\Authenticate; // Lo necesitamos para el authMiddleware si lo usamos, pero no en el principal
+use App\Http\Middleware\AdminMiddleware; 
+use Filament\Http\Middleware\Authenticate; 
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -27,9 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            // **IMPORTANTE: NO INCLUIR ->login() aquí si quieres que Filament NO maneje su login**
-            // Esto significa que los administradores se loguearán vía Jetstream (/login)
-            // y luego accederán a /admin.
+            
             ->brandName('Inmobiliaria Admin')
             ->colors([
                 'primary' => Color::Amber,
@@ -54,14 +52,10 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
 
-                // Si NO usas ->login(), entonces Authenticate::class (de Filament) NO debe ir aquí.
-                // Tu RedirectGuestFromAdmin (global) ya se encargará de la redirección inicial.
-                // Aquí, SOLO necesitas asegurarte de que el usuario que llegue sea un admin.
-                // AdminMiddleware::class se encargará de esto si RedirectGuestFromAdmin lo dejó pasar.
-                AdminMiddleware::class, // Tu middleware para verificar el rol dentro del panel.
+                
+                AdminMiddleware::class, 
             ])
-            // **IMPORTANTE: Remover completamente authMiddleware o dejarlo vacío**
-            // Si ->login() no está, este array no tiene un propósito de autenticación.
+            
             ->authMiddleware([])
             ->authGuard('web')
             ->authPasswordBroker('users');
