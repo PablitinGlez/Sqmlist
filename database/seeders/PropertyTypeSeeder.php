@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\PropertyType; // Importa tu modelo PropertyType
-use App\Models\Category;     // Importa tu modelo Category para relacionarlos
+use App\Models\PropertyType; 
+use App\Models\Category;     
 
 class PropertyTypeSeeder extends Seeder
 {
@@ -14,18 +14,18 @@ class PropertyTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        // Obtener las categorías existentes (asumimos que CategorySeeder ya se ejecutó)
+       
         $residencialCategory = Category::where('name', 'Residencial')->first();
         $comercialCategory = Category::where('name', 'Comercial')->first();
         $industrialCategory = Category::where('name', 'Industrial')->first();
 
         if (!$residencialCategory || !$comercialCategory || !$industrialCategory) {
             $this->command->error('¡Error! Las categorías Residencial, Comercial o Industrial no existen. Asegúrate de ejecutar CategorySeeder primero.');
-            return; // Detener la ejecución si las categorías no están presentes
+            return; 
         }
 
         $propertyTypes = [
-            // Tipos para categoría Residencial
+           
             [
                 'name' => 'Departamento',
                 'description' => 'Unidad de vivienda en un edificio de apartamentos.',
@@ -102,7 +102,7 @@ class PropertyTypeSeeder extends Seeder
                 ['name' => $typeData['name'], 'category_id' => $typeData['category_id']],
                 [
                     'description' => $typeData['description'],
-                    'is_active' => true, // Por defecto, activos al crearse
+                    'is_active' => true, 
                 ]
             );
             $this->command->info('Tipo de propiedad "' . $typeData['name'] . '" creado/actualizado.');
