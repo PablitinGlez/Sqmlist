@@ -89,7 +89,7 @@
         <!-- Línea divisoria -->
         <hr class="my-8 border-gray-200">
 
-        <!-- Copyright -->
+       
         <div class="text-center">
             <p class="text-gray-500 text-sm">
                 Copyright © {{ date('Y') }}. Logoipsum. All rights reserved.

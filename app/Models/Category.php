@@ -1,49 +1,55 @@
 <?php
-// app/Models/Category.php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-        'description',
-    ];
+    protected $fillable = ['name', 'description', 'color'];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * Scope para buscar por nombre
-     */
+    public function propertyTypes(): HasMany
+    {
+        return $this->hasMany(PropertyType::class);
+    }
+
+    public function activePropertyTypes(): HasMany
+    {
+        return $this->propertyTypes()->where('is_active', true);
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->where('name', 'like', "%{$search}%")
             ->orWhere('description', 'like', "%{$search}%");
     }
 
-    /**
-     * Accessor para el nombre con primera letra mayúscula
-     */
-    public function getFormattedNameAttribute()
+    public function getFormattedNameAttribute(): string
     {
         return ucfirst($this->name);
+    }
+
+    public function getPropertyTypesCountAttribute(): int
+    {
+        return $this->propertyTypes()->count();
+    }
+
+    public function getRgbColorAttribute(): array
+    {
+        $hex = ltrim($this->color, '#');
+        return [
+            'r' => hexdec(substr($hex, 0, 2)),
+            'g' => hexdec(substr($hex, 2, 2)),
+            'b' => hexdec(substr($hex, 4, 2))
+        ];
     }
 }

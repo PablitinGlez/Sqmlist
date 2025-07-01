@@ -53,6 +53,10 @@ return [
             'transport' => 'ses',
         ],
 
+        'mailgun' => [
+            'transport' => 'mailgun',
+        ],
+
         'postmark' => [
             'transport' => 'postmark',
             // 'message_stream_id' => env('POSTMARK_MESSAGE_STREAM_ID'),
@@ -113,6 +117,19 @@ return [
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Contact Mail Configuration
+    |--------------------------------------------------------------------------
+    |
+    | This section is added to store custom configuration specific to the
+    | contact form, such as the administrator's email.
+    |
+    */
+    'contact' => [
+        'admin_email' => env('MAIL_CONTACT_ADMIN_EMAIL'),
     ],
 
 ];

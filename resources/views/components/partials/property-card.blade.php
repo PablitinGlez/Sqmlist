@@ -1,21 +1,24 @@
-{{-- resources/views/components/partials/property-card.blade.php --}}
+{{--
+    Este componente Blade muestra una tarjeta de propiedad con un carrusel de imágenes,
+    detalles de la propiedad, y opciones de contacto.
+--}}
 @props(['property'])
 
 <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
     <!-- Carrusel de imágenes -->
-    <div class="relative h-56 overflow-hidden" x-data="{ 
-        currentSlide: 0, 
+    <div class="relative h-56 overflow-hidden" x-data="{
+        currentSlide: 0,
         images: {{ json_encode($property['images']) }},
         get canGoNext() { return this.currentSlide < this.images.length - 1 },
         get canGoPrev() { return this.currentSlide > 0 },
-        nextSlide() { 
-            if (this.canGoNext) this.currentSlide++ 
+        nextSlide() {
+            if (this.canGoNext) this.currentSlide++
         },
-        prevSlide() { 
-            if (this.canGoPrev) this.currentSlide-- 
+        prevSlide() {
+            if (this.canGoPrev) this.currentSlide--
         },
-        goToSlide(index) { 
-            this.currentSlide = index 
+        goToSlide(index) {
+            this.currentSlide = index
         }
     }">
         <!-- Botón de favoritos -->
@@ -26,7 +29,7 @@
         <!-- Imágenes del carrusel -->
         <div class="relative w-full h-full">
             <template x-for="(image, index) in images" :key="index">
-                <div 
+                <div
                     x-show="currentSlide === index"
                     x-transition:enter="transition ease-out duration-300"
                     x-transition:enter-start="opacity-0 transform translate-x-full"
@@ -36,7 +39,7 @@
                     x-transition:leave-end="opacity-0 transform -translate-x-full"
                     class="absolute inset-0"
                 >
-                    <img :src="image" :alt="'{{ $property['title'] }} - Imagen ' + (index + 1)" 
+                    <img :src="image" :alt="'{{ $property['title'] }} - Imagen ' + (index + 1)"
                          class="w-full h-full object-cover">
                 </div>
             </template>
@@ -46,7 +49,7 @@
         <template x-if="images.length > 1">
             <div>
                 <!-- Botón anterior -->
-                <button 
+                <button
                     x-show="canGoPrev"
                     @click="prevSlide()"
                     class="absolute left-4 top-1/2 transform -translate-y-1/2 z-10 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200"
@@ -55,7 +58,7 @@
                 </button>
 
                 <!-- Botón siguiente -->
-                <button 
+                <button
                     x-show="canGoNext"
                     @click="nextSlide()"
                     class="absolute right-4 top-1/2 transform -translate-y-1/2 z-10 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200"
@@ -66,7 +69,7 @@
                 <!-- Indicadores (puntitos) -->
                 <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
                     <template x-for="(image, index) in images" :key="index">
-                        <button 
+                        <button
                             @click="goToSlide(index)"
                             class="w-2 h-2 rounded-full transition-all duration-200"
                             :class="currentSlide === index ? 'bg-white' : 'bg-white/50'"
@@ -107,7 +110,7 @@
 
         <!-- Precio -->
         <div class="text-2xl font-bold text-gray-900 mb-3">
-            ${{ number_format($property['price']) }} 
+            ${{ number_format($property['price']) }}
             <span class="text-lg text-gray-600">{{ $property['currency'] }}</span>
         </div>
 
@@ -119,14 +122,14 @@
                     <span class="text-sm">{{ $property['bedrooms'] }}</span>
                 </div>
             @endif
-            
+
             @if($property['bathrooms'])
                 <div class="flex items-center">
                     <i class="fas fa-bath mr-2"></i>
                     <span class="text-sm">{{ $property['bathrooms'] }}</span>
                 </div>
             @endif
-            
+
             @if($property['area'])
                 <div class="flex items-center">
                     <i class="fas fa-ruler-combined mr-2"></i>

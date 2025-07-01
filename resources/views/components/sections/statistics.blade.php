@@ -1,7 +1,10 @@
-{{-- resources/views/components/sections/statistics.blade.php --}}
+{{--
+    Esta sección muestra estadísticas clave de la empresa,
+    como propiedades vendidas, clientes satisfechos y años de experiencia,
+    para generar confianza en los usuarios.
+--}}
 <section class="py-16 bg-white">
     <x-partials.container>
-        <!-- Encabezado -->
         <div class="text-center mb-12">
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Números que nos Respaldan
@@ -11,10 +14,8 @@
             </p>
         </div>
 
-        <!-- Grid de estadísticas -->
         <div class="bg-gradient-to-br from-blue-50 via-purple-50 to-green-50 rounded-3xl p-8 md:p-12 shadow-lg">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Propiedades vendidas -->
                 <div class="text-center group">
                     <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                         <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-blue-200 transition-colors">
@@ -25,7 +26,6 @@
                     </div>
                 </div>
 
-                <!-- Clientes satisfechos -->
                 <div class="text-center group">
                     <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                         <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-green-200 transition-colors">
@@ -36,7 +36,6 @@
                     </div>
                 </div>
 
-                <!-- Años de experiencia -->
                 <div class="text-center group">
                     <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                         <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-purple-200 transition-colors">
@@ -47,7 +46,6 @@
                     </div>
                 </div>
 
-                <!-- Atención al cliente -->
                 <div class="text-center group">
                     <div class="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
                         <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-200 transition-colors">
@@ -59,7 +57,6 @@
                 </div>
             </div>
 
-            <!-- Texto adicional -->
             <div class="text-center mt-8">
                 <p class="text-gray-700 font-medium">
                     Más de una década construyendo confianza en el mercado inmobiliario veracruzano

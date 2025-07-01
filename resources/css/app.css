@@ -1,3 +1,6 @@
+@import './fonts.css';
+@import './navigation-loader.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -12,6 +12,14 @@
             <x-label for="current_password" value="{{ __('Current Password') }}" />
             <x-input id="current_password" type="password" class="mt-1 block w-full" wire:model="state.current_password" autocomplete="current-password" />
             <x-input-error for="current_password" class="mt-2" />
+
+            @if($this->hasSocialLogin())
+                <div class="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                    <p class="text-xs text-blue-700 text-">
+                        {{ __('Dado que no tiene una contraseña asignada por utilizar el inicio de sesión por redes sociales, primero debe crear una. Para hacerlo, vaya a la sección de inicio de sesión y haga clic en "Olvidé mi contraseña".') }}
+                    </p>
+                </div>
+            @endif
         </div>
 
         <div class="col-span-6 sm:col-span-4">

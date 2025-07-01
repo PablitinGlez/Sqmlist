@@ -1,4 +1,4 @@
-{{-- resources/views/components/sections/featured-properties.blade.php --}}
+
 <section class="py-16 bg-gray-50">
     <x-partials.container>
         <!-- Encabezado de la sección -->
@@ -6,7 +6,7 @@
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                 Propiedades Destacadas
             </h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            <p class="text-lg text-gray-600 max-w-4xl mx-auto">
                 Descubre las mejores oportunidades inmobiliarias seleccionadas especialmente para ti
             </p>
         </div>
