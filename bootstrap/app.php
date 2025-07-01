@@ -3,8 +3,8 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
-use App\Http\Middleware\AdminMiddleware; // Mantener si aún lo aliasas o usas en otros lugares
-use App\Http\Middleware\RedirectGuestFromAdmin; // Importar tu nuevo middleware
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\RedirectGuestFromAdmin;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,20 +14,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Alias de middlewares (si los necesitas para Route::middleware())
+        
         $middleware->alias([
-            'admin' => AdminMiddleware::class, // Mantener si lo usas en rutas no-Filament
-            'redirect.guest.admin' => RedirectGuestFromAdmin::class, // Alias para este middleware
+            'admin' => AdminMiddleware::class, 
+            'redirect.guest.admin' => RedirectGuestFromAdmin::class, // 
         ]);
 
-        // **AÑADIR ESTE MIDDLEWARE AL PRINCIPIO DEL GRUPO 'web'**
-        // Esto asegura que se ejecute ANTES que Filament intente redirigir.
+       
         $middleware->prependToGroup('web', RedirectGuestFromAdmin::class);
 
-        // Puedes comentar o eliminar los demás $middleware->web() si solo usas prependToGroup para esto
-        // $middleware->web([
-        //    // Otros middlewares que quieras aplicar globalmente al grupo web
-        // ]);
+    
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
