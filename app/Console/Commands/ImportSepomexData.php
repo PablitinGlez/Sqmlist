@@ -42,8 +42,8 @@ class ImportSepomexData extends Command
             $this->error('Please provide the path to the SEPOMEX TXT file using --path option.');
             return Command::FAILURE;
         }
+        $fullPath = base_path($filePath);
 
-        $fullPath = storage_path('app/' . basename($filePath)); 
 
         if (!File::exists($fullPath)) {
             $this->error("The file '{$fullPath}' does not exist.");

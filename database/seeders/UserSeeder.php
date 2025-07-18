@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
@@ -14,17 +13,28 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $adminRole = Role::where('name', 'admin')->first();
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
-        $adminUser = User::firstOrCreate(
-            ['email' => 'admin@example.com'],
+        // Usuario Admin 1
+        $admin1 = User::firstOrCreate(
+            ['email' => 'admin1@admin.com'],
             [
-                'name' => 'Admin',
-                'password' => bcrypt('12345678'),
+                'name' => 'Admin 1',
+                'password' => bcrypt('A$dmin1Secure2024!'), // Contraseña segura
                 'email_verified_at' => now(),
             ]
         );
+        $admin1->assignRole($adminRole);
 
-        $adminUser->assignRole($adminRole);
+        // Usuario Admin 2
+        $admin2 = User::firstOrCreate(
+            ['email' => 'admin2@admin.com'],
+            [
+                'name' => 'Admin 2',
+                'password' => bcrypt('S@feP4sswordAdmin2!'), // Contraseña segura
+                'email_verified_at' => now(),
+            ]
+        );
+        $admin2->assignRole($adminRole);
     }
 }
