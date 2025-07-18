@@ -137,7 +137,7 @@
                 </a>
 
                 @if($hasAdvertiserRole)
-                    <a href="{{ route('dashboard') }}"
+                    <a href="/dashboard" 
                        :class="{
                            'text-white hover:text-gray-200 hover:bg-white/20 border-white/30': scrolled,
                            'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-transparent': !scrolled

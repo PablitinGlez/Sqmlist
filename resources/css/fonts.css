@@ -32,3 +32,95 @@
     font-style: normal;
     src: url('../fonts/poppins-v20-latin-700.woff2') format('woff2');
 }
+
+
+/* 🗺️ ESTILOS PARA ARREGLAR EL MAPA DE GOOGLE MAPS */
+
+/* Contenedor principal del mapa */
+#map {
+    width: 100% !important;
+    height: 400px !important;
+    min-height: 400px !important;
+    min-width: 100% !important;
+    display: block !important;
+    position: relative !important;
+    z-index: 1 !important;
+    background-color: #f3f4f6 !important;
+    border-radius: 0.5rem !important;
+    overflow: hidden !important;
+}
+
+/* Elementos internos de Google Maps */
+#map * {
+    max-width: none !important;
+    box-sizing: content-box !important;
+}
+
+/* Contenedor de estilos de Google Maps */
+.gm-style {
+    position: relative !important;
+    overflow: hidden !important;
+}
+
+/* Imágenes del mapa */
+#map img {
+    max-width: none !important;
+    height: auto !important;
+}
+
+/* Controles de Google Maps */
+.gm-control-active {
+    display: block !important;
+}
+
+.gm-style-cc {
+    display: none !important; /* Ocultar créditos si es necesario */
+}
+
+/* Botones de zoom */
+.gm-bundled-control {
+    display: block !important;
+}
+
+/* Para modo oscuro */
+.dark #map {
+    background-color: #374151 !important;
+}
+
+/* Asegurar que el contenedor padre no interfiera */
+.fi-section {
+    overflow: visible !important;
+}
+
+/* Arreglar problemas con flexbox */
+#map {
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+}
+
+/* Asegurar que no haya transformaciones que interfieran */
+#map {
+    transform: none !important;
+}
+
+/* Mensaje de carga mientras se inicializa */
+#map:empty::before {
+    content: "Cargando mapa...";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* Arreglar problemas con Tailwind CSS */
+#map [class*="gm-"] {
+    box-sizing: content-box !important;
+}
+
+/* Asegurar que el mapa sea visible en todos los navegadores */
+#map {
+    visibility: visible !important;
+    opacity: 1 !important;
+}

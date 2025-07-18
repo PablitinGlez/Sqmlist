@@ -1,5 +1,8 @@
 @import './fonts.css';
 @import './navigation-loader.css';
+@import './skeleton-animation.css';
+
+
 
 @tailwind base;
 @tailwind components;

@@ -94,7 +94,7 @@
                         @if(isset($notification->data['link']))
                             <a href="{{ $notification->data['link'] }}" 
                                wire:click.stop
-                               class="text-blue-600 hover:underline text-xs block mt-1">
+                               class="text-blue-600 hover:underline text-xs block mt-1"  wire:navigate>
                                 Ver detalles
                             </a>
                         @endif
@@ -166,7 +166,7 @@
         @if ($unreadNotifications->isNotEmpty() || $readNotifications->isNotEmpty())
             <div class="border-t border-gray-100 text-center">
                 <a href="#"
-                   class="block px-4 py-2 text-sm text-blue-600 hover:text-blue-800">
+                   class="block px-4 py-2 text-sm text-blue-600 hover:text-blue-800"  wire:navigate>
                     Ver todas las notificaciones
                 </a>
             </div>

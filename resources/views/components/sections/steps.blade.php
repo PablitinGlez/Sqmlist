@@ -1,112 +1,148 @@
-{{--
-    Esta sección describe los pasos para que un usuario se convierta en agente inmobiliario.
-    Incluye un encabezado, un carrusel de pasos interactivo y una llamada a la acción.
---}}
-<section class="py-20 bg-gradient-to-br from-slate-50 to-blue-50 overflow-hidden" id="steps-section">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-20" id="steps-header">
-            <h2 class="text-5xl font-bold text-gray-900 mb-6">
-                Conviértete en
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                    Agente Inmobiliario
-                </span>
-            </h2>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Un proceso simple y efectivo para comenzar tu carrera profesional
-            </p>
-            <div class="w-24 h-1 bg-gradient-to-r from-blue-600 to-purple-600 mx-auto mt-8 rounded-full"></div>
-        </div>
-
-        <div class="relative" id="steps-container">
-            <div class="absolute top-1/2 left-0 right-0 h-2 bg-gray-200 rounded-full transform -translate-y-1/2 z-0">
-                <div class="h-full bg-gradient-to-r from-blue-600 to-purple-600 rounded-full transition-all duration-1000 ease-out" id="progress-bar" style="width: 0%"></div>
+{{-- resources/views/components/timeline-section.blade.php --}}
+<section class="timeline-section bg-gray-50 py-20 min-h-screen flex items-center">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <!-- Título de la sección -->
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                    Pasos para Convertirse en Agente
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                    Sigue estos pasos simples para iniciar tu carrera como agente inmobiliario
+                </p>
             </div>
-
-            <div class="relative z-10 flex justify-between items-center" id="steps-track">
-                <div class="step-card bg-white rounded-2xl shadow-xl p-8 w-72 transform translate-x-0" data-step="1">
-                    <div class="flex items-center mb-6">
-                        <div class="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg step-number">
-                            1
+            
+            <!-- Línea de tiempo -->
+            <div class="relative">
+                <!-- Línea principal (estática) -->
+                <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gray-300 h-full timeline-line-bg"></div>
+                
+                <!-- Línea de progreso (animada) -->
+                <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-blue-500 timeline-line"></div>
+                
+                <!-- Elementos de la línea de tiempo -->
+                <div class="space-y-16">
+                    <!-- Paso 1 -->
+                    <div class="timeline-item relative flex items-center">
+                        <div class="w-1/2 pr-8 text-right">
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">1. Obtén tu Licencia</h3>
+                                <p class="text-gray-600">
+                                    Completa el curso de educación inmobiliaria y aprueba el examen de licencia estatal.
+                                </p>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <div class="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
+                        <div class="w-1/2 pl-8"></div>
+                    </div>
+                    
+                    <!-- Paso 2 -->
+                    <div class="timeline-item relative flex items-center">
+                        <div class="w-1/2 pr-8"></div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
+                        <div class="w-1/2 pl-8">
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">2. Únete a una Agencia</h3>
+                                <p class="text-gray-600">
+                                    Encuentra una agencia inmobiliaria establecida que te ayude a comenzar tu carrera.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                        Registro Inicial
-                    </h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Completa tu perfil profesional con tus datos personales y experiencia previa.
-                    </p>
-                    <div class="flex items-center text-blue-600 font-semibold">
-                        <i class="fas fa-user-plus mr-2"></i>
-                        <span>5 minutos</span>
-                    </div>
-                </div>
-
-                <div class="step-card bg-white rounded-2xl shadow-xl p-8 w-72 transform translate-x-full opacity-50" data-step="2">
-                    <div class="flex items-center mb-6">
-                        <div class="w-16 h-16 bg-gradient-to-r from-green-600 to-green-700 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg step-number">
-                            2
+                    
+                    <!-- Paso 3 -->
+                    <div class="timeline-item relative flex items-center">
+                        <div class="w-1/2 pr-8 text-right">
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">3. Construye tu Red</h3>
+                                <p class="text-gray-600">
+                                    Desarrolla relaciones con clientes potenciales, otros agentes y profesionales del sector.
+                                </p>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <div class="w-3 h-3 bg-green-600 rounded-full"></div>
-                        </div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
+                        <div class="w-1/2 pl-8"></div>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                        Documentación
-                    </h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Envía tu solicitud oficial y documentos requeridos para verificación completa.
-                    </p>
-                    <div class="flex items-center text-green-600 font-semibold">
-                        <i class="fas fa-file-alt mr-2"></i>
-                        <span>10 minutos</span>
-                    </div>
-                </div>
-
-                <div class="step-card bg-white rounded-2xl shadow-xl p-8 w-72 transform translate-x-full opacity-50" data-step="3">
-                    <div class="flex items-center mb-6">
-                        <div class="w-16 h-16 bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg step-number">
-                            3
-                        </div>
-                        <div class="ml-4">
-                            <div class="w-3 h-3 bg-purple-600 rounded-full"></div>
+                    
+                    <!-- Paso 4 -->
+                    <div class="timeline-item relative flex items-center">
+                        <div class="w-1/2 pr-8"></div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
+                        <div class="w-1/2 pl-8">
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">4. Especialízate</h3>
+                                <p class="text-gray-600">
+                                    Enfócate en un nicho específico como propiedades comerciales, residenciales o de lujo.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                        Aprobación
-                    </h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Revisión profesional de tu solicitud en un plazo máximo de 48-72 horas.
-                    </p>
-                    <div class="flex items-center text-purple-600 font-semibold">
-                        <i class="fas fa-clock mr-2"></i>
-                        <span>48-72 horas</span>
-                    </div>
-                </div>
-
-                <div class="step-card bg-white rounded-2xl shadow-xl p-8 w-72 transform translate-x-full opacity-50" data-step="4">
-                    <div class="flex items-center mb-6">
-                        <div class="w-16 h-16 bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg step-number">
-                            <i class="fas fa-check text-2xl"></i>
+                    
+                    <!-- Paso 5 -->
+                    <div class="timeline-item relative flex items-center">
+                        <div class="w-1/2 pr-8 text-right">
+                            <div class="bg-white p-6 rounded-lg shadow-md">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">5. Crece tu Negocio</h3>
+                                <p class="text-gray-600">
+                                    Utiliza marketing digital, referencias y excelente servicio al cliente para expandir tu negocio.
+                                </p>
+                            </div>
                         </div>
-                        <div class="ml-4">
-                            <div class="w-3 h-3 bg-emerald-600 rounded-full animate-bounce"></div>
-                        </div>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">
-                        ¡Comienza Ya!
-                    </h3>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        Accede a tu panel profesional y empieza a promocionar propiedades.
-                    </p>
-                    <div class="flex items-center text-emerald-600 font-semibold">
-                        <i class="fas fa-rocket mr-2"></i>
-                        <span>¡Inmediato!</span>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
+                        <div class="w-1/2 pl-8"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+<style>
+.timeline-line-bg {
+    z-index: 1;
+}
+
+.timeline-line {
+    z-index: 2;
+    height: 0%;
+}
+
+.timeline-item {
+    z-index: 3;
+}
+
+/* Responsive para dispositivos móviles */
+@media (max-width: 768px) {
+    .timeline-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .timeline-item .w-1/2 {
+        width: 100%;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .timeline-item .w-1/2:last-child {
+        margin-bottom: 0;
+    }
+    
+    .timeline-item .text-right {
+        text-align: center;
+    }
+    
+    .timeline-line-bg,
+    .timeline-line {
+        left: 20px;
+        transform: none;
+    }
+    
+    .timeline-item .absolute {
+        position: static;
+        transform: none;
+        margin: 1rem auto;
+        display: block;
+    }
+}
+</style>

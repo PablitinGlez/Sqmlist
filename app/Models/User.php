@@ -12,6 +12,8 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
@@ -48,7 +50,19 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $panel->getId() === 'admin' && $this->hasRole('admin');
+        
+        if ($panel->getId() === 'admin') {
+            return $this->hasRole('admin');
+        }
+
+       
+        if ($panel->getId() === 'advertiser') {
+            
+            return $this->hasAnyRole(['owner', 'agent', 'real_estate_company']);
+        }
+
+        
+        return false;
     }
 
     public function hasSocialLogin(): bool
@@ -151,4 +165,37 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
             default => null
         };
     }
+
+    // --- NUEVAS RELACIONES PARA EL ANUNCIANTE ---
+
+    /**
+     * Un usuario puede tener muchas propiedades.
+     * Esta relación es clave para obtener las propiedades de un anunciante.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function properties(): HasMany
+    {
+        return $this->hasMany(Property::class);
+    }
+
+    /**
+     * Un usuario puede tener muchos mensajes de contacto, a través de sus propiedades.
+     * Esta relación es perfecta para el panel del anunciante.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function propertyContacts(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            PropertyContact::class, // El modelo final que queremos obtener
+            Property::class,        // El modelo intermedio (a través del cual llegamos a PropertyContact)
+            'user_id',              // La clave foránea en la tabla `properties` que apunta a `users`
+            'property_id',          // La clave foránea en la tabla `property_contacts` que apunta a `properties`
+            'id',                   // La clave local en la tabla `users` (id del usuario)
+            'id'                    // La clave local en la tabla `properties` (id de la propiedad)
+        );
+    }
+
+
 }

@@ -3,7 +3,7 @@
     un esqueleto de carga, la imagen de fondo y el contenido interactivo
     con el formulario de búsqueda de propiedades.
 --}}
-@props(['backgroundImage' => 'images/ola.webp'])
+@props(['backgroundImage' => 'images/ola.webp', 'title' => 'Conecta con tu nuevo hogar en solo unos clics'])
 
 <section class="relative h-[80vh] flex items-center justify-center overflow-hidden">
     <!-- Skeleton Loader -->
@@ -20,7 +20,6 @@
                     <!-- Skeleton del título -->
                     <div class="max-w-2xl text-xl sm:text md:text-2xl lg:text-2xl mb-8 leading-tight">
                         <div class="h-7 bg-gray-300 rounded-full mb-2"></div>
-
                     </div>
 
                     <!-- Skeleton de los botones En Venta / En Renta -->
@@ -74,51 +73,15 @@
             <div class="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-start md:text-center sm:text-center shadow-2xl">
                 <!-- Título principal -->
                 <h1 class="max-w-2xl text-xl sm:text md:text-2xl lg:text-2xl font-medium text-white mb-8 leading-tight">
-                    {{ $title ?? 'Conecta con tu nuevo hogar en solo unos clics' }}
+                    {{ $title }}
                 </h1>
 
-                <!-- Opciones En Venta / En Renta -->
-                <div class="flex justify-start max-w-2xl mx-auto">
-                    <div class="flex gap-8">
-                        <button id="btn-venta"
-                                class="property-type-btn px-4 py-2 text-white font-medium transition-all duration-300 relative active"
-                                data-type="venta">
-                            En Venta
-                        </button>
-                        <button id="btn-renta"
-                                class="property-type-btn px-4 py-2 text-white font-medium transition-all duration-300 relative"
-                                data-type="renta">
-                            En Renta
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Línea divisoria -->
-                <div class="max-w-2xl mx-auto h-px bg-white/30 mb-8"></div>
-
-                <!-- Barra de búsqueda -->
-                <div class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
-                    <!-- Dropdown -->
-                    <div class="relative">
-                        <select class="w-full md:w-48 px-4 py-3 bg-white/90 backdrop-blur-sm rounded-lg border border-white/20 text-gray-800 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                            <option value="">Todos</option>
-                            <option value="casa">Casa</option>
-                            <option value="departamento">Departamento</option>
-                            <option value="terreno">Terreno</option>
-                            <option value="local">Local Comercial</option>
-                        </select>
-                    </div>
-
-                    <!-- Input de búsqueda -->
-                    <div class="flex-1 relative">
-                        <input type="text"
-                               placeholder="Buscar por ubicación..."
-                               class="w-full px-4 py-3 pr-12 bg-white/90 backdrop-blur-sm rounded-lg border border-white/20 text-gray-800 placeholder-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                        <button class="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-600 hover:text-blue-700 transition-colors">
-                            <i class="fas fa-search text-lg"></i>
-                        </button>
-                    </div>
-                </div>
+                <!-- Barra de búsqueda - Ahora es un componente Livewire que incluye los botones de operación y la línea divisoria -->
+                @livewire('hero-search', [
+                    'initialLocationSearch' => request('ubicacion'),
+                    'initialPropertyType' => request('tipo'),
+                    'initialOperationType' => request('operacion') // Pasar el tipo de operación inicial
+                ])
             </div>
         </x-partials.container>
     </div>
@@ -134,17 +97,8 @@
 </section>
 
 <style>
-    .property-type-btn {
-        border-bottom: 2px solid transparent;
-    }
-
-    .property-type-btn.active {
-        border-bottom: 2px solid #3b82f6;
-    }
-
-    .property-type-btn:hover:not(.active) {
-        opacity: 0.8;
-    }
+    /* Se eliminan las clases .property-type-btn y .property-type-btn.active
+       porque ahora son enlaces y la activación se maneja con Blade/request() */
 </style>
 
 <script>
@@ -185,21 +139,7 @@
             });
         }
 
-        // Funcionalidad de los botones
-        const buttons = document.querySelectorAll('.property-type-btn');
-
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Remover clase active de todos los botones
-                buttons.forEach(btn => btn.classList.remove('active'));
-
-                // Agregar clase active al botón clickeado
-                this.classList.add('active');
-
-                // Lógica adicional si necesitas
-                const selectedType = this.dataset.type;
-                console.log('Tipo seleccionado:', selectedType);
-            });
-        });
+        // La lógica de los botones "En Venta" / "En Renta" se ha movido al componente HeroSearch.
+        // Por lo tanto, el código JavaScript relacionado con 'property-type-btn' ya no es necesario aquí.
     });
 </script>

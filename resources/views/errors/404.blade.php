@@ -25,48 +25,38 @@
                         En Inmobiliaria no encontramos esta página, pero sí tu próximo hogar.
                     </p>
 
-                    <div class="mb-8 max-w-lg mx-auto lg:mx-0">
-                        <form method="GET">
-                            <div class="flex">
-                                <input
-                                    type="text"
-                                    name="search"
-                                    placeholder="Buscar propiedades, ubicaciones..."
-                                    class="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                >
-                                <button
-                                    type="submit"
-                                    class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-r-lg transition-colors"
-                                >
-                                    Buscar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
+                    {{-- La barra de búsqueda ha sido eliminada de aquí --}}
+                    {{-- <div class="mb-8 max-w-lg mx-auto lg:mx-0">
+                        @livewire('hero-search')
+                    </div> --}}
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                        <a href="#" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center">
+                        {{-- Enlaces directos a la página de propiedades con filtro de operación --}}
+                        <a href="{{ route('properties.index', ['operacion' => 'sale']) }}" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center" 
+                            wire:navigate>
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-2">
                                 <i class="fa-solid fa-house w-5 h-5 text-blue-600"></i>
                             </div>
                             <span class="text-sm text-gray-700">En Venta</span>
                         </a>
 
-                        <a href="#" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center">
+                        <a href="{{ route('properties.index', ['operacion' => 'rent']) }}" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center"
+                            wire:navigate>
                             <div class="w-10 h-10 bg-teal-100 rounded-lg flex items-center justify-center mb-2">
                                 <i class="fa-solid fa-key w-5 h-5 text-teal-600"></i>
                             </div>
                             <span class="text-sm text-gray-700">En Renta</span>
                         </a>
 
-                        <a href="#" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center">
+                        {{-- Estos enlaces puedes ajustarlos según necesites, por ahora son placeholders --}}
+                        <a href="{{ route('properties.index') }}" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center" wire:navigate>
                             <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-2">
                                 <i class="fa-solid fa-fire w-5 h-5 text-purple-600"></i>
                             </div>
                             <span class="text-sm text-gray-700">Destacados</span>
                         </a>
 
-                        <a href="#" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center">
+                        <a href="{{ route('properties.index') }}" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center"  wire:navigate>
                             <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-2">
                                 <i class="fa-solid fa-bolt w-5 h-5 text-green-600"></i>
                             </div>
@@ -75,7 +65,7 @@
                     </div>
 
                     <div class="flex justify-center lg:justify-start mx-auto lg:ml-0">
-                        <a href="{{ route('home') }}" class="inline-flex items-center px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors">
+                        <a href="{{ route('home') }}" class="inline-flex items-center px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"  wire:navigate>
                             <i class="fa-solid fa-arrow-left w-4 h-4 mr-2"></i>
                             Volver al inicio
                         </a>

@@ -125,7 +125,7 @@ class UserApplicationForm extends Component
 
         if ($user->hasRole($this->userType)) {
             session()->flash('info', 'Ya tienes este perfil activo.');
-            return redirect()->route('dashboard');
+            return redirect('/dashboard');
         }
 
         $pendingApplication = $user->userApplications()
@@ -189,7 +189,7 @@ class UserApplicationForm extends Component
             $user = Auth::user();
             $userFolder = "user-applications/{$user->id}";
 
-            // Verificar si ya tiene una solicitud pendiente
+          
             $pendingApplication = $user->userApplications()
                 ->whereIn('status', [UserApplication::STATUS_PENDING, UserApplication::STATUS_APPROVED])
                 ->exists();
@@ -198,13 +198,13 @@ class UserApplicationForm extends Component
                 throw new \Exception('Ya tienes una solicitud pendiente o aprobada.');
             }
 
-            // Procesar archivos
+          
             $identificationPath = $this->identificationFile->store($userFolder, 'public');
             $licensePath = $this->needsLicense() && $this->licenseFile
                 ? $this->licenseFile->store($userFolder, 'public')
                 : null;
 
-            // Crear solicitud
+            //se crea la soli de el perfil de usuario  -----
             UserApplication::create([
                 'user_id' => $user->id,
                 'requested_user_type' => $this->userType,

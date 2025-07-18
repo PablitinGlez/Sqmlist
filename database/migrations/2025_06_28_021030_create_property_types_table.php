@@ -16,11 +16,11 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
 
-            // Índices para mejorar performance
             $table->index('category_id');
             $table->index('is_active');
         });
     }
+
 
     public function down(): void
     {

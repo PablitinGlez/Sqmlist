@@ -20,7 +20,7 @@ class UserApplicationController extends Controller
 
         
         if ($user->hasAnyRole(['owner', 'agent', 'real_estate_company'])) {
-            return redirect()->route('dashboard')
+            return redirect('dashboard')
                 ->with('info', 'Ya tienes un perfil de anunciante activo.');
         }
 
@@ -32,12 +32,12 @@ class UserApplicationController extends Controller
             $preselectedType = $typeFromUrl;
 
             if ($user->hasRole($preselectedType)) {
-                return redirect()->route('dashboard')
+                return redirect('dashboard')
                     ->with('info', 'Ya eres un(a) ' . $userTypesOptions[$preselectedType] . ' registrado(a).');
             }
         }
 
-        // Verificar solicitudes existentes
+      
         $latestApplication = $user->userApplications()->latest()->first();
 
         if ($latestApplication && in_array($latestApplication->status, [

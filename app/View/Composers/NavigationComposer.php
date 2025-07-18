@@ -5,45 +5,49 @@ namespace App\View\Composers;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserApplication;
+// use App\Models\PropertyType; // Ya no es necesario importar PropertyType aquí si no generamos enlaces por tipo
 
 class NavigationComposer
 {
     public function compose(View $view): void
     {
+        // No necesitamos cargar PropertyType si los enlaces no son por tipo de propiedad anidado.
+        // $propertyTypes = PropertyType::orderBy('name')->get();
+
         $navigationLinks = [
+            // --- Enlace para "En Venta" (directo) ---
             [
                 'name' => 'En venta',
-                'route' => '#',
-                'active' => false,
-                'dropdown' => [
-                    'Tipo de propiedad' => ['Casa', 'Departamento', 'Oficina', 'Local comercial'],
-                ]
+                'route' => route('properties.index', ['operacion' => 'sale']),
+                // Activo si estamos en la ruta de propiedades y el parámetro 'operacion' es 'sale'
+                'active' => request()->routeIs('properties.index') && request('operacion') === 'sale',
             ],
+            // --- Enlace para "En Renta" (directo) ---
             [
                 'name' => 'En renta',
-                'route' => '#',
-                'active' => false,
-                'dropdown' => [
-                    'Tipo de propiedad' => ['Casa', 'Departamento', 'Oficinas', 'Locales comerciales'],
-                ]
+                'route' => route('properties.index', ['operacion' => 'rent']),
+                // Activo si estamos en la ruta de propiedades y el parámetro 'operacion' es 'rent'
+                'active' => request()->routeIs('properties.index') && request('operacion') === 'rent',
             ],
+            // --- Otros enlaces (Agentes, Nosotros, Contacto) ---
             [
                 'name' => 'Agentes',
-                'route' => '#',
-                'active' => false,
+                'route' => '#', // Mantener como placeholder o cambiar a tu ruta real de agentes
+                'active' => false, // O la lógica de activo para agentes
             ],
             [
                 'name' => 'Nosotros',
                 'route' => route('about'),
-                'active' => false,
+                'active' => request()->routeIs('about'),
             ],
             [
                 'name' => 'Contacto',
                 'route' => route('contact.create'),
-                'active' => false,
+                'active' => request()->routeIs('contact.create'),
             ],
         ];
 
+        // Lógica del botón de publicación (se mantiene igual)
         $buttonConfig = $this->getButtonConfig();
 
         $view->with([

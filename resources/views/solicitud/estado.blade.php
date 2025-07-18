@@ -51,7 +51,7 @@
                                 </div>
                             @endif
                             <div class="mt-6">
-                                <a href="{{ route('dashboard') }}"
+                                <a href="/dashboard" 
                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                                     Ir al Dashboard
                                 </a>

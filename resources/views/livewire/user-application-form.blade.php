@@ -331,8 +331,8 @@
 
         {{-- Botones de acción --}}
         <div class="flex justify-end space-x-4 border-t border-gray-200 pt-8">
-            <a href="{{ route('dashboard') }}" 
-               class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75">
+            <a href="{{ route('home') }}" 
+               class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75"  wire:navigate>
                 Cancelar
             </a>
             

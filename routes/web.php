@@ -4,7 +4,11 @@ use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\UserApplicationController;
 use App\Http\Controllers\ProfileSelectionController;
+use App\Http\Controllers\PropertyContactController;
+use App\Http\Controllers\PropertyController;
 use App\Http\Middleware\EnsureUserCanAccessAdvertiserPanel;
+use App\Livewire\PropertiesIndex;
+use App\Livewire\ShowProperties;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,6 +24,19 @@ Route::view('/about', 'pages.about')->name('about');
 
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/propiedades/{slug}', [PropertyController::class, 'show'])->name('properties.show');
+
+
+Route::post('/propiedades/{property}/contactar', [App\Http\Controllers\PropertyMessageController::class, 'store'])->name('properties.contact');
+
+
+Route::get('/propiedades/{slug}', [PropertyController::class, 'show'])->name('properties.show');
+
+
+Route::post('/propiedades/{property}/contactar', [App\Http\Controllers\PropertyMessageController::class, 'store'])->name('properties.contact');
+
+Route::get('/propiedades', PropertiesIndex::class)->name('properties.index');
+
 
 Route::middleware([
     'auth:sanctum',
@@ -30,9 +47,9 @@ Route::middleware([
     Route::get('/solicitud/estado', [UserApplicationController::class, 'status'])->name('solicitud.estado');
     Route::get('/solicitud/{type?}', [UserApplicationController::class, 'create'])->name('solicitud.formulario');
 
-    Route::middleware([EnsureUserCanAccessAdvertiserPanel::class])->group(function () {
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->name('dashboard');
-    });
+    // Route::middleware([EnsureUserCanAccessAdvertiserPanel::class])->group(function () {
+    //     Route::get('/dashboard', function () {
+    //         return view('dashboard');
+    //     })->name('dashboard');
+    // });
 });

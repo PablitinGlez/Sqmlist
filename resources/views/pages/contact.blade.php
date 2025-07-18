@@ -51,15 +51,15 @@
                         </div>
 
                         <div class="flex space-x-4 mt-auto pt-16">
-                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
-                                <i class="fab fa-facebook text-gray-900"></i>
+                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"  wire:navigate>
+                                <i class="fab fa-facebook text-gray-900" ></i>
                             </a>
 
-                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
+                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"  wire:navigate>
                                 <i class="fab fa-x-twitter text-gray-900"></i>
                             </a>
 
-                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
+                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"  wire:navigate>
                                 <i class="fab fa-instagram text-gray-900"></i>
                             </a>
                         </div>

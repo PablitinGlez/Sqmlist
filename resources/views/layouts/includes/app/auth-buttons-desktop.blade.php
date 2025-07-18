@@ -10,14 +10,14 @@
 <div class="hidden sm:flex sm:items-center space-x-2 lg:space-x-4">
     @if ($shouldShowButton)
         <a href="{{ $buttonRoute }}"
-           class="inline-flex items-center px-2 py-2 md:px-3 lg:px-4 {{ $buttonClass }} border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wide transition ease-in-out duration-150">
+           class="inline-flex items-center px-2 py-2 md:px-3 lg:px-4 {{ $buttonClass }} border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wide transition ease-in-out duration-150"  wire:navigate>
             {{ $buttonText }}
         </a>
     @endif
 
     @guest
         <a href="{{ route('login') }}"
-           class="inline-flex items-center px-2 py-2 md:px-3 lg:px-4 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wide hover:bg-gray-700 transition ease-in-out duration-150">
+           class="inline-flex items-center px-2 py-2 md:px-3 lg:px-4 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wide hover:bg-gray-700 transition ease-in-out duration-150"  wire:navigate>
             Ingresar
         </a>
     @endguest
@@ -76,21 +76,13 @@
 
                     @if (Auth::user()->hasAnyRole(['owner', 'agent', 'real_estate_company']))
                         <div class="border-t border-gray-200"></div>
-                        <x-dropdown-link href="{{ route('dashboard') }}">
+                        <x-dropdown-link href="/dashboard" >
                             <div class="flex items-center">
                                 <x-heroicon-s-home-modern class="w-4 h-4 mr-2 text-gray-500"/>
                                 Panel de Anunciante
                             </div>
                         </x-dropdown-link>
                         
-                        @if(Auth::user()->hasRole('agent'))
-                            <x-dropdown-link href="{{ route('agent.properties.index') }}">
-                                <div class="flex items-center">
-                                    <x-heroicon-s-building-office class="w-4 h-4 mr-2 text-gray-500"/>
-                                    Mis Propiedades
-                                </div>
-                            </x-dropdown-link>
-                        @endif
                     @endif
 
                     @if (Laravel\Jetstream\Jetstream::hasApiFeatures())

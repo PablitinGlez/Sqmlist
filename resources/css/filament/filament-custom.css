@@ -1,0 +1,30 @@
+/* Prevenir que Tailwind afecte a Filament */
+@layer filament {
+
+    /* Tus estilos para los selects */
+    .fi-fo-select [role="listbox"] {
+        max-height: 200px !important;
+        overflow-y: auto !important;
+        scrollbar-width: thin !important;
+    }
+
+    /* Establecer colores de Filament */
+    .fi-fo-select .fi-select-option:hover {
+        background-color: var(--primary-600) !important;
+        color: white !important;
+    }
+
+    /* Eliminar el scroll duplicado */
+    .fi-fo-select .fi-select-options-container::-webkit-scrollbar {
+        width: 6px !important;
+    }
+
+    .fi-fo-select .fi-select-options-container::-webkit-scrollbar-track {
+        background: #f1f1f1 !important;
+    }
+
+    .fi-fo-select .fi-select-options-container::-webkit-scrollbar-thumb {
+        background: var(--primary-500) !important;
+        border-radius: 3px !important;
+    }
+}

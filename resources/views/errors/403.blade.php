@@ -25,7 +25,7 @@
                     </a>
                     
                     @if(auth()->user()->hasAnyRole(['owner', 'agent', 'real_estate']))
-                        <a href="{{ route('dashboard') }}" 
+                        <a href="/dashboard" 
                            class="inline-block w-full bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 transition duration-200">
                             Ir a Mi Panel
                         </a>

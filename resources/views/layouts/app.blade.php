@@ -11,28 +11,19 @@
     <link rel="preconnect" href="https://kit.fontawesome.com">
     <script src="https://kit.fontawesome.com/529714676e.js" crossorigin="anonymous"></script>
     
-    
+    {{-- LottieFiles Web Component Script --}}
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @livewireStyles
-
+    @filamentStyles
 
 </head>
 
 <body style="font-family: 'Poppins', sans-serif;" class="antialiased">
     
     
-<div id="navigation-loader">
-        <div class="loader-content">
-            <l-helix
-                size="60"
-                stroke="5"
-                bg-opacity="0.1"
-                speed="2"
-                color="#3490dc">
-            </l-helix>
-        </div>
-    </div>
 
     <div class="min-h-screen bg-transparent">
         @include('layouts.includes.app.navigation-menu')
@@ -54,8 +45,16 @@
 
     @stack('modals')
     @livewireScripts
+    @filamentScripts
     @stack('scripts')
 
-   
+    <script>
+        window.initMap = function () {
+            // Tu código de Google Maps
+        };
+    </script>
+    
+    {{-- Script de Google Maps API --}}
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&callback=initMap"></script>
 </body>
 </html>

@@ -1,0 +1,145 @@
+/* Estilos personalizados para el wizard de Filament */
+
+/* Contenedor principal del wizard */
+.fi-wizard {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200;
+}
+
+/* Header del wizard con los pasos */
+.fi-wizard-header {
+    @apply bg-gray-50 rounded-t-lg p-6 border-b border-gray-200;
+}
+
+/* Contenedor de los pasos */
+.fi-wizard-steps {
+    @apply flex items-center justify-between relative;
+}
+
+/* Línea de conexión entre pasos */
+.fi-wizard-steps::before {
+    content: '';
+    @apply absolute top-1/2 left-0 right-0 h-0.5 bg-gray-300 -translate-y-1/2 z-0;
+}
+
+/* Paso individual */
+.fi-wizard-step {
+    @apply relative z-10 flex flex-col items-center;
+}
+
+/* Círculo del paso */
+.fi-wizard-step-circle {
+    @apply w-10 h-10 rounded-full border-2 flex items-center justify-center text-sm font-semibold transition-all duration-200 bg-white;
+}
+
+/* Paso completado */
+.fi-wizard-step.fi-wizard-step-completed .fi-wizard-step-circle {
+    @apply bg-blue-500 border-blue-500 text-white;
+}
+
+/* Paso activo */
+.fi-wizard-step.fi-wizard-step-active .fi-wizard-step-circle {
+    @apply bg-blue-100 border-blue-500 text-blue-600;
+}
+
+/* Paso inactivo */
+.fi-wizard-step.fi-wizard-step-inactive .fi-wizard-step-circle {
+    @apply bg-gray-100 border-gray-300 text-gray-500;
+}
+
+/* Etiqueta del paso */
+.fi-wizard-step-label {
+    @apply mt-2 text-sm font-medium text-center;
+}
+
+/* Etiqueta paso completado */
+.fi-wizard-step.fi-wizard-step-completed .fi-wizard-step-label {
+    @apply text-blue-600;
+}
+
+/* Etiqueta paso activo */
+.fi-wizard-step.fi-wizard-step-active .fi-wizard-step-label {
+    @apply text-blue-600;
+}
+
+/* Etiqueta paso inactivo */
+.fi-wizard-step.fi-wizard-step-inactive .fi-wizard-step-label {
+    @apply text-gray-500;
+}
+
+/* Descripción del paso */
+.fi-wizard-step-description {
+    @apply text-xs text-gray-400 mt-1 text-center;
+}
+
+/* Contenido del wizard */
+.fi-wizard-content {
+    @apply p-6;
+}
+
+/* Botones del wizard */
+.fi-wizard-actions {
+    @apply flex justify-between items-center mt-6 pt-4 border-t border-gray-200;
+}
+
+/* Botón anterior */
+.fi-wizard-prev-btn {
+    @apply px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200;
+}
+
+/* Botón siguiente */
+.fi-wizard-next-btn {
+    @apply px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200;
+}
+
+/* Botón finalizar */
+.fi-wizard-finish-btn {
+    @apply px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200;
+}
+
+/* Estilos para diseño como la imagen que mostraste */
+.fi-wizard-step-modern {
+    @apply relative flex items-center;
+}
+
+.fi-wizard-step-modern .fi-wizard-step-circle {
+    @apply w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300;
+}
+
+.fi-wizard-step-modern.fi-wizard-step-completed .fi-wizard-step-circle {
+    @apply bg-blue-500 text-white;
+}
+
+.fi-wizard-step-modern.fi-wizard-step-active .fi-wizard-step-circle {
+    @apply bg-blue-500 text-white;
+}
+
+.fi-wizard-step-modern.fi-wizard-step-inactive .fi-wizard-step-circle {
+    @apply bg-gray-200 text-gray-500;
+}
+
+/* Línea conectora moderna */
+.fi-wizard-step-modern:not(:last-child)::after {
+    content: '';
+    @apply absolute left-8 top-4 w-full h-0.5 bg-gray-300 z-0;
+}
+
+.fi-wizard-step-modern.fi-wizard-step-completed:not(:last-child)::after {
+    @apply bg-blue-500;
+}
+
+/* Etiquetas modernas */
+.fi-wizard-step-modern .fi-wizard-step-label {
+    @apply ml-3 text-sm font-medium;
+}
+
+.fi-wizard-step-modern.fi-wizard-step-completed .fi-wizard-step-label {
+    @apply text-blue-600;
+}
+
+.fi-wizard-step-modern.fi-wizard-step-active .fi-wizard-step-label {
+    @apply text-blue-600;
+}
+
+.fi-wizard-step-modern.fi-wizard-step-inactive .fi-wizard-step-label {
+    @apply text-gray-500;
+}

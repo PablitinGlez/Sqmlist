@@ -9,6 +9,15 @@ use Filament\Support\Facades\FilamentColor;
 use Livewire\Livewire;
 use App\View\Composers\NavigationComposer;
 
+use Laravel\Fortify\Contracts\LoginResponse;
+use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\VerifyEmailResponse;
+
+
+use App\Http\Responses\LoginResponse as CustomLoginResponse;
+use App\Http\Responses\RegisterResponse as CustomRegisterResponse;
+use App\Http\Responses\VerifyEmailResponse as CustomVerifyEmailResponse;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -16,7 +25,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
+        $this->app->singleton(RegisterResponse::class, CustomRegisterResponse::class);
+        $this->app->singleton(VerifyEmailResponse::class, CustomVerifyEmailResponse::class);
     }
 
     /**
@@ -24,20 +35,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Sobrescribir el componente de Jetstream
-        // CORRECCIÓN: Usar Livewire::component() correctamente
         Livewire::component('profile.update-password-form', \App\Livewire\UpdatePasswordForm::class);
 
-        // Configurar colores de Filament
         FilamentColor::register([
             'primary' => Color::hex('#5F97FF'),
         ]);
 
-        // --- Registro del View Composer ---
-        // CORRECCIÓN: Usa el nombre completo de la vista
         View::composer('layouts.includes.app.navigation-menu', NavigationComposer::class);
 
-        // También registra para las otras vistas que usan las variables
         View::composer([
             'layouts.includes.app.navigation-links-desktop',
             'layouts.includes.app.auth-buttons-desktop',

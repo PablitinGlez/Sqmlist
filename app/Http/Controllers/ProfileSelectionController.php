@@ -34,7 +34,7 @@ class ProfileSelectionController extends Controller
         $hasAdvertiserRole = $user->hasAnyRole(['owner', 'agent', 'real_estate_company']);
         if ($hasAdvertiserRole) {
             session()->flash('info', 'Ya tienes un perfil de anunciante activo. Administra tus propiedades desde tu panel de control.');
-            return redirect()->route('dashboard');
+            return redirect('/dashboard');
         }
 
         // Si el usuario tiene una solicitud pendiente o aprobada, redirige a la página de estado.
@@ -51,17 +51,17 @@ class ProfileSelectionController extends Controller
         // Define las opciones de perfil a mostrar en el formulario.
         $profiles = [
             'owner' => [
-                'title' => 'Particular / Dueño Directo',
+                'title' => 'Particular',
                 'description' => 'Para publicar tus propias propiedades sin intermediarios.',
                 'icon_class' => 'heroicon-o-user'
             ],
             'agent' => [
-                'title' => 'Agente / Corredor',
+                'title' => 'Agente',
                 'description' => 'Para profesionales inmobiliarios que gestionan propiedades de terceros.',
                 'icon_class' => 'heroicon-o-briefcase'
             ],
             'real_estate_company' => [
-                'title' => 'Constructora / Desarrolladora',
+                'title' => 'Inmobiliaria',
                 'description' => 'Para empresas que construyen y venden proyectos inmobiliarios.',
                 'icon_class' => 'heroicon-o-building-office-2'
             ],

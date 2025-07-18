@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\Log; // Eliminado ya que no se usa
 use Laravel\Socialite\Facades\Socialite;
 use Exception;
 use Illuminate\Auth\Events\Verified;
@@ -93,7 +92,7 @@ class GoogleController extends Controller
 
             Auth::login($user);
 
-            return redirect()->intended('/dashboard');
+            return redirect('/');
         } catch (Exception $e) {
             return redirect('/login')->with('error', 'Error al autenticar con Google. Inténtalo de nuevo.');
         }

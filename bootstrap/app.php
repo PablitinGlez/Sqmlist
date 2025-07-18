@@ -17,7 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
         
         $middleware->alias([
             'admin' => AdminMiddleware::class, 
-            'redirect.guest.admin' => RedirectGuestFromAdmin::class, // 
+            'redirect.guest.admin' => RedirectGuestFromAdmin::class, 
         ]);
 
        
