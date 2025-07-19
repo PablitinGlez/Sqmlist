@@ -25,7 +25,11 @@ class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="flex justify-between h-16">
             <div class="flex">
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('home') }}" class="bold text-xl"  wire:navigate>Logo</a>
+                    <a href="{{ route('home') }}" class="bold text-xl"  wire:navigate>
+                        
+                            <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-16 h-auto mx-auto">
+                    
+                    </a>
                 </div>
 
                 @include('layouts.includes.app.navigation-links-desktop')

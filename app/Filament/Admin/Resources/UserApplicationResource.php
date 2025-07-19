@@ -17,7 +17,7 @@ use App\Filament\Admin\Resources\UserApplicationResource\Pages;
 use App\Traits\AdminOnlyResourceTrait;
 
 /**
- * Recurso para gestionar las solicitudes de perfil de usuario en el panel de administración.
+ * gestiona las solicitudes de perfil de usuario en el panel de administración.
  */
 class UserApplicationResource extends Resource
 {
@@ -25,10 +25,13 @@ class UserApplicationResource extends Resource
 
     protected static ?string $model = UserApplication::class;
     protected static ?string $navigationIcon = 'heroicon-o-document-duplicate';
-    protected static ?string $navigationLabel = 'Solicitudes de Perfil';
+    protected static ?string $navigationLabel = 'Solicitudes de Anunciantes';
     protected static ?string $modelLabel = 'Solicitud de Perfil';
     protected static ?string $pluralModelLabel = 'Solicitudes de Perfil';
-    protected static ?string $navigationGroup = 'Gestión de Solicitudes';
+
+        // Grupo de navegación (opcional, para organizar en el sidebar)
+        protected static ?string $navigationGroup = 'Gestión de Usuarios';
+
     protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form

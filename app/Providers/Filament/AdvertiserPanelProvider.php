@@ -36,7 +36,8 @@ class AdvertiserPanelProvider extends PanelProvider
             ->id('advertiser')
             ->path('dashboard')
             ->authGuard('web')
-            ->brandName('Inmobiliaria Anunciante')
+            ->brandLogo(asset('images/logo.png'))
+
             ->colors([
                 'primary' => Color::Blue,
             ])

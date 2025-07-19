@@ -19,6 +19,15 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
     use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable, HasRoles;
 
+    // --- Constantes para el estado del usuario ---
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_INACTIVE = 'inactive';
+
+    public const STATUS_OPTIONS = [
+        self::STATUS_ACTIVE => 'Activo',
+        self::STATUS_INACTIVE => 'Inactivo',
+    ];
+
     protected $fillable = [
         'name',
         'email',
@@ -27,6 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         'external_id',
         'external_auth',
         'email_verified_at',
+        'status', // ¡NUEVO! Añadir la columna 'status' aquí
     ];
 
     protected $hidden = [
@@ -50,17 +60,15 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        
+        // Por ahora, solo nos aseguramos de que el usuario tenga el rol 'admin' para el panel 'admin'.
+        // La lógica para deshabilitar el acceso a usuarios inactivos se añadirá en un paso posterior.
         if ($panel->getId() === 'admin') {
             return $this->hasRole('admin');
         }
 
-       
         if ($panel->getId() === 'advertiser') {
-            
             return $this->hasAnyRole(['owner', 'agent', 'real_estate_company']);
         }
-
         
         return false;
     }
@@ -197,5 +205,14 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         );
     }
 
+    // --- Métodos auxiliares para el estado del usuario ---
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
 
+    public function isInactive(): bool
+    {
+        return $this->status === self::STATUS_INACTIVE;
+    }
 }

@@ -36,9 +36,9 @@ class PropertyResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 
-    protected static ?string $navigationLabel = 'Propiedades (Admin)';
+    protected static ?string $navigationLabel = 'Revisión de Propiedades';
 
-    protected static ?string $navigationGroup = 'Gestión de Contenido';
+    protected static ?string $navigationGroup = 'Revisiones';
 
     protected static ?int $navigationSort = 1;
 
@@ -578,8 +578,8 @@ class PropertyResource extends Resource
                         ->rows(3)
                         ->columnSpanFull()
                         ->visible(fn(Forms\Get $get) => $get('status') === Property::STATUS_REJECTED),
-                ])->columns(1), // <--- ¡Este cierre era el que faltaba o estaba mal ubicado!
-        ]; // <--- Y este cierre para el array del esquema del formulario
+                ])->columns(1),
+        ]; 
     }
 
     public static function form(Form $form): Form
