@@ -10,14 +10,14 @@
 <div class="hidden sm:flex sm:items-center space-x-2 lg:space-x-4">
     @if ($shouldShowButton)
         <a href="{{ $buttonRoute }}"
-           class="inline-flex items-center px-2 py-2 md:px-3 lg:px-4 {{ $buttonClass }} border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wide transition ease-in-out duration-150"  wire:navigate>
+           class="inline-flex items-center px-2 py-2 md:px-3 lg:px-4 {{ $buttonClass }} border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wide transition ease-in-out duration-150" wire:navigate>
             {{ $buttonText }}
         </a>
     @endif
 
     @guest
         <a href="{{ route('login') }}"
-           class="inline-flex items-center px-2 py-2 md:px-3 lg:px-4 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wide hover:bg-gray-700 transition ease-in-out duration-150"  wire:navigate>
+           class="inline-flex items-center px-2 py-2 md:px-3 lg:px-4 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-wide hover:bg-gray-700 transition ease-in-out duration-150" wire:navigate>
             Ingresar
         </a>
     @endguest
@@ -61,6 +61,14 @@
 
                     <x-dropdown-link href="{{ route('profile.show') }}">
                         {{ __('Profile') }}
+                    </x-dropdown-link>
+
+                    {{-- ¡NUEVO! Enlace a Mis Favoritos --}}
+                    <x-dropdown-link href="{{ route('user.favorites.index') }}" wire:navigate>
+                        <div class="flex items-center">
+                           
+                            Mis Favoritos
+                        </div>
                     </x-dropdown-link>
 
                     <!-- Sección de Paneles -->

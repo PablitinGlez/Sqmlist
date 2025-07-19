@@ -9,6 +9,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Middleware\EnsureUserCanAccessAdvertiserPanel;
 use App\Livewire\PropertiesIndex;
 use App\Livewire\ShowProperties;
+use App\Livewire\FavoritePropertiesIndex; // <--- ¡ASEGÚRATE DE QUE ESTA LÍNEA ESTÉ AQUÍ!
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,15 +25,8 @@ Route::view('/about', 'pages.about')->name('about');
 
 Route::get('/contact', [ContactController::class, 'create'])->name('contact.create');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
-Route::get('/propiedades/{slug}', [PropertyController::class, 'show'])->name('properties.show');
-
-
-Route::post('/propiedades/{property}/contactar', [App\Http\Controllers\PropertyMessageController::class, 'store'])->name('properties.contact');
-
 
 Route::get('/propiedades/{slug}', [PropertyController::class, 'show'])->name('properties.show');
-
-
 Route::post('/propiedades/{property}/contactar', [App\Http\Controllers\PropertyMessageController::class, 'store'])->name('properties.contact');
 
 Route::get('/propiedades', PropertiesIndex::class)->name('properties.index');
@@ -46,6 +40,9 @@ Route::middleware([
     Route::get('/solicitud-perfil', [ProfileSelectionController::class, 'showSelectionForm'])->name('solicitud.perfil');
     Route::get('/solicitud/estado', [UserApplicationController::class, 'status'])->name('solicitud.estado');
     Route::get('/solicitud/{type?}', [UserApplicationController::class, 'create'])->name('solicitud.formulario');
+
+    // Nueva ruta para las propiedades favoritas
+    Route::get('/mis-favoritos', FavoritePropertiesIndex::class)->name('user.favorites.index'); // <--- ¡ASEGÚRATE DE QUE ESTA LÍNEA ESTÉ AQUÍ!
 
     // Route::middleware([EnsureUserCanAccessAdvertiserPanel::class])->group(function () {
     //     Route::get('/dashboard', function () {

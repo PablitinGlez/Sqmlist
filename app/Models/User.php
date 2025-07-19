@@ -14,6 +14,7 @@ use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
@@ -214,5 +215,18 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     public function isInactive(): bool
     {
         return $this->status === self::STATUS_INACTIVE;
+    }
+
+    public function favoriteProperties(): BelongsToMany
+    {
+        return $this->belongsToMany(Property::class, 'user_favorite_properties', 'user_id', 'property_id')->withTimestamps();
+    }
+
+    /**
+     * Verifica si el usuario ha marcado una propiedad específica como favorita.
+     */
+    public function hasFavorited(Property $property): bool
+    {
+        return $this->favoriteProperties()->where('property_id', $property->id)->exists();
     }
 }
