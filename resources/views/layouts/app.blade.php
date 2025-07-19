@@ -49,8 +49,5 @@
     @stack('scripts')
 
    
-    
-    {{-- Script de Google Maps API --}}
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&callback=initMap"></script>
 </body>
 </html>
