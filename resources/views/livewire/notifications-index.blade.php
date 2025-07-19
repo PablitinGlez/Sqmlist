@@ -1,9 +1,9 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-6 lg:p-8">
-            <h1 class="text-3xl font-extrabold text-gray-900 mb-6 text-center">
-                <i class="fas fa-bell text-blue-500 mr-2"></i> Mis Notificaciones
-            </h1>
+        <div class="bg-white overflow-hidden sm:rounded-lg p-6 lg:p-8">
+            <h1 class="text-2xl font-semibold text-gray-900 mb-6 text-center">
+                Mis Notificaciones
+             </h1>
 
             @auth
                 @if ($notifications->isEmpty())
@@ -73,7 +73,7 @@
             @else
                 {{-- Message for unauthenticated users --}}
                 <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
-                    <i class="fas fa-lock text-gray-400 text-6xl mb-6"></i>
+                   
                     <p class="mt-6 text-xl font-semibold text-gray-700">
                         ¡Inicia sesión para ver tus notificaciones!
                     </p>
@@ -81,7 +81,7 @@
                         Crea una cuenta o inicia sesión para mantenerte al día con las novedades de tu cuenta.
                     </p>
                     <a href="{{ route('login') }}" class="mt-6 inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" wire:navigate>
-                        <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
+                        Iniciar Sesión
                     </a>
                 </div>
             @endauth
