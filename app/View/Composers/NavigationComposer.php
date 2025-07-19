@@ -29,12 +29,6 @@ class NavigationComposer
                 // Activo si estamos en la ruta de propiedades y el parámetro 'operacion' es 'rent'
                 'active' => request()->routeIs('properties.index') && request('operacion') === 'rent',
             ],
-            // --- Otros enlaces (Agentes, Nosotros, Contacto) ---
-            [
-                'name' => 'Agentes',
-                'route' => '#', // Mantener como placeholder o cambiar a tu ruta real de agentes
-                'active' => false, // O la lógica de activo para agentes
-            ],
             [
                 'name' => 'Nosotros',
                 'route' => route('about'),

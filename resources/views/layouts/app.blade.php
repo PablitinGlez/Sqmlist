@@ -23,7 +23,7 @@
 
 <body style="font-family: 'Poppins', sans-serif;" class="antialiased">
     
-    <div class="min-h-screen bg-transparent">
+    <div class="bg-transparent">
         @include('layouts.includes.app.navigation-menu')
 
         @if (isset($header))

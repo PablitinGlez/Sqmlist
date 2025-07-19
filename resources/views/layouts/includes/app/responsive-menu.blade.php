@@ -138,14 +138,23 @@
                     </a>
                 @endif
 
-             s
+             
                  <x-responsive-nav-link href="{{ route('user.favorites.index') }}" :active="request()->routeIs('user.favorites.index')" wire:navigate>
-                    <dijv class="flex items-center">
-                      {{-- Icono de corazón --}}
+                    <div class="flex items-center">
+                     
                         Mis Favoritos
                     </div>
                 </x-responsive-nav-link>
 
+
+                <x-dropdown-link href="{{ route('user.notifications.index') }}" wire:navigate>
+                    <div class="flex items-center">
+                        <i class="fas fa-bell mr-2 text-blue-500"></i> {{-- Icono de campana --}}
+                        Mis Notificaciones
+                    </div>
+                </x-dropdown-link>
+
+                
                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                     <a href="{{ route('api-tokens.index') }}"
                        :class="{

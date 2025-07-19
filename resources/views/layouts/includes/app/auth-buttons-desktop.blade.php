@@ -71,6 +71,14 @@
                         </div>
                     </x-dropdown-link>
 
+
+                    <x-dropdown-link href="{{ route('user.notifications.index') }}" wire:navigate>
+                        <div class="flex items-center">
+                          
+                            Mis Notificaciones
+                        </div>
+                    </x-dropdown-link>
+
                     <!-- Sección de Paneles -->
                     @if (Auth::user()->hasRole('admin'))
                         <div class="border-t border-gray-200"></div>
