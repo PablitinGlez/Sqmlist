@@ -14,6 +14,13 @@
     {{-- LottieFiles Web Component Script --}}
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
 
+
+      {{-- GSAP y ScrollTrigger CDN --}}
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+      
+      
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @livewireStyles
