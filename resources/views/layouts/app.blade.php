@@ -48,11 +48,7 @@
     @filamentScripts
     @stack('scripts')
 
-    <script>
-        window.initMap = function () {
-            // Tu código de Google Maps
-        };
-    </script>
+   
     
     {{-- Script de Google Maps API --}}
     <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&callback=initMap"></script>
