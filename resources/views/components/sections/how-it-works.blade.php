@@ -89,9 +89,9 @@
                 <!-- Área de contenido visual - Optimizada para móvil -->
                 <div class="relative w-full order-1 lg:order-2">
                     <!-- Altura responsive -->
-                    <div class="relative h-64 md:h-80 lg:h-[500px] flex items-center justify-center">
+                    <div class="relative h-64 md:h-80 lg:h-[400px] flex items-center justify-center">
                         <!-- Contenedor de imágenes -->
-                        <div class="relative w-full h-full max-w-xs md:max-w-md lg:max-w-lg mx-auto">
+                        <div class="relative w-full h-full max-w-sm md:max-w-md lg:max-w-lg mx-auto">
                             <template x-for="(step, index) in steps" :key="index">
                                 <div 
                                     x-show="currentStep === index"
@@ -101,44 +101,47 @@
                                     x-transition:leave="transition ease-in duration-300"
                                     x-transition:leave-start="opacity-100 transform scale-100"
                                     x-transition:leave-end="opacity-0 transform scale-95"
-                                    class="absolute inset-0 flex items-center justify-center"
+                                    class="absolute inset-0 flex items-center justify-center p-4"
                                 >
-                                    <!-- Mockup de dispositivos responsive -->
-                                    <div class="relative">
-                                        <!-- Laptop mockup - tamaños responsivos -->
-                                        <div class="bg-gray-800 rounded-lg p-1 md:p-2 shadow-2xl transform rotate-1">
-                                            <div class="bg-white rounded-md overflow-hidden" style="width: 200px; height: 125px;">
-                                                <!-- Barra superior del navegador -->
-                                                <div class="h-4 md:h-6 bg-gray-100 flex items-center px-2 md:px-3 space-x-1">
-                                                    <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-red-500 rounded-full"></div>
-                                                    <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-yellow-500 rounded-full"></div>
-                                                    <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-green-500 rounded-full"></div>
-                                                </div>
-                                                <!-- Contenido -->
-                                                <div class="p-2 md:p-4 h-full bg-gradient-to-br from-blue-50 to-blue-100 flex flex-col justify-center items-center">
-                                                    <div class="text-center">
-                                                        <i :class="step.icon" class="text-2xl md:text-3xl lg:text-4xl text-blue-500 mb-1 md:mb-3"></i>
-                                                        <h4 class="text-xs md:text-sm font-semibold text-gray-800 mb-1" x-text="step.title"></h4>
-                                                        <p class="text-xs text-gray-600 hidden md:block" x-text="step.shortDescription"></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    <!-- AQUÍ VAN TUS IMÁGENES PERSONALIZADAS -->
+                                    <!-- Descomenta y añade tus imágenes según el paso -->
+                                    
+                                   <div x-show="index === 0" class="w-full h-full">
+                                        <img 
+                                            src="/images/location.png" 
+                                            alt="Ubicar inmueble en mapa"
+                                            class="w-full h-full object-cover"
+                                        >
+                                    </div> 
+                                    
+                                    <!-- PASO 2: Características -->
+                                    <!-- <div x-show="index === 1" class="w-full h-full">
+                                        <img 
+                                            src="/images/paso-2-caracteristicas.jpg" 
+                                            alt="Describir características del inmueble"
+                                            class="w-full h-full object-cover rounded-2xl shadow-2xl"
+                                        >
+                                    </div> -->
+                                    
+                                    <!-- PASO 3: Fotos y videos -->
+                                    <!-- <div x-show="index === 2" class="w-full h-full">
+                                        <img 
+                                            src="/images/paso-3-fotos.jpg" 
+                                            alt="Subir fotos y videos"
+                                            class="w-full h-full object-cover rounded-2xl shadow-2xl"
+                                        >
+                                    </div> -->
+                                    
+                                    <!-- PASO 4: Datos de contacto -->
+                                    <!-- <div x-show="index === 3" class="w-full h-full">
+                                        <img 
+                                            src="/images/paso-4-contacto.jpg" 
+                                            alt="Establecer datos de contacto"
+                                            class="w-full h-full object-cover rounded-2xl shadow-2xl"
+                                        >
+                                    </div> -->
 
-                                        <!-- Phone mockup - tamaño optimizado para móvil -->
-                                        <div class="absolute -bottom-2 md:-bottom-4 -right-4 md:-right-8 bg-gray-800 rounded-xl md:rounded-2xl p-0.5 md:p-1 shadow-xl transform -rotate-12 scale-75 md:scale-75">
-                                            <div class="bg-white rounded-lg md:rounded-xl overflow-hidden" style="width: 80px; height: 140px;">
-                                                <div class="h-1 md:h-2 bg-gray-100"></div>
-                                                <div class="px-2 md:px-3 py-1 md:py-2 h-full bg-gradient-to-b from-blue-50 to-blue-100 flex flex-col justify-center items-center">
-                                                    <i :class="step.icon" class="text-lg md:text-2xl text-blue-500 mb-1 md:mb-2"></i>
-                                                    <div class="text-center">
-                                                        <div class="w-10 md:w-16 h-0.5 md:h-1 bg-gray-300 rounded mb-1"></div>
-                                                        <div class="w-8 md:w-12 h-0.5 md:h-1 bg-gray-200 rounded"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                 
                                 </div>
                             </template>
                         </div>
