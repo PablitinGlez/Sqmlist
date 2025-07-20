@@ -106,7 +106,7 @@
                                
                                    <div x-show="index === 0" class="w-full h-full">
                                         <img 
-                                            src="/images/location.png" 
+                                            src="/images/step1.png" 
                                             alt="Ubicar inmueble en mapa"
                                             class="w-full h-full object-cover"
                                         >
@@ -128,14 +128,14 @@
                                             class="w-full h-full object-cover"
                                         >
                                     </div> 
-                                    <!-- PASO 4: Datos de contacto -->
-                                    <!-- <div x-show="index === 3" class="w-full h-full">
+                                    
+                                     <div x-show="index === 3" class="w-full h-full">
                                         <img 
-                                            src="/images/paso-4-contacto.jpg" 
+                                            src="/images/paso4.png" 
                                             alt="Establecer datos de contacto"
-                                            class="w-full h-full object-cover rounded-2xl shadow-2xl"
+                                            class="w-full h-full object-cover"
                                         >
-                                    </div> -->
+                                    </div> 
 
                                  
                                 </div>
@@ -146,14 +146,14 @@
             </div>
 
             <!-- Botón de acción - responsive -->
-            <div class="text-center mt-8 md:mt-12 px-4">
+            <div class="text-center mt-8 md:mt-12 px-4 relative z-50">
                 <button 
                     @click="restartTimeline()"
-                    class="inline-flex items-center px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 text-sm md:text-base"
+                    class="btn-primary inline-flex items-center px-6 md:px-8 py-3 md:py-4 font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-sm md:text-base"
+                    style="background: linear-gradient(to right, #3b82f6, #2563eb) !important; color: white !important; z-index: 9999 !important;"
                 >
                     <i class="fas fa-plus-circle mr-2"></i>
-                    Comienza a publicar
-                </button>
+                    Comienza a publicar 
                 
                 <!-- Controles adicionales - ocultos en móvil pequeño -->
                 <div class="mt-4 md:mt-6 flex justify-center space-x-3 md:space-x-4">
@@ -322,6 +322,21 @@ function timelineData() {
     animation: pulse-blue 2s infinite;
 }
 
+.btn-primary {
+            background: linear-gradient(to right, #3b82f6, #2563eb) !important;
+            color: white !important;
+            position: relative !important;
+            z-index: 9999 !important;
+            display: inline-flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
+            transform: scale(1.05);
+        }
+
 /* Mejoras responsive adicionales */
 @media (max-width: 640px) {
     /* Asegurar que no hay overflow horizontal */
@@ -344,4 +359,6 @@ function timelineData() {
         gap: 2rem;
     }
 }
+
+
 </style>

@@ -872,14 +872,7 @@ class PropertyResource extends Resource
                                             ->maxLength(255)
                                             ->columnSpanFull(),
 
-                                        Forms\Components\Placeholder::make('contact_info')
-                                            ->content(new HtmlString('
-                                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                                                    <p><strong>Nota:</strong> Estos datos se han prellenado con la información de tu perfil. Puedes modificarlos si deseas usar diferentes datos de contacto para esta propiedad específica.</p>
-                                                    <p class="mt-2 text-primary-600 dark:text-primary-400">Una vez creada, su propiedad será evaluada por un administrador para poder ser publicada. Si cumple con los requisitos, su propiedad se publicará automáticamente.</p>
-                                                </div>
-                                            '))
-                                            ->columnSpanFull(),
+                                      
 
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('enviar_a_revision')
