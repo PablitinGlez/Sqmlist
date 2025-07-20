@@ -72,8 +72,10 @@
             <!-- Div cristalizado -->
             <div class="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-start md:text-center sm:text-center shadow-2xl">
                 <!-- Título principal -->
-                <h1 class="max-w-2xl text-xl sm:text md:text-2xl lg:text-2xl font-medium text-white mb-8 leading-tight">
-                    {{ $title }}
+                <h1 id="hero-title" class="max-w-2xl text-xl sm:text md:text-2xl lg:text-2xl font-bold text-white mb-8 leading-tight"> {{-- <--- font-bold y id="hero-title" --}}
+                    {{-- El texto original se usará como base para la animación de escritura --}}
+                    {{-- La palabra 'clics' envuelta en un span para la animación del cursor --}}
+                    Conecta con tu nuevo hogar en solo unos <span id="clics-word">clics</span>
                 </h1>
 
                 <!-- Barra de búsqueda - Ahora es un componente Livewire que incluye los botones de operación y la línea divisoria -->
@@ -84,6 +86,16 @@
                 ])
             </div>
         </x-partials.container>
+
+        {{-- ¡NUEVO! SVG de flecha/cursor para la animación --}}
+        <div id="cursor-arrow" class="absolute z-20 hidden" style="width: 30px; height: 30px; color: white;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-right">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                <path d="M5 12l14 0" />
+                <path d="M13 18l6 -6" />
+                <path d="M13 6l6 6" />
+            </svg>
+        </div>
     </div>
 
     <!-- Icono de scroll animado -->
@@ -119,6 +131,9 @@
             image.style.opacity = '1';
             content.style.opacity = '1';
             scrollIcon.style.opacity = '1';
+
+            // ¡NUEVO! Despacha un evento personalizado cuando el contenido del hero esté visible
+            document.dispatchEvent(new CustomEvent('hero-content-loaded'));
         }
     }
 
@@ -138,8 +153,5 @@
                 hideHeroSkeleton();
             });
         }
-
-        // La lógica de los botones "En Venta" / "En Renta" se ha movido al componente HeroSearch.
-        // Por lo tanto, el código JavaScript relacionado con 'property-type-btn' ya no es necesario aquí.
     });
 </script>

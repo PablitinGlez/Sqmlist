@@ -4,10 +4,8 @@ import './bootstrap';
 import './file-validation';
 import './navigation-loader';
 import './scroll-animations';
+import './hero-animations';
 
-// NO IMPORTAR ALPINE.JS - Livewire ya lo maneja todo
-
-// Eventos de Livewire
 document.addEventListener('livewire:init', () => {
     console.log('Livewire inicializado');
 });
