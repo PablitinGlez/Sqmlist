@@ -155,36 +155,37 @@
                     <i class="fas fa-plus-circle mr-2"></i>
                     Comienza a publicar 
                 
-                <!-- Controles adicionales - ocultos en móvil pequeño -->
-                <div class="mt-4 md:mt-6 flex justify-center space-x-3 md:space-x-4">
+             
+            </div>
+
+               <div class="mt-6 md:mt-8 flex flex-row justify-center items-center space-x-4 md:space-x-6 relative z-40">
                     <button 
                         @click="pauseTimeline()" 
                         x-show="!isPaused"
-                        class="flex items-center justify-center bg-white text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:shadow-sm"
-                        style="min-height: 36px; visibility: visible !important; opacity: 1 !important;"
+                        class="flex items-center justify-center bg-white text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-all duration-200 hover:shadow-sm"
+                        style="min-height: 32px; visibility: visible !important; opacity: 1 !important;"
                     >
-                        <i class="fas fa-pause mr-2 text-sm"></i>
+                        <i class="fas fa-pause mr-1 sm:mr-2 text-xs sm:text-sm"></i>
                         <span class="whitespace-nowrap">Pausar</span>
                     </button>
                     <button 
                         @click="resumeTimeline()" 
                         x-show="isPaused"
-                        class="flex items-center justify-center bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:shadow-sm"
-                        style="min-height: 36px; visibility: visible !important; opacity: 1 !important;"
+                        class="flex items-center justify-center bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-all duration-200 hover:shadow-sm"
+                        style="min-height: 32px; visibility: visible !important; opacity: 1 !important;"
                     >
-                        <i class="fas fa-play mr-2 text-sm"></i>
+                        <i class="fas fa-play mr-1 sm:mr-2 text-xs sm:text-sm"></i>
                         <span class="whitespace-nowrap">Continuar</span>
                     </button>
                     <button 
                         @click="restartTimeline()" 
-                        class="flex items-center justify-center bg-white text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:shadow-sm"
-                        style="min-height: 36px; visibility: visible !important; opacity: 1 !important;"
+                        class="flex items-center justify-center bg-white text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-all duration-200 hover:shadow-sm"
+                        style="min-height: 32px; visibility: visible !important; opacity: 1 !important;"
                     >
-                        <i class="fas fa-redo mr-2 text-sm"></i>
+                        <i class="fas fa-redo mr-1 sm:mr-2 text-xs sm:text-sm"></i>
                         <span class="whitespace-nowrap">Reiniciar</span>
                     </button>
                 </div>
-            </div>
         </div>
     </x-partials.container>
 </section>
@@ -385,6 +386,35 @@ function timelineData() {
         gap: 2rem;
     }
 }
+
+ .controls-container {
+            display: flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 1rem !important;
+            margin-top: 1.5rem !important;
+        }
+
+        @media (max-width: 640px) {
+            .controls-container {
+                margin-top: 1.5rem !important;
+                gap: 0.75rem !important;
+            }
+            
+            /* Botones más pequeños en móvil pero siempre horizontales */
+            .btn-control {
+                padding: 0.5rem 0.75rem !important;
+                font-size: 0.75rem !important;
+            }
+        }
+
+        /* Mejoras responsive adicionales */
+        @media (max-width: 640px) {
+            .overflow-hidden {
+                overflow-x: hidden;
+            }
+        }
 
 
 </style>
