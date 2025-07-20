@@ -29,7 +29,7 @@ document.addEventListener('hero-content-loaded', () => {
     
     // Efecto de escritura
     .to(heroTitle, {
-        duration: 3, // Duración de 4 segundos
+        duration: 2, // Duración de 4 segundos
         ease: "none", // Sin easing para efecto de escritura natural
         text: {
             value: originalTitleText,

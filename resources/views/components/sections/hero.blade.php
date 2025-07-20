@@ -70,18 +70,13 @@
         <x-partials.container>
             <!-- Div cristalizado -->
             <div class="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-start md:text-center sm:text-center shadow-2xl">
-                <!-- Título principal con cursor -->
+                <!-- Título principal -->
                 <div class="relative max-w-2xl mx-auto">
                     <h1 id="hero-title"
                     class="text-xl sm:text md:text-2xl lg:text-2xl font-semibold text-white mb-8 leading-tight"
                     data-original-text="Conecta con tu nuevo hogar en solo unos clics">
-                    Conecta con tu nuevo hogar en solo unos <span id="clics-word" class="relative">clics</span>
+                    Conecta con tu nuevo hogar en solo unos clics
                     </h1>
-                    
-                    <!-- Cursor SVG - Reposicionado con CSS y animación -->
-                    <div id="cursor-icon" class="absolute top-2 right-4 pointer-events-none z-30 opacity-0">
-                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-click cursor-animate"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12l3 0" /><path d="M12 3l0 3" /><path d="M7.8 7.8l-2.2 -2.2" /><path d="M16.2 7.8l2.2 -2.2" /><path d="M7.8 16.2l-2.2 2.2" /><path d="M12 12l9 3l-4 2l-2 4l-3 -9" /></svg>
-                    </div>
                 </div>
 
                 <!-- Barra de búsqueda -->
@@ -126,75 +121,6 @@
         }
     }
 
-    // Función mejorada con posicionamiento responsivo
-    function positionCursorNearClics() {
-        const clicsWord = document.getElementById('clics-word');
-        const cursorIcon = document.getElementById('cursor-icon');
-        
-        if (clicsWord && cursorIcon) {
-            const rect = clicsWord.getBoundingClientRect();
-            const containerRect = clicsWord.closest('.relative').getBoundingClientRect();
-            
-            // Media queries en JavaScript para ajustes responsivos
-            const screenWidth = window.innerWidth;
-            let adjustments = { left: 5, top: -2 }; // Valores por defecto (desktop)
-            
-            // Ajustes específicos por tamaño de pantalla
-            if (screenWidth <= 640) {
-                // sm y menores (móviles) - más a la izquierda y arriba
-                adjustments = { left: -12, top: -10 };
-            } else if (screenWidth <= 768) {
-                // md (tablets pequeñas)
-                adjustments = { left: -8, top: -6 };
-            } else if (screenWidth <= 1024) {
-                // lg (tablets)
-                adjustments = { left: 0, top: -4 };
-            }
-            
-            const leftPosition = rect.right - containerRect.left + adjustments.left;
-            const topPosition = rect.top - containerRect.top + adjustments.top;
-            
-            cursorIcon.style.left = leftPosition + 'px';
-            cursorIcon.style.top = topPosition + 'px';
-            cursorIcon.style.opacity = '1';
-        }
-    }
-
-    // Función para animar el cursor con movimiento curveado (solo una vez)
-    function animateCursor() {
-        const cursorIcon = document.getElementById('cursor-icon');
-        if (!cursorIcon) return;
-
-        // Hacer visible el ícono
-        cursorIcon.style.opacity = '1';
-
-        let startTime = null;
-        const duration = 3000; // 3 segundos
-        
-        function animate(currentTime) {
-            if (startTime === null) startTime = currentTime;
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            
-            // Crear movimiento curveado usando funciones trigonométricas
-            const curveX = Math.sin(progress * Math.PI * 2) * 15; // Amplitud horizontal
-            const curveY = Math.sin(progress * Math.PI * 4) * 8;  // Amplitud vertical más rápida
-            
-            // Aplicar la transformación
-            cursorIcon.style.transform = `translate(${curveX}px, ${curveY}px)`;
-            
-            // Continuar la animación solo hasta completarla
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            } else {
-                // Animación completada, resetear posición y mantenerla
-                cursorIcon.style.transform = `translate(0px, 0px)`;
-            }
-        }
-        
-        requestAnimationFrame(animate);
-    }
-
     document.addEventListener('DOMContentLoaded', function() {
         const heroImage = document.getElementById('hero-image');
 
@@ -206,28 +132,9 @@
         } else {
             setTimeout(hideHeroSkeleton, 300);
         }
-
-        // Posicionar el cursor después de que el contenido se cargue
-        setTimeout(positionCursorNearClics, 100);
-        
-        // Iniciar la animación del cursor después de 4 segundos
-        setTimeout(() => {
-            animateCursor();
-        }, 4000);
     });
 
     document.addEventListener('livewire:navigated', () => {
         hideHeroSkeleton();
-        setTimeout(positionCursorNearClics, 100);
-        
-        // Reiniciar la animación en navegación después de 4 segundos
-        setTimeout(() => {
-            animateCursor();
-        }, 4000);
-    });
-
-    // Reposicionar el cursor cuando se redimensiona la ventana
-    window.addEventListener('resize', () => {
-        setTimeout(positionCursorNearClics, 50);
     });
 </script>
