@@ -61,7 +61,7 @@
              src="{{ asset($backgroundImage) }}"
              alt="Hero Background"
              class="w-full h-full object-cover opacity-0 transition-opacity duration-500"
-             loading="eager"> {{-- QUITAMOS onload="hideHeroSkeleton()" de aquí --}}
+             loading="eager">
         <div class="absolute inset-0 bg-black/30"></div>
     </div>
 
@@ -70,31 +70,28 @@
         <x-partials.container>
             <!-- Div cristalizado -->
             <div class="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-start md:text-center sm:text-center shadow-2xl">
-                <!-- Título principal -->
-                <h1 id="hero-title"
-                    class="max-w-2xl text-xl sm:text md:text-2xl lg:text-2xl font-bold text-white mb-8 leading-tight"
-                    data-original-text="Conecta con tu nuevo hogar en solo unos clics"> {{-- ¡NUEVO! data-original-text --}}
-                    Conecta con tu nuevo hogar en solo unos <span id="clics-word">clics</span>
-                </h1>
+                <!-- Título principal con cursor -->
+                <div class="relative max-w-2xl mx-auto">
+                    <h1 id="hero-title"
+                    class="text-xl sm:text md:text-2xl lg:text-2xl font-semibold text-white mb-8 leading-tight"
+                    data-original-text="Conecta con tu nuevo hogar en solo unos clics">
+                    Conecta con tu nuevo hogar en solo unos <span id="clics-word" class="relative">clics</span>
+                    </h1>
+                    
+                    <!-- Cursor SVG - Reposicionado con CSS y animación -->
+                    <div id="cursor-icon" class="absolute top-2 right-4 pointer-events-none z-30 opacity-0">
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-click cursor-animate"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12l3 0" /><path d="M12 3l0 3" /><path d="M7.8 7.8l-2.2 -2.2" /><path d="M16.2 7.8l2.2 -2.2" /><path d="M7.8 16.2l-2.2 2.2" /><path d="M12 12l9 3l-4 2l-2 4l-3 -9" /></svg>
+                    </div>
+                </div>
 
-                <!-- Barra de búsqueda - Ahora es un componente Livewire que incluye los botones de operación y la línea divisoria -->
+                <!-- Barra de búsqueda -->
                 @livewire('hero-search', [
                     'initialLocationSearch' => request('ubicacion'),
                     'initialPropertyType' => request('tipo'),
-                    'initialOperationType' => request('operacion') // Pasar el tipo de operación inicial
+                    'initialOperationType' => request('operacion')
                 ])
             </div>
         </x-partials.container>
-
-        {{-- SVG de flecha/cursor para la animación --}}
-        <div id="cursor-arrow" class="absolute z-20 hidden" style="width: 30px; height: 30px; color: white;">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-right">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                <path d="M5 12l14 0" />
-                <path d="M13 18l6 -6" />
-                <path d="M13 6l6 6" />
-            </svg>
-        </div>
     </div>
 
     <!-- Icono de scroll animado -->
@@ -107,11 +104,6 @@
     </div>
 </section>
 
-<style>
-    /* Se eliminan las clases .property-type-btn y .property-type-btn.active
-       porque ahora son enlaces y la activación se maneja con Blade/request() */
-</style>
-
 <script>
     function hideHeroSkeleton() {
         const skeleton = document.getElementById('hero-skeleton');
@@ -120,7 +112,6 @@
         const scrollIcon = document.getElementById('scroll-icon');
 
         if (skeleton && image && content && scrollIcon) {
-            // Solo procede si el esqueleto aún no está oculto
             if (skeleton.style.display !== 'none' || skeleton.style.opacity !== '0') {
                 skeleton.style.opacity = '0';
                 setTimeout(() => {
@@ -131,31 +122,102 @@
                 content.style.opacity = '1';
                 scrollIcon.style.opacity = '1';
 
-                // Despacha el evento solo cuando el contenido real esté visible
                 document.dispatchEvent(new CustomEvent('hero-content-loaded'));
             }
         }
     }
 
+    function positionCursorNearClics() {
+        const clicsWord = document.getElementById('clics-word');
+        const cursorIcon = document.getElementById('cursor-icon');
+        
+        if (clicsWord && cursorIcon) {
+            const rect = clicsWord.getBoundingClientRect();
+            const containerRect = clicsWord.closest('.relative').getBoundingClientRect();
+            
+            // Posicionar el cursor al final de la palabra "clics"
+            const leftPosition = rect.right - containerRect.left + 5; // 5px de separación
+            const topPosition = rect.top - containerRect.top - 2; // Pequeño ajuste vertical
+            
+            cursorIcon.style.left = leftPosition + 'px';
+            cursorIcon.style.top = topPosition + 'px';
+            cursorIcon.style.opacity = '1';
+        }
+    }
+
+    // Función para animar el cursor con movimiento curveado (solo una vez)
+    function animateCursor() {
+        const cursorIcon = document.getElementById('cursor-icon');
+        if (!cursorIcon) return;
+
+        // Hacer visible el ícono
+        cursorIcon.style.opacity = '1';
+
+        let startTime = null;
+        const duration = 3000; // 3 segundos
+        
+        function animate(currentTime) {
+            if (startTime === null) startTime = currentTime;
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Crear movimiento curveado usando funciones trigonométricas
+            const curveX = Math.sin(progress * Math.PI * 2) * 15; // Amplitud horizontal
+            const curveY = Math.sin(progress * Math.PI * 4) * 8;  // Amplitud vertical más rápida
+            
+            // Aplicar la transformación
+            cursorIcon.style.transform = `translate(${curveX}px, ${curveY}px)`;
+            
+            // Continuar la animación solo hasta completarla
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                // Animación completada, resetear posición y mantenerla
+                cursorIcon.style.transform = `translate(0px, 0px)`;
+            }
+        }
+        
+        requestAnimationFrame(animate);
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         const heroImage = document.getElementById('hero-image');
 
-        // Comprueba si la imagen ya está cargada (ej. desde caché)
         if (heroImage && heroImage.complete && heroImage.naturalHeight !== 0) {
             hideHeroSkeleton();
         } else if (heroImage) {
-            // Si no está cargada, espera a que se cargue o a un error
             heroImage.addEventListener('load', hideHeroSkeleton);
             heroImage.addEventListener('error', hideHeroSkeleton);
         } else {
-            // Si no hay imagen o como fallback de seguridad
             setTimeout(hideHeroSkeleton, 300);
         }
+
+        // Posicionar el cursor después de que el contenido se cargue
+        setTimeout(positionCursorNearClics, 100);
+        
+        // Iniciar la animación del cursor después de 4 segundos
+        setTimeout(() => {
+            animateCursor();
+        }, 4000); // Esperar 4 segundos antes de mostrar y animar el cursor
     });
 
-    // ¡NUEVO! Escucha el evento livewire:navigated para reiniciar las animaciones
     document.addEventListener('livewire:navigated', () => {
-        // Asegurarse de que el esqueleto esté oculto y el contenido visible
         hideHeroSkeleton();
+        setTimeout(positionCursorNearClics, 100);
+        
+        // Reiniciar la animación en navegación después de 4 segundos
+        setTimeout(() => {
+            animateCursor();
+        }, 4000);
     });
+
+    // Reposicionar el cursor cuando se redimensiona la ventana
+    window.addEventListener('resize', () => {
+        setTimeout(positionCursorNearClics, 50);
+    });
+
+  
+</script> 
+
+  
 </script>
