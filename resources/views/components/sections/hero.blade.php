@@ -61,8 +61,7 @@
              src="{{ asset($backgroundImage) }}"
              alt="Hero Background"
              class="w-full h-full object-cover opacity-0 transition-opacity duration-500"
-             loading="eager"
-             onload="hideHeroSkeleton()">
+             loading="eager"> {{-- QUITAMOS onload="hideHeroSkeleton()" de aquí --}}
         <div class="absolute inset-0 bg-black/30"></div>
     </div>
 
@@ -72,9 +71,9 @@
             <!-- Div cristalizado -->
             <div class="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-start md:text-center sm:text-center shadow-2xl">
                 <!-- Título principal -->
-                <h1 id="hero-title" class="max-w-2xl text-xl sm:text md:text-2xl lg:text-2xl font-bold text-white mb-8 leading-tight"> {{-- <--- font-bold y id="hero-title" --}}
-                    {{-- El texto original se usará como base para la animación de escritura --}}
-                    {{-- La palabra 'clics' envuelta en un span para la animación del cursor --}}
+                <h1 id="hero-title"
+                    class="max-w-2xl text-xl sm:text md:text-2xl lg:text-2xl font-bold text-white mb-8 leading-tight"
+                    data-original-text="Conecta con tu nuevo hogar en solo unos clics"> {{-- ¡NUEVO! data-original-text --}}
                     Conecta con tu nuevo hogar en solo unos <span id="clics-word">clics</span>
                 </h1>
 
@@ -87,7 +86,7 @@
             </div>
         </x-partials.container>
 
-        {{-- ¡NUEVO! SVG de flecha/cursor para la animación --}}
+        {{-- SVG de flecha/cursor para la animación --}}
         <div id="cursor-arrow" class="absolute z-20 hidden" style="width: 30px; height: 30px; color: white;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-right">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -121,37 +120,42 @@
         const scrollIcon = document.getElementById('scroll-icon');
 
         if (skeleton && image && content && scrollIcon) {
-            // Ocultar skeleton
-            skeleton.style.opacity = '0';
-            setTimeout(() => {
-                skeleton.style.display = 'none';
-            }, 200);
+            // Solo procede si el esqueleto aún no está oculto
+            if (skeleton.style.display !== 'none' || skeleton.style.opacity !== '0') {
+                skeleton.style.opacity = '0';
+                setTimeout(() => {
+                    skeleton.style.display = 'none';
+                }, 200);
 
-            // Mostrar contenido real
-            image.style.opacity = '1';
-            content.style.opacity = '1';
-            scrollIcon.style.opacity = '1';
+                image.style.opacity = '1';
+                content.style.opacity = '1';
+                scrollIcon.style.opacity = '1';
 
-            // ¡NUEVO! Despacha un evento personalizado cuando el contenido del hero esté visible
-            document.dispatchEvent(new CustomEvent('hero-content-loaded'));
+                // Despacha el evento solo cuando el contenido real esté visible
+                document.dispatchEvent(new CustomEvent('hero-content-loaded'));
+            }
         }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Timeout de seguridad: ocultar skeleton después de 3 segundos máximo
-        setTimeout(() => {
-            const skeleton = document.getElementById('hero-skeleton');
-            if (skeleton && skeleton.style.display !== 'none') {
-                hideHeroSkeleton();
-            }
-        }, 300);
-
-        // Manejar error de carga de imagen
         const heroImage = document.getElementById('hero-image');
-        if (heroImage) {
-            heroImage.addEventListener('error', function() {
-                hideHeroSkeleton();
-            });
+
+        // Comprueba si la imagen ya está cargada (ej. desde caché)
+        if (heroImage && heroImage.complete && heroImage.naturalHeight !== 0) {
+            hideHeroSkeleton();
+        } else if (heroImage) {
+            // Si no está cargada, espera a que se cargue o a un error
+            heroImage.addEventListener('load', hideHeroSkeleton);
+            heroImage.addEventListener('error', hideHeroSkeleton);
+        } else {
+            // Si no hay imagen o como fallback de seguridad
+            setTimeout(hideHeroSkeleton, 300);
         }
+    });
+
+    // ¡NUEVO! Escucha el evento livewire:navigated para reiniciar las animaciones
+    document.addEventListener('livewire:navigated', () => {
+        // Asegurarse de que el esqueleto esté oculto y el contenido visible
+        hideHeroSkeleton();
     });
 </script>
