@@ -40,8 +40,8 @@
             <!-- Logo, descripción y redes sociales -->
             <div class="text-center lg:text-left">
                 <div class="flex items-center justify-center lg:justify-start mb-4">
-                    <div class="w-8 h-8 bg-gray-300 rounded mr-3"></div>
-                    <span class="text-xl font-semibold text-gray-900">Logoipsum</span>
+                      <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-16 h-auto mr-3">
+                    <span class="text-xl font-semibold text-gray-900">SQMLIST</span>
                 </div>
                 <p class="text-gray-600 text-sm leading-relaxed mb-6 max-w-md mx-auto lg:mx-0">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.

@@ -2,9 +2,10 @@
 import 'ldrs/helix';
 import './bootstrap';
 import './file-validation';
+import './hero-animations';
+import './how-it-works-animations';
 import './navigation-loader';
 import './scroll-animations';
-import './hero-animations';
 
 document.addEventListener('livewire:init', () => {
     console.log('Livewire inicializado');

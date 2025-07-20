@@ -10,6 +10,7 @@
     <x-sections.explore-cities></x-sections.explore-cities>
     <x-sections.featured-properties></x-sections.featured-properties>
     <x-sections.statistics></x-sections.statistics>
+    <x-sections.how-it-works></x-sections.how-it-works> {{-- <--- ¡NUEVO! --}}
     @livewire('featured-locations') 
 
 </x-app-layout>
