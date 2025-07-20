@@ -103,9 +103,7 @@
                                     x-transition:leave-end="opacity-0 transform scale-95"
                                     class="absolute inset-0 flex items-center justify-center p-4"
                                 >
-                                    <!-- AQUÍ VAN TUS IMÁGENES PERSONALIZADAS -->
-                                    <!-- Descomenta y añade tus imágenes según el paso -->
-                                    
+                               
                                    <div x-show="index === 0" class="w-full h-full">
                                         <img 
                                             src="/images/location.png" 
@@ -115,23 +113,21 @@
                                     </div> 
                                     
                                     <!-- PASO 2: Características -->
-                                    <!-- <div x-show="index === 1" class="w-full h-full">
+                                     <div x-show="index === 1" class="w-full h-full">
                                         <img 
-                                            src="/images/paso-2-caracteristicas.jpg" 
+                                            src="/images/paso2.png" 
                                             alt="Describir características del inmueble"
-                                            class="w-full h-full object-cover rounded-2xl shadow-2xl"
+                                            class="w-full h-full object-cover "
                                         >
-                                    </div> -->
+                                    </div> 
                                     
-                                    <!-- PASO 3: Fotos y videos -->
-                                    <!-- <div x-show="index === 2" class="w-full h-full">
+                                    <div x-show="index === 2" class="w-full h-full">
                                         <img 
-                                            src="/images/paso-3-fotos.jpg" 
+                                            src="/images/paso3.png" 
                                             alt="Subir fotos y videos"
-                                            class="w-full h-full object-cover rounded-2xl shadow-2xl"
+                                            class="w-full h-full object-cover"
                                         >
-                                    </div> -->
-                                    
+                                    </div> 
                                     <!-- PASO 4: Datos de contacto -->
                                     <!-- <div x-show="index === 3" class="w-full h-full">
                                         <img 
