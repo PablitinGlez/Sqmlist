@@ -160,25 +160,28 @@
                     <button 
                         @click="pauseTimeline()" 
                         x-show="!isPaused"
-                        class="text-gray-500 hover:text-gray-700 text-xs md:text-sm flex items-center"
+                        class="flex items-center justify-center bg-white text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:shadow-sm"
+                        style="min-height: 36px; visibility: visible !important; opacity: 1 !important;"
                     >
-                        <i class="fas fa-pause mr-1"></i>
-                        <span class="hidden sm:inline">Pausar</span>
+                        <i class="fas fa-pause mr-2 text-sm"></i>
+                        <span class="whitespace-nowrap">Pausar</span>
                     </button>
                     <button 
                         @click="resumeTimeline()" 
                         x-show="isPaused"
-                        class="text-blue-500 hover:text-blue-600 text-xs md:text-sm flex items-center"
+                        class="flex items-center justify-center bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:shadow-sm"
+                        style="min-height: 36px; visibility: visible !important; opacity: 1 !important;"
                     >
-                        <i class="fas fa-play mr-1"></i>
-                        <span class="hidden sm:inline">Continuar</span>
+                        <i class="fas fa-play mr-2 text-sm"></i>
+                        <span class="whitespace-nowrap">Continuar</span>
                     </button>
                     <button 
                         @click="restartTimeline()" 
-                        class="text-gray-500 hover:text-gray-700 text-xs md:text-sm flex items-center"
+                        class="flex items-center justify-center bg-white text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200 hover:shadow-sm"
+                        style="min-height: 36px; visibility: visible !important; opacity: 1 !important;"
                     >
-                        <i class="fas fa-redo mr-1"></i>
-                        <span class="hidden sm:inline">Reiniciar</span>
+                        <i class="fas fa-redo mr-2 text-sm"></i>
+                        <span class="whitespace-nowrap">Reiniciar</span>
                     </button>
                 </div>
             </div>
@@ -336,6 +339,29 @@ function timelineData() {
             background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
             transform: scale(1.05);
         }
+
+
+         /* Botones de control - Visibilidad garantizada */
+        .btn-control {
+            visibility: visible !important;
+            opacity: 1 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            position: relative !important;
+            z-index: 999 !important;
+        }
+
+        /* Contenedor de controles */
+        .controls-container {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 1rem !important;
+            margin-top: 1rem !important;
+        }
+
+
 
 /* Mejoras responsive adicionales */
 @media (max-width: 640px) {
