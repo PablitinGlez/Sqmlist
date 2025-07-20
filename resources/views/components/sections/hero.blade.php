@@ -103,7 +103,6 @@
         </div>
     </div>
 </section>
-
 <script>
     function hideHeroSkeleton() {
         const skeleton = document.getElementById('hero-skeleton');
@@ -127,6 +126,7 @@
         }
     }
 
+    // Función mejorada con posicionamiento responsivo
     function positionCursorNearClics() {
         const clicsWord = document.getElementById('clics-word');
         const cursorIcon = document.getElementById('cursor-icon');
@@ -135,9 +135,24 @@
             const rect = clicsWord.getBoundingClientRect();
             const containerRect = clicsWord.closest('.relative').getBoundingClientRect();
             
-            // Posicionar el cursor al final de la palabra "clics"
-            const leftPosition = rect.right - containerRect.left + 5; // 5px de separación
-            const topPosition = rect.top - containerRect.top - 2; // Pequeño ajuste vertical
+            // Media queries en JavaScript para ajustes responsivos
+            const screenWidth = window.innerWidth;
+            let adjustments = { left: 5, top: -2 }; // Valores por defecto (desktop)
+            
+            // Ajustes específicos por tamaño de pantalla
+            if (screenWidth <= 640) {
+                // sm y menores (móviles) - más a la izquierda y arriba
+                adjustments = { left: -12, top: -10 };
+            } else if (screenWidth <= 768) {
+                // md (tablets pequeñas)
+                adjustments = { left: -8, top: -6 };
+            } else if (screenWidth <= 1024) {
+                // lg (tablets)
+                adjustments = { left: 0, top: -4 };
+            }
+            
+            const leftPosition = rect.right - containerRect.left + adjustments.left;
+            const topPosition = rect.top - containerRect.top + adjustments.top;
             
             cursorIcon.style.left = leftPosition + 'px';
             cursorIcon.style.top = topPosition + 'px';
@@ -198,7 +213,7 @@
         // Iniciar la animación del cursor después de 4 segundos
         setTimeout(() => {
             animateCursor();
-        }, 4000); // Esperar 4 segundos antes de mostrar y animar el cursor
+        }, 4000);
     });
 
     document.addEventListener('livewire:navigated', () => {
@@ -215,9 +230,4 @@
     window.addEventListener('resize', () => {
         setTimeout(positionCursorNearClics, 50);
     });
-
-  
-</script> 
-
-  
 </script>
