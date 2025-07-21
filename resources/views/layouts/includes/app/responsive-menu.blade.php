@@ -38,14 +38,14 @@
                          x-transition:leave="transition ease-in duration-75"
                          x-transition:leave-start="opacity-100 scale-100"
                          x-transition:leave-end="opacity-0 scale-95"
-                         class="bg-white/90 backdrop-blur-sm rounded-md shadow-inner ring-1 ring-black ring-opacity-5 mx-4 mt-1"
+                         class="bg-white/90 backdrop-blur-sm rounded-md ring-black ring-opacity-5 mx-4 mt-1"
                          x-cloak>
                         <div class="py-1">
                             {{-- Modificación clave: Iterar sobre las categorías (states, property_types, bedrooms) --}}
                             @foreach($item['dropdown_items'] as $categoryName => $options)
                                 <div x-data="{ categoryOpen: false }" class="relative">
                                     <button @click="categoryOpen = !categoryOpen"
-                                            class="flex items-center justify-between w-full ps-6 pe-4 py-2 text-sm font-medium focus:outline-none transition duration-150 ease-in-out
+                                            class="flex items-center justify-between w-full ps-6 pe-4 py-2 text-base font-medium focus:outline-none transition duration-150 ease-in-out
                                                    text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-b border-gray-100 last:border-b-0">
                                         <span>
                                             @if($categoryName === 'states') Estados
