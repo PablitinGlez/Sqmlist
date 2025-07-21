@@ -9,8 +9,9 @@
     <x-sections.introduction></x-sections.introduction>
     <x-sections.explore-cities></x-sections.explore-cities>
     <x-sections.featured-properties></x-sections.featured-properties>
-    <x-sections.statistics></x-sections.statistics>
-    <x-sections.how-it-works></x-sections.how-it-works> {{-- <--- ¡NUEVO! --}}
+    {{-- <x-sections.statistics></x-sections.statistics> --}} {{-- ¡ELIMINADO! --}}
+    <x-sections.our-solutions></x-sections.our-solutions> {{-- <--- ¡NUEVO! --}}
+    <x-sections.how-it-works></x-sections.how-it-works> 
     @livewire('featured-locations') 
 
 </x-app-layout>
