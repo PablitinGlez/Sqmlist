@@ -5,39 +5,84 @@ namespace App\View\Composers;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserApplication;
-// use App\Models\PropertyType; // Ya no es necesario importar PropertyType aquí si no generamos enlaces por tipo
+use App\Models\State; // Importamos el modelo State
+use App\Models\PropertyType; // Importamos el modelo PropertyType
 
 class NavigationComposer
 {
     public function compose(View $view): void
     {
-        // No necesitamos cargar PropertyType si los enlaces no son por tipo de propiedad anidado.
-        // $propertyTypes = PropertyType::orderBy('name')->get();
+        // Cargar los estados más populares (limitamos a 8)
+        $popularStates = State::whereIn('name', [
+            'Ciudad de México',
+            'Edo. de México',
+            'Querétaro',
+            'Morelos',
+            'Nuevo León',
+            'Yucatán',
+            'Quintana Roo',
+            'Jalisco'
+        ])->orderBy('name')->get();
+
+        // Cargar los tipos de propiedad más populares (limitamos a 8)
+        $popularPropertyTypes = PropertyType::whereIn('name', [
+            'Casa',
+            'Departamento',
+            'Terreno / Lote',
+            'Casa en condominio',
+            'Local Comercial',
+            'Oficina',
+            'Bodega',
+            'Edificio'
+        ])->orderBy('name')->get();
+
+        // Opciones estáticas para recámaras
+        $bedroomOptions = [
+            ['value' => '1', 'label' => '1 recámara'],
+            ['value' => '2', 'label' => '2 recámaras'],
+            ['value' => '3', 'label' => '3 recámaras'],
+            ['value' => '4', 'label' => '4 recámaras'],
+            ['value' => '5+', 'label' => '5 o más recámaras']
+        ];
 
         $navigationLinks = [
-            // --- Enlace para "En Venta" (directo) ---
+            // --- Dropdown para "En Venta" ---
             [
                 'name' => 'En venta',
                 'route' => route('properties.index', ['operacion' => 'sale']),
-                // Activo si estamos en la ruta de propiedades y el parámetro 'operacion' es 'sale'
                 'active' => request()->routeIs('properties.index') && request('operacion') === 'sale',
+                'type' => 'dropdown',
+                'operacion' => 'sale',
+                'dropdown_items' => [
+                    'states' => $popularStates,
+                    'property_types' => $popularPropertyTypes,
+                    'bedrooms' => $bedroomOptions
+                ]
             ],
-            // --- Enlace para "En Renta" (directo) ---
+            // --- Dropdown para "En Renta" ---
             [
                 'name' => 'En renta',
                 'route' => route('properties.index', ['operacion' => 'rent']),
-                // Activo si estamos en la ruta de propiedades y el parámetro 'operacion' es 'rent'
                 'active' => request()->routeIs('properties.index') && request('operacion') === 'rent',
+                'type' => 'dropdown',
+                'operacion' => 'rent',
+                'dropdown_items' => [
+                    'states' => $popularStates,
+                    'property_types' => $popularPropertyTypes,
+                    'bedrooms' => $bedroomOptions
+                ]
             ],
             [
                 'name' => 'Nosotros',
                 'route' => route('about'),
                 'active' => request()->routeIs('about'),
+                'type' => 'simple'
             ],
             [
                 'name' => 'Contacto',
                 'route' => route('contact.create'),
                 'active' => request()->routeIs('contact.create'),
+                'type' => 'simple'
             ],
         ];
 
