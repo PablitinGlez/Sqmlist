@@ -25,14 +25,11 @@
             </x-google-button>
         </div>
 
-        {{-- Separador --}}
-        <div class="relative mb-6">
-            <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-300"></div>
-            </div>
-            <div class="relative flex justify-center text-sm">
-                <span class="px-2 bg-white text-gray-500">O continúa con</span>
-            </div>
+        {{-- Separador con dos líneas separadas por el texto --}}
+        <div class="flex items-center mb-6"> {{-- Usa flexbox para alinear los elementos --}}
+            <div class="flex-grow border-t border-gray-300"></div> {{-- Línea izquierda --}}
+            <span class="px-2 text-gray-500 text-sm">O continúa con</span> {{-- El texto --}}
+            <div class="flex-grow border-t border-gray-300"></div> {{-- Línea derecha --}}
         </div>
 
         <form method="POST" action="{{ route('login') }}">
@@ -76,9 +73,6 @@
         </form>
     </x-authentication-card>
 
-    {{-- FIGURA SVG PARA MÓVIL SOLAMENTE (Tamaño disminuido, opacidad al 100%) --}}
-    <div class="block lg:hidden absolute bottom-0 right-0 z-0"> 
-        <img src="{{ asset('images/flower_10.svg') }}" alt="Decorative Flower" class="w-20 h-auto"> {{-- ¡CAMBIO CLAVE AQUÍ: w-20! --}}
-    </div>
+   {{-- Aquí iría la figura SVG para móvil si la agregamos a este código --}}
 
 </x-guest-layout>
