@@ -1,4 +1,4 @@
-<div class="min-h-screen flex">
+<div class="flex">
     {{-- Sección de la imagen de fondo para pantallas grandes --}}
     <div class="hidden lg:flex lg:w-1/2 relative">
         <img 

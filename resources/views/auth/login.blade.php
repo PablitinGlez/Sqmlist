@@ -55,7 +55,7 @@
                 </label>
             </div>
 
-            <div class="flex  justify-evenly mt-4">
+            <div class="flex justify-evenly mt-6">
                 @if (Route::has('password.request'))
                     <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
@@ -76,5 +76,9 @@
         </form>
     </x-authentication-card>
 
- 
+    {{-- FIGURA SVG PARA MÓVIL SOLAMENTE (Tamaño disminuido, opacidad al 100%) --}}
+    <div class="block lg:hidden absolute bottom-0 right-0 z-0"> 
+        <img src="{{ asset('images/flower_10.svg') }}" alt="Decorative Flower" class="w-20 h-auto"> {{-- ¡CAMBIO CLAVE AQUÍ: w-20! --}}
+    </div>
+
 </x-guest-layout>
