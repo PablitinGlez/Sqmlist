@@ -8,20 +8,28 @@
         />
         <div class="absolute inset-0 bg-black/20"></div>
     </div>
-    
+
     {{-- Sección del formulario --}}
-    {{-- Por defecto (móvil) será el fondo de puntos, y en lg: será blanco --}}
-    <div class="flex-1 flex items-center justify-center p-6 
-                bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] 
-                lg:bg-white"> {{-- <--- CAMBIO CLAVE AQUÍ --}}
-                {{-- Ahora lg:bg-white reemplaza lo que era lg:bg-gray-50 --}}
-        <div class="w-full max-w-md">
+    <div class="flex-1 flex items-center justify-center p-6 relative">
+        {{-- Fondo de imagen repetida (fondodoce.png) --}}
+        <div class="fixed h-full top-0 left-0 right-0 z-0" 
+             style="width:100%;height:100%;background-size:109px;background-repeat:repeat;background-image:url('{{ asset('images/fondodoce.png') }}');opacity:0.06;border-radius:0;">
+            {{-- Puedes mantener este div interior si es parte del diseño original del fondo, si no, puedes quitarlo --}}
+            <div class="absolute left-0 right-0 bottom-0 h-[300px]"></div>
+        </div>
+
+        {{-- Gradiente borroso flotante (ahora azulito) --}}
+        <div style="width:600px;top:-180px" 
+             class="absolute right-[100px] z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-blue-800 via-blue-500 to-blue-200 blur-[150px]">
+        </div>
+        
+        <div class="w-full max-w-md relative z-20"> {{-- Aumentamos el z-index para asegurar que el contenido esté sobre los nuevos fondos --}}
             <div class="flex justify-center text-center mb-8">
                 {{ $logo ?? '' }}
             </div>
-            
-            {{-- El contenedor blanco del formulario se mantiene para la tarjeta --}}
-            <div class="bg-white px-8 py-10 shadow-lg rounded-lg">
+
+            {{-- Card con efecto cristalizado --}}
+            <div class="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl px-8 py-10 shadow-2xl">
                 {{ $slot }}
             </div>
         </div>

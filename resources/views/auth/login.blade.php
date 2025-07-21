@@ -25,13 +25,13 @@
             </x-google-button>
         </div>
 
-        {{-- Separador --}}
+        {{-- Separador actualizado para el fondo cristalizado --}}
         <div class="relative mb-6">
             <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-300"></div>
+                <div class="w-full border-t border-gray-400/30"></div>
             </div>
             <div class="relative flex justify-center text-sm">
-                <span class="px-2 bg-white text-gray-500">O continúa con</span>
+                <span class="px-2 bg-white/80 text-gray-600 backdrop-blur-sm rounded">O continúa con</span>
             </div>
         </div>
 
@@ -75,6 +75,4 @@
             </div>
         </form>
     </x-authentication-card>
-
- 
 </x-guest-layout>
