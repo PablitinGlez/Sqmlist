@@ -25,13 +25,13 @@
             </x-google-button>
         </div>
 
-        {{-- Separador actualizado para el fondo cristalizado --}}
+        {{-- Separador --}}
         <div class="relative mb-6">
             <div class="absolute inset-0 flex items-center">
-                <div class="w-full border-t border-gray-400/30"></div>
+                <div class="w-full border-t border-gray-300"></div>
             </div>
             <div class="relative flex justify-center text-sm">
-                <span class="px-2 bg-white/80 text-gray-600 backdrop-blur-sm rounded">O continúa con</span>
+                <span class="px-2 bg-white text-gray-500">O continúa con</span>
             </div>
         </div>
 
@@ -55,7 +55,7 @@
                 </label>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex  justify-evenly mt-4">
                 @if (Route::has('password.request'))
                     <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
@@ -75,4 +75,6 @@
             </div>
         </form>
     </x-authentication-card>
+
+ 
 </x-guest-layout>
