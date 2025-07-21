@@ -17,8 +17,8 @@
             <div class="absolute left-0 right-0 bottom-0 h-[300px]"></div>
         </div>
 
-        {{-- Gradiente borroso flotante (ahora visible en móvil) --}}
-        <div style="width:600px;top:-180px" 
+        {{-- Gradiente borroso flotante (AHORA CON top:0 o un valor positivo pequeño) --}}
+        <div style="width:600px;top:0px;" {{-- CAMBIADO DE -180px A 0px (o top:20px si quieres un poco de margen) --}}
              class="absolute left-1/2 -translate-x-1/2 z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-blue-800 via-blue-500 to-blue-200 blur-[150px]">
         </div>
         
