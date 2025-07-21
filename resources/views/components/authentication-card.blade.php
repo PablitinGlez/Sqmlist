@@ -17,9 +17,12 @@
             <div class="absolute left-0 right-0 bottom-0 h-[300px]"></div>
         </div>
 
-        {{-- Gradiente borroso flotante (menos fuerte con opacity) --}}
-        <div style="width:600px; bottom:0px;" 
-             class="absolute left-1/2 -translate-x-1/2 z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-blue-800 via-blue-500 to-blue-200 blur-[150px] opacity-30"> {{-- ¡CAMBIO CLAVE AQUÍ: AÑADIDA CLASE opacity-30! --}}
+        {{-- Gradiente borroso flotante (RESPONSIVO) --}}
+        <div 
+            class="absolute left-1/2 -translate-x-1/2 z-10 
+                   h-[100px] w-[250px] bottom-[50px] {{-- ESTILOS PARA MÓVIL (por defecto) --}}
+                   lg:h-[150px] lg:w-[400px] lg:bottom:-100px {{-- ESTILOS PARA ESCRITORIO (lg: prefix) --}}
+                   rotate-[0deg] transform rounded-full bg-gradient-to-tl from-blue-800 via-blue-500 to-blue-200 blur-[150px] opacity-30">
         </div>
         
         <div class="w-full max-w-md relative z-20">
