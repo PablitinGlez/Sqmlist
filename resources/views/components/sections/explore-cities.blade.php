@@ -12,7 +12,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {{-- Tarjeta 1: Veracruz --}}
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-[1.02]">
-                <div class="h-24 md:h-40 w-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                <div class="h-32 md:h-40 w-full bg-gray-200 flex items-center justify-center overflow-hidden">
                     <img src="{{ asset('images/veracruz.jpg') }}" alt="Veracruz" class="w-full h-full object-cover">
                 </div>
                 <div class="p-3 md:p-4">
@@ -26,7 +26,7 @@
 
             {{-- Tarjeta 2: Ciudad de México --}}
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-[1.02]">
-                <div class="h-24 md:h-40 w-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                <div class="h-32 md:h-40 w-full bg-gray-200 flex items-center justify-center overflow-hidden">
                     <img src="{{ asset('images/cdmx.jpg') }}" alt="Ciudad de México" class="w-full h-full object-cover">
                 </div>
                 <div class="p-3 md:p-6">
@@ -40,7 +40,7 @@
 
             {{-- Tarjeta 3: Puebla --}}
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-[1.02]">
-                <div class="h-24 md:h-40 w-full bg-gray-200 flex items-center justify-center overflow-hidden">
+                <div class="h-32 md:h-40 w-full bg-gray-200 flex items-center justify-center overflow-hidden">
                     <img src="{{ asset('images/puebla.jpg') }}" alt="Puebla" class="w-full h-full object-cover">
                 </div>
                 <div class="p-3 md:p-6">
