@@ -13,7 +13,7 @@
                 Un portal inmobiliario es más que un buscador de inmuebles.
             </p>
             <p class="text-sm md:text-lg text-gray-600 md:max-w-3xl md:mx-auto">
-                . ¡Explora todas nuestras herramientas!
+            ¡Explora todas nuestras herramientas!
             </p>
         </div>
 
