@@ -17,9 +17,9 @@
             <div class="absolute left-0 right-0 bottom-0 h-[300px]"></div>
         </div>
 
-        {{-- Gradiente borroso flotante (AHORA CON top:0 o un valor positivo pequeño) --}}
-        <div style="width:600px;top:0px;" {{-- CAMBIADO DE -180px A 0px (o top:20px si quieres un poco de margen) --}}
-             class="absolute left-1/2 -translate-x-1/2 z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-blue-800 via-blue-500 to-blue-200 blur-[150px]">
+        {{-- Gradiente borroso flotante (menos fuerte con opacity) --}}
+        <div style="width:600px; bottom:0px;" 
+             class="absolute left-1/2 -translate-x-1/2 z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-blue-800 via-blue-500 to-blue-200 blur-[150px] opacity-30"> {{-- ¡CAMBIO CLAVE AQUÍ: AÑADIDA CLASE opacity-30! --}}
         </div>
         
         <div class="w-full max-w-md relative z-20">
