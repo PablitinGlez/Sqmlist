@@ -14,16 +14,15 @@
         {{-- Fondo de imagen repetida (fondodoce.png) --}}
         <div class="fixed h-full top-0 left-0 right-0 z-0" 
              style="width:100%;height:100%;background-size:109px;background-repeat:repeat;background-image:url('{{ asset('images/fondodoce.png') }}');opacity:0.06;border-radius:0;">
-            {{-- Puedes mantener este div interior si es parte del diseño original del fondo, si no, puedes quitarlo --}}
             <div class="absolute left-0 right-0 bottom-0 h-[300px]"></div>
         </div>
 
-        {{-- Gradiente borroso flotante (ahora azulito) --}}
+        {{-- Gradiente borroso flotante (ahora visible en móvil) --}}
         <div style="width:600px;top:-180px" 
-             class="absolute right-[100px] z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-blue-800 via-blue-500 to-blue-200 blur-[150px]">
+             class="absolute left-1/2 -translate-x-1/2 z-10 h-[150px] w-[400px] rotate-[0deg] transform rounded-full bg-gradient-to-tl from-blue-800 via-blue-500 to-blue-200 blur-[150px]">
         </div>
         
-        <div class="w-full max-w-md relative z-20"> {{-- Aumentamos el z-index para asegurar que el contenido esté sobre los nuevos fondos --}}
+        <div class="w-full max-w-md relative z-20">
             <div class="flex justify-center text-center mb-8">
                 {{ $logo ?? '' }}
             </div>
