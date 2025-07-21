@@ -12,14 +12,15 @@
             class="max-w-7xl mx-auto"
         >
             <!-- Título -->
-            <div class="text-center mb-8 md:mb-16 px-4">
-                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
-                    Publica tu inmueble gratis y en simples pasos
-                </h2>
-                <p class="text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-                    Sigue estos pasos para publicar tu propiedad de manera rápida y sencilla
-                </p>
-            </div>
+           
+<div class="text-left mb-8 md:mb-16 md:text-center px-4">
+    <h2 class="text-lg md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 md:mb-4">
+        Publica tu inmueble gratis y en simples pasos
+    </h2>
+    <p class="text-sm md:text-lg text-gray-600 md:max-w-2xl md:mx-auto">
+        Sigue estos pasos para publicar tu propiedad de manera rápida y sencilla
+    </p>
+</div>
 
             <!-- Layout responsive: Stack en móvil, Grid en desktop -->
             <div class="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-12 items-start lg:items-center">

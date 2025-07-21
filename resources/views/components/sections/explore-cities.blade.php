@@ -1,7 +1,7 @@
 {{--
     Esta sección muestra tarjetas para explorar propiedades por ciudades destacadas.
 --}}
-<section class="py-16 bg-gray-50">
+<section class="py-16">
     <x-partials.container>
         <!-- Encabezado de la sección -->
         <div class="text-center mb-12">
