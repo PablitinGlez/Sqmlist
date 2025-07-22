@@ -59,7 +59,8 @@
                 </div>
 
                 {{-- Contenido de los pasos - altura adaptable sin cortes --}}
-                <div class="step-content-container relative min-h-[280px] sm:min-h-[320px] md:h-64 lg:h-80 overflow-hidden">
+                {{-- Aumentado el margin-top a mt-8 (antes no tenía o era menor) --}}
+                <div class="step-content-container relative mt-8 min-h-[280px] sm:min-h-[320px] md:h-64 lg:h-80 overflow-hidden">
 
                     {{-- Paso 1: Registro --}}
                     <div class="step-content absolute inset-0 opacity-0 invisible transform translate-y-10 pointer-events-none" data-step="1">
@@ -78,13 +79,14 @@
                             </div>
                             {{-- Ajuste aquí: flex justify-start para mobile, md:justify-center para desktop --}}
                             <div class="flex justify-start md:justify-center mt-2 md:mt-0">
-                                <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-blue-100 flex flex-col justify-between">
+                                {{-- Aumentado el tamaño de la tarjeta y el padding --}}
+                                <div class="w-48 sm:w-56 md:w-64 lg:w-72 h-32 sm:h-36 md:h-44 lg:h-52 bg-white rounded-lg shadow-lg p-3 md:p-5 border-2 border-blue-100 flex flex-col justify-between">
                                     <div class="space-y-2 md:space-y-3">
-                                        <div class="h-2 md:h-3 bg-blue-200 rounded animate-pulse w-3/4"></div>
-                                        <div class="h-2 md:h-3 bg-gray-200 rounded animate-pulse w-full"></div>
-                                        <div class="h-2 md:h-3 bg-gray-200 rounded animate-pulse w-1/2"></div>
+                                        <div class="h-3 md:h-4 bg-blue-200 rounded animate-pulse w-3/4"></div>
+                                        <div class="h-3 md:h-4 bg-gray-200 rounded animate-pulse w-full"></div>
+                                        <div class="h-3 md:h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
                                     </div>
-                                    <div class="h-4 md:h-6 bg-blue-500 rounded mt-auto"></div> {{-- Use mt-auto to push to bottom --}}
+                                    <div class="h-5 md:h-7 bg-blue-500 rounded mt-auto"></div> {{-- Use mt-auto to push to bottom --}}
                                 </div>
                             </div>
                         </div>
@@ -107,16 +109,18 @@
                             </div>
                             {{-- Ajuste aquí: flex justify-start para mobile, md:justify-center para desktop --}}
                             <div class="flex justify-start md:justify-center mt-2 md:mt-0">
-                                <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-green-100 flex flex-col">
+                                {{-- Aumentado el tamaño de la tarjeta y el padding --}}
+                                <div class="w-48 sm:w-56 md:w-64 lg:w-72 h-32 sm:h-36 md:h-44 lg:h-52 bg-white rounded-lg shadow-lg p-3 md:p-5 border-2 border-green-100 flex flex-col">
                                     <div class="space-y-1 md:space-y-2 mb-auto"> {{-- Add mb-auto to push docs to bottom --}}
-                                        <div class="text-xs md:text-xs text-gray-600">Tipo de Perfil</div>
-                                        <div class="h-1 md:h-2 bg-green-200 rounded w-full"></div>
-                                        <div class="text-xs md:text-xs text-gray-600">Datos de Contacto</div>
-                                        <div class="h-1 md:h-2 bg-gray-200 rounded w-5/6"></div>
-                                        <div class="h-1 md:h-2 bg-gray-200 rounded w-2/3"></div>
+                                        <div class="text-xs md:text-sm text-gray-600">Tipo de Perfil</div>
+                                        <div class="h-2 md:h-3 bg-green-200 rounded w-full"></div>
+                                        <div class="text-xs md:text-sm text-gray-600">Datos de Contacto</div>
+                                        <div class="h-2 md:h-3 bg-gray-200 rounded w-5/6"></div>
+                                        <div class="h-2 md:h-3 bg-gray-200 rounded w-2/3"></div>
                                     </div>
-                                    <div class="text-xs md:text-xs text-gray-600 mt-2">Documentos</div> {{-- Add mt-2 for spacing --}}
-                                    <div class="h-4 md:h-6 bg-gray-100 rounded border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-xs">
+                                    <div class="text-xs md:text-sm text-gray-600 mt-2">Documentos</div> {{-- Add mt-2 for spacing --}}
+                                    {{-- Aumentado el tamaño del área de subir archivo --}}
+                                    <div class="h-6 md:h-8 bg-gray-100 rounded border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-xs md:text-sm">
                                         Subir Archivo
                                     </div>
                                 </div>
@@ -141,10 +145,12 @@
                             </div>
                             {{-- Ajuste aquí: flex justify-start para mobile, md:justify-center para desktop --}}
                             <div class="flex justify-start md:justify-center mt-2 md:mt-0">
-                                <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-yellow-100 flex flex-col items-start justify-center"> {{-- items-start para alinear contenido interno a la izquierda --}}
-                                    <div class="w-8 md:w-12 h-8 md:h-12 border-2 md:border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mb-2 md:mb-3"></div> {{-- Eliminado mx-auto --}}
+                                {{-- Aumentado el tamaño de la tarjeta y el padding --}}
+                                <div class="w-48 sm:w-56 md:w-64 lg:w-72 h-32 sm:h-36 md:h-44 lg:h-52 bg-white rounded-lg shadow-lg p-3 md:p-5 border-2 border-yellow-100 flex flex-col items-start justify-center"> {{-- items-start para alinear contenido interno a la izquierda --}}
+                                    {{-- Aumentado el tamaño del spinner --}}
+                                    <div class="w-10 md:w-14 h-10 md:h-14 border-2 md:border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mb-2 md:mb-3"></div> {{-- Eliminado mx-auto --}}
                                     <p class="text-yellow-600 font-semibold text-xs md:text-sm">Revisando tu solicitud...</p> {{-- Eliminado text-center --}}
-                                    <p class="text-xs md:text-xs text-gray-500 mt-1">Te notificaremos pronto</p> {{-- Eliminado text-center --}}
+                                    <p class="text-xs md:text-sm text-gray-500 mt-1">Te notificaremos pronto</p> {{-- Eliminado text-center --}}
                                 </div>
                             </div>
                         </div>
@@ -167,23 +173,26 @@
                             </div>
                             {{-- Ajuste aquí: flex justify-start para mobile, md:justify-center para desktop --}}
                             <div class="flex justify-start md:justify-center mt-2 md:mt-0">
-                                <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-purple-100 flex flex-col">
+                                {{-- Aumentado el tamaño de la tarjeta y el padding --}}
+                                <div class="w-48 sm:w-56 md:w-64 lg:w-72 h-32 sm:h-36 md:h-44 lg:h-52 bg-white rounded-lg shadow-lg p-3 md:p-5 border-2 border-purple-100 flex flex-col">
                                     <div class="flex justify-between items-center mb-2"> {{-- Added mb-2 for spacing --}}
-                                        <div class="text-xs md:text-xs font-semibold text-purple-600">Mis Propiedades</div>
-                                        <div class="w-4 md:w-6 h-4 md:h-6 bg-purple-500 rounded text-white text-xs flex items-center justify-center">+</div>
+                                        <div class="text-xs md:text-sm font-semibold text-purple-600">Mis Propiedades</div>
+                                        {{-- Aumentado el tamaño del botón '+' --}}
+                                        <div class="w-5 md:w-7 h-5 md:h-7 bg-purple-500 rounded text-white text-xs md:text-sm flex items-center justify-center">+</div>
                                     </div>
                                     <div class="space-y-1 md:space-y-2 flex-grow"> {{-- flex-grow to take available space --}}
-                                        <div class="h-6 md:h-8 bg-purple-50 rounded border border-purple-200 p-1 md:p-2 flex flex-col justify-center"> {{-- Added flex-col justify-center --}}
-                                            <div class="h-0.5 md:h-1 bg-purple-300 rounded mb-1 w-3/4"></div> {{-- Added w-3/4 --}}
-                                            <div class="h-0.5 md:h-1 bg-gray-200 rounded w-1/2"></div> {{-- Added w-1/2 --}}
+                                        {{-- Aumentado el tamaño de las barras dentro de las propiedades --}}
+                                        <div class="h-7 md:h-9 bg-purple-50 rounded border border-purple-200 p-1 md:p-2 flex flex-col justify-center"> {{-- Added flex-col justify-center --}}
+                                            <div class="h-1 md:h-1.5 bg-purple-300 rounded mb-1 w-3/4"></div> {{-- Added w-3/4 --}}
+                                            <div class="h-1 md:h-1.5 bg-gray-200 rounded w-1/2"></div> {{-- Added w-1/2 --}}
                                         </div>
-                                        <div class="h-6 md:h-8 bg-purple-50 rounded border border-purple-200 p-1 md:p-2 flex flex-col justify-center"> {{-- Added flex-col justify-center --}}
-                                            <div class="h-0.5 md:h-1 bg-purple-300 rounded mb-1 w-full"></div> {{-- Added w-full --}}
-                                            <div class="h-0.5 md:h-1 bg-gray-200 rounded w-2/3"></div> {{-- Added w-2/3 --}}
+                                        <div class="h-7 md:h-9 bg-purple-50 rounded border border-purple-200 p-1 md:p-2 flex flex-col justify-center"> {{-- Added flex-col justify-center --}}
+                                            <div class="h-1 md:h-1.5 bg-purple-300 rounded mb-1 w-full"></div> {{-- Added w-full --}}
+                                            <div class="h-1 md:h-1.5 bg-gray-200 rounded w-2/3"></div> {{-- Added w-2/3 --}}
                                         </div>
-                                        <div class="h-6 md:h-8 bg-purple-50 rounded border border-purple-200 p-1 md:p-2 flex flex-col justify-center"> {{-- Added flex-col justify-center --}}
-                                            <div class="h-0.5 md:h-1 bg-purple-300 rounded mb-1 w-1/2"></div> {{-- Added w-1/2 --}}
-                                            <div class="h-0.5 md:h-1 bg-gray-200 rounded w-full"></div> {{-- Added w-full --}}
+                                        <div class="h-7 md:h-9 bg-purple-50 rounded border border-purple-200 p-1 md:p-2 flex flex-col justify-center"> {{-- Added flex-col justify-center --}}
+                                            <div class="h-1 md:h-1.5 bg-purple-300 rounded mb-1 w-1/2"></div> {{-- Added w-1/2 --}}
+                                            <div class="h-1 md:h-1.5 bg-gray-200 rounded w-full"></div> {{-- Added w-full --}}
                                         </div>
                                     </div>
                                 </div>
@@ -236,16 +245,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const allStepContents = document.querySelectorAll('.step-content');
 
     // Create a timeline for the step content transitions
-    // This allows us to control the animations more precisely and to kill/overwrite
-    // animations if a new one is triggered too quickly.
     let stepTransitionTL = gsap.timeline({ paused: true });
 
-    // Configuración del ScrollTrigger con inicio más tardío
+    // Configuración del ScrollTrigger
     ScrollTrigger.create({
         trigger: "#steps-to-advertiser",
-        start: isMobile ? "top top+=25%" : "top top+=15%", // Empezar más abajo para centrar mejor
-        end: isMobile ? "+=200%" : "+=250%", // Ajustar proporcionalmente
-        scrub: 0.1, // Más responsivo para cambios inmediatos
+        start: isMobile ? "top top+=25%" : "top top+=15%", // Mantengo el inicio para centrar
+        // Reducido el 'end' para que el scroll sea más "ligero"
+        end: isMobile ? "+=150%" : "+=180%", // Ajustado para un scroll más corto
+        scrub: 0.3, // Aumentado el scrub para un scroll más suave y menos brusco
         pin: ".sticky-container",
         anticipatePin: 1,
         invalidateOnRefresh: true,
@@ -258,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Debounce/throttle variable for step activation
     let activateStepTimeout;
-    const ACTIVATE_STEP_DELAY = 100; // milliseconds - adjust as needed
+    const ACTIVATE_STEP_DELAY = 80; // Reducido un poco para mayor reactividad con scrub más alto
 
     function updateStepsProgressSmooth(progress) {
         const stepSize = 1 / totalSteps;
@@ -318,8 +326,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Hide ALL step contents immediately (or animate out quickly)
         allStepContents.forEach((content) => {
             if (parseInt(content.dataset.step) !== stepNumber) {
-                // If there's an active animation on this content, kill it.
-                // We use gsap.set for immediate changes when hiding.
                 gsap.set(content, {
                     opacity: 0,
                     y: 30,
