@@ -1,13 +1,13 @@
 {{-- resources/views/components/sections/steps-to-advertiser.blade.php --}}
 <section id="steps-to-advertiser" class="relative bg-gradient-to-br bg-transparent overflow-hidden">
-    
+
     {{-- Contenedor principal con scroll pinning optimizado --}}
     <div class="sticky-container relative w-full">
-        
+
         {{-- Contenedor fijo que se quedará en pantalla - altura optimizada --}}
         <div class="sticky top-0 flex items-center justify-center bg-gradient-to-br py-4 md:py-8 lg:py-12">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                
+
                 {{-- Título principal - márgenes reducidos --}}
                 <div class="text-center mb-4 md:mb-8 lg:mb-12">
                     <h2 class="text-xl md:text-2xl lg:text-5xl font-semibold text-gray-900 mb-2 md:mb-3 lg:mb-4">
@@ -30,7 +30,7 @@
                                     </span>
                                     <div class="step-line w-full h-0.5 md:h-1 bg-gray-200 mx-1 md:mx-2 lg:mx-3 transition-all duration-500"></div>
                                 </li>
-                                
+
                                 {{-- Paso 2 --}}
                                 <li class="flex w-full items-center step-item" data-step="2">
                                     <span class="step-circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-gray-200 rounded-full lg:h-12 lg:w-12 shrink-0 transition-all duration-500">
@@ -38,7 +38,7 @@
                                     </span>
                                     <div class="step-line w-full h-0.5 md:h-1 bg-gray-200 mx-1 md:mx-2 lg:mx-3 transition-all duration-500"></div>
                                 </li>
-                                
+
                                 {{-- Paso 3 --}}
                                 <li class="flex w-full items-center step-item" data-step="3">
                                     <span class="step-circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-gray-200 rounded-full lg:h-12 lg:w-12 shrink-0 transition-all duration-500">
@@ -46,7 +46,7 @@
                                     </span>
                                     <div class="step-line w-full h-0.5 md:h-1 bg-gray-200 mx-1 md:mx-2 lg:mx-3 transition-all duration-500"></div>
                                 </li>
-                                
+
                                 {{-- Paso 4 --}}
                                 <li class="flex items-center step-item" data-step="4">
                                     <span class="step-circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-gray-200 rounded-full lg:h-12 lg:w-12 shrink-0 transition-all duration-500">
@@ -60,11 +60,11 @@
 
                 {{-- Contenido de los pasos - altura adaptable sin cortes --}}
                 <div class="step-content-container relative min-h-[280px] sm:min-h-[320px] md:h-64 lg:h-80 overflow-hidden">
-                    
+
                     {{-- Paso 1: Registro --}}
                     <div class="step-content absolute inset-0 opacity-0 invisible transform translate-y-10 pointer-events-none" data-step="1">
                         {{-- Ajuste aquí: md:items-center para desktop, por defecto align-start en mobile --}}
-                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full"> 
+                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full">
                             <div class="text-left px-2 md:px-0"> {{-- text-left para mobile y desktop --}}
                                 <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">Regístrate y Verifica</h3>
                                 <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
@@ -77,7 +77,7 @@
                                 </ul>
                             </div>
                             {{-- Ajuste aquí: flex justify-start para mobile, md:justify-center para desktop --}}
-                            <div class="flex justify-start md:justify-center mt-2 md:mt-0"> 
+                            <div class="flex justify-start md:justify-center mt-2 md:mt-0">
                                 <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-blue-100 flex flex-col justify-between">
                                     <div class="space-y-2 md:space-y-3">
                                         <div class="h-2 md:h-3 bg-blue-200 rounded animate-pulse w-3/4"></div>
@@ -97,7 +97,7 @@
                             <div class="text-left px-2 md:px-0"> {{-- text-left para mobile y desktop --}}
                                 <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">Envía tu Solicitud</h3>
                                 <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
-                                    Completa el formulario con tus datos y sube los documentos requeridos. 
+                                    Completa el formulario con tus datos y sube los documentos requeridos.
                                 </p>
                                 <ul class="text-left space-y-0.5 md:space-y-1 text-xs md:text-xs lg:text-sm text-gray-600">
                                     <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Formulario simple y rápido</li>
@@ -208,7 +208,7 @@
                 <br class="hidden md:block">
                 ¡No esperes más para conectar con ellos!
             </p>
-            
+
             <a href="{{ route('register') }}" class="inline-flex items-center px-4 md:px-6 lg:px-8 py-2 md:py-3 lg:py-4 border border-transparent text-sm md:text-base lg:text-lg font-bold rounded-lg shadow-lg text-indigo-600 bg-white hover:bg-gray-50 transition-all duration-300 transform hover:scale-105">
                 <i class="fas fa-rocket mr-1 md:mr-2 text-sm"></i>
                 Empieza Ahora
@@ -232,8 +232,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const totalSteps = 4;
     const isMobile = window.innerWidth < 768;
 
+    // Store all step content elements
+    const allStepContents = document.querySelectorAll('.step-content');
+
+    // Create a timeline for the step content transitions
+    // This allows us to control the animations more precisely and to kill/overwrite
+    // animations if a new one is triggered too quickly.
+    let stepTransitionTL = gsap.timeline({ paused: true });
+
     // Configuración del ScrollTrigger con inicio más tardío
-   ScrollTrigger.create({
+    ScrollTrigger.create({
         trigger: "#steps-to-advertiser",
         start: isMobile ? "top top+=25%" : "top top+=15%", // Empezar más abajo para centrar mejor
         end: isMobile ? "+=200%" : "+=250%", // Ajustar proporcionalmente
@@ -248,33 +256,48 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Debounce/throttle variable for step activation
+    let activateStepTimeout;
+    const ACTIVATE_STEP_DELAY = 100; // milliseconds - adjust as needed
+
     function updateStepsProgressSmooth(progress) {
         const stepSize = 1 / totalSteps;
         const currentProgress = Math.min(progress, 0.999);
         const newActiveStep = Math.min(Math.floor(currentProgress / stepSize) + 1, totalSteps);
-        
+
         if (newActiveStep !== currentActiveStep) {
             currentActiveStep = newActiveStep;
-            activateStep(currentActiveStep);
+
+            // Clear any pending activation to prevent rapid, overlapping calls
+            clearTimeout(activateStepTimeout);
+            activateStepTimeout = setTimeout(() => {
+                activateStep(currentActiveStep);
+            }, ACTIVATE_STEP_DELAY); // Add a small delay
         }
     }
 
     function activateStep(stepNumber) {
+        // Kill any ongoing step content transition to prevent overlaps
+        if (stepTransitionTL.isActive()) {
+            stepTransitionTL.kill();
+        }
+        stepTransitionTL = gsap.timeline({ defaults: { duration: 0.4, ease: "power2.out" } });
+
         // Update progress circles
         for (let i = 1; i <= totalSteps; i++) {
             const stepItem = document.querySelector(`[data-step="${i}"]`);
             if (!stepItem) continue;
-            
+
             const circle = stepItem.querySelector('.step-circle');
             const icon = stepItem.querySelector('.step-icon');
             const line = stepItem.querySelector('.step-line');
-            
+
             if (i <= stepNumber) {
                 circle.classList.remove('bg-gray-200');
                 circle.classList.add('bg-blue-500');
                 icon.classList.remove('text-gray-400');
                 icon.classList.add('text-white');
-                
+
                 if (line && i < totalSteps) {
                     line.classList.remove('bg-gray-200');
                     line.classList.add('bg-blue-500');
@@ -284,40 +307,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 circle.classList.add('bg-gray-200');
                 icon.classList.remove('text-white');
                 icon.classList.add('text-gray-400');
-                
+
                 if (line) {
                     line.classList.remove('bg-blue-500');
                     line.classList.add('bg-gray-200');
                 }
             }
         }
-        
-        // **CORRECCIÓN PRINCIPAL: Ocultar TODOS los contenidos primero**
-        document.querySelectorAll('.step-content').forEach((content) => {
+
+        // Hide ALL step contents immediately (or animate out quickly)
+        allStepContents.forEach((content) => {
             if (parseInt(content.dataset.step) !== stepNumber) {
-                // Ocultar inmediatamente los que no son el paso actual
+                // If there's an active animation on this content, kill it.
+                // We use gsap.set for immediate changes when hiding.
                 gsap.set(content, {
                     opacity: 0,
                     y: 30,
                     pointerEvents: 'none',
-                    visibility: 'hidden', // **AGREGADO: visibility hidden**
+                    visibility: 'hidden',
                     zIndex: 1,
                 });
             }
         });
 
-        // **Luego mostrar SOLO el contenido activo**
+        // Animate in the active content
         const activeContent = document.querySelector(`.step-content[data-step="${stepNumber}"]`);
         if (activeContent) {
-            gsap.to(activeContent, {
+            stepTransitionTL.to(activeContent, {
                 opacity: 1,
                 y: 0,
-                duration: 0.4,
-                ease: "power2.out",
                 pointerEvents: 'auto',
-                visibility: 'visible', // **AGREGADO: visibility visible**
+                visibility: 'visible',
                 zIndex: 10,
-            });
+            }, 0); // Start this animation at the beginning of the timeline
         }
     }
 
@@ -326,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ScrollTrigger.addEventListener("refresh", () => {
         currentActiveStep = 1;
-        activateStep(1);
+        activateStep(1); // Re-activate step 1 on refresh
     });
 
     let resizeTimeout;
