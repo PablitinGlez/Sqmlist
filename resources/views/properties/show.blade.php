@@ -208,8 +208,8 @@
             {{-- Contenedor principal para la información, usando flexbox para alinear el precio a la derecha --}}
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 sm:mb-8">
                 <div class="sm:flex-grow">
-                    {{-- Dirección Completa - CAMBIADO: Ahora usa text-xs sm:text-sm igual que las migas de pan --}}
-                    <p class="text-xs sm:text-sm font-bold text-gray-900 mb-2">
+                    {{-- Dirección Completa - MANTENER TAMAÑO ORIGINAL --}}
+                    <p class="text-lg font-bold text-gray-900 mb-2">
                         {{ $property->address->street_address ?? 'N/A' }}
                         @if($property->address->neighborhood_name), {{ $property->address->neighborhood_name }}@endif
                         @if($property->address->city_name), {{ $property->address->city_name }}@endif
