@@ -226,11 +226,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ScrollTrigger.create({
         trigger: "#steps-to-advertiser",
-        start: "top top",
-        // Adjusted 'end' values for a slightly less 'hard' scroll.
-        // Increased scroll distance slightly to allow more room for animation.
+        // NEW: Adjusted 'start' value.
+        // "top center" means when the top of the trigger hits the center of the viewport.
+        // For mobile, "top top+=10%" adds a slight offset from the very top.
+        // This aims to ensure the content is visible before pinning starts.
+        start: isMobile ? "top top+=10%" : "top center", 
         end: isMobile ? "+=350%" : "+=450%", 
-        scrub: isMobile ? 0.4 : 0.6, // Slightly increased scrub for a bit more perceived "lightness"
+        scrub: isMobile ? 0.4 : 0.6, 
         pin: ".sticky-container",
         anticipatePin: 1,
         invalidateOnRefresh: true,
@@ -291,7 +293,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 gsap.to(content, {
                     opacity: 1,
                     y: 0,
-                    // Slightly increased duration and y-offset for smoother transitions and less overlap
                     duration: isMobile ? 0.5 : 0.8, 
                     ease: "power2.out",
                     pointerEvents: 'auto',
@@ -300,7 +301,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 gsap.to(content, {
                     opacity: 0,
-                    // Increased y-offset to ensure content moves further out of view
                     y: isMobile ? 30 : 50, 
                     duration: isMobile ? 0.3 : 0.5, 
                     ease: "power2.in",
