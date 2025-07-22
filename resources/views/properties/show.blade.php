@@ -74,7 +74,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- INICIA: Pila de Navegación (Breadcrumbs) Modificada --}}
-            <nav class="flex items-center text-xs sm:text-sm font-medium text-gray-500 mb-6 space-x-1 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
+            <nav class="flex items-center text-xs sm:text-sm font-medium text-gray-500 mb-4 space-x-1 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
                 {{-- Inicio - OCULTADO EN MÓVILES, VISIBLE EN SM Y SUPERIORES --}}
                 <a wire:navigate href="{{ url('/') }}" class="hidden sm:inline text-blue-600 hover:text-blue-800">Inicio</a>
                 {{-- Separador para Inicio - OCULTADO EN MÓVILES, VISIBLE EN SM Y SUPERIORES --}}
@@ -174,7 +174,93 @@
             </nav>
             {{-- FIN: Pila de Navegación (Breadcrumbs) --}}
 
+            {{-- INICIA: Badges de Tipo de Propiedad y Operación --}}
+            <div class="flex items-center space-x-2 mt-4 mb-6">
+                @if($property->propertyType)
+                    {{-- Ajuste: px-2 py-0.5 para móviles, sm:px-3 sm:py-1 para PC --}}
+                    <span class="inline-flex items-center px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold bg-gray-100 text-gray-800">
+                        {{ strtoupper($property->propertyType->name) }}
+                    </span>
+                @endif
+
+                @php
+                    $operationBadgeText = match($property->operation_type) {
+                        'sale' => 'VENTA',
+                        'rent' => 'RENTA',
+                        'both' => 'VENTA Y RENTA',
+                        default => 'OPERACIÓN'
+                    };
+                    $operationBadgeColor = match($property->operation_type) {
+                        'sale' => 'bg-blue-100 text-blue-800',
+                        'rent' => 'bg-green-100 text-green-800',
+                        'both' => 'bg-purple-100 text-purple-800',
+                        default => 'bg-gray-100 text-gray-800'
+                    };
+                @endphp
+                {{-- Ajuste: px-2 py-0.5 para móviles, sm:px-3 sm:py-1 para PC --}}
+                <span class="inline-flex items-center px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-semibold {{ $operationBadgeColor }}">
+                    {{ $operationBadgeText }}
+                </span>
+            </div>
+            {{-- FIN: Badges de Tipo de Propiedad y Operación --}}
+
+            {{-- INICIA: Bloque de Información de la Propiedad (Dirección, Tipo, Precio) --}}
+            {{-- Contenedor principal para la información, usando flexbox para alinear el precio a la derecha --}}
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-6 sm:mb-8">
+                <div class="sm:flex-grow">
+                    {{-- Dirección Completa - CAMBIADO: Ahora usa text-xs sm:text-sm igual que las migas de pan --}}
+                    <p class="text-xs sm:text-sm font-bold text-gray-900 mb-2">
+                        {{ $property->address->street_address ?? 'N/A' }}
+                        @if($property->address->neighborhood_name), {{ $property->address->neighborhood_name }}@endif
+                        @if($property->address->city_name), {{ $property->address->city_name }}@endif
+                        @if($property->address->state_name), {{ $property->address->state_name }}@endif
+                        @if($property->address->zip_code), C.P. {{ $property->address->zip_code }}@endif
+                    </p>
+
+                    {{-- Tipo de Propiedad + Operación + Estado - CAMBIADO: Ahora usa text-xs sm:text-sm igual que las migas de pan --}}
+                    <p class="text-xs sm:text-sm text-gray-700">
+                        @if($property->propertyType)
+                            {{ $property->propertyType->name }}
+                        @else
+                            Propiedad
+                        @endif
+                        en
+                        @php
+                            echo match($property->operation_type) {
+                                'sale' => 'Venta',
+                                'rent' => 'Renta',
+                                'both' => 'Venta y Renta',
+                                default => 'Operación'
+                            };
+                        @endphp
+                        en {{ $property->address->state_name ?? 'N/A' }}
+                    </p>
+
+                    {{-- Municipio, Estado + Enlace Ver Ubicación - CAMBIADO: Ahora usa text-xs sm:text-sm igual que las migas de pan --}}
+                    <p class="text-xs sm:text-sm text-gray-600 mt-1">
+                        Municipio {{ $property->address->municipality_name ?? 'N/A' }}, {{ $property->address->state_name ?? 'N/A' }}
+                        <br class="sm:hidden"> {{-- Salto de línea solo en móvil --}}
+                        <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold underline">Ver Ubicación</a>
+                    </p>
+                </div>
+
+                {{-- Precio de la Propiedad --}}
+                {{-- text-xl en móvil, sm:text-2xl, md:text-3xl --}}
+                <div class="mt-4 sm:mt-0 sm:ml-6 flex-shrink-0">
+                    <p class="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 text-left sm:text-right">
+                        @if($property->price)
+                            ${{ number_format($property->price, 0, '.', ',') }} MXN
+                        @else
+                            Precio no disponible
+                        @endif
+                    </p>
+                </div>
+            </div>
+            {{-- FIN: Bloque de Información de la Propiedad --}}
+
+            {{-- Título principal de la propiedad (se mantiene el que ya tenías) --}}
             <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Detalles de la Propiedad: {{ $property->title ?? 'N/A' }}</h2>
+
             <div style="height: 1500px;">
                 <p class="text-sm md:text-base text-gray-700">Contenido principal de la propiedad...</p>
             </div>
