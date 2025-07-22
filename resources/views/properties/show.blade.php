@@ -74,7 +74,7 @@
     </script>
 
     {{-- Aquí irá el resto del contenido de la página de detalles --}}
- <div class="py-10 sm:py-20"> {{-- Ajuste del padding vertical principal --}}
+ <div class="py-24 sm:py-20"> {{-- Ajuste del padding vertical principal --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {{-- Título principal de la propiedad --}}
             <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Detalles de la Propiedad: {{ $property->title ?? 'N/A' }}</h2> {{-- Cambiado de sm:text-3xl a md:text-3xl para que sea más pequeño en sm --}}
