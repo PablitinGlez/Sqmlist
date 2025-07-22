@@ -7,6 +7,7 @@
 <x-app-layout>
     <x-sections.hero></x-sections.hero>
     <x-sections.introduction></x-sections.introduction>
+        <x-sections.steps-to-advertiser></x-sections.steps-to-advertiser>
     <x-sections.explore-cities></x-sections.explore-cities>
     <x-sections.featured-properties></x-sections.featured-properties>
     {{-- <x-sections.statistics></x-sections.statistics> --}} {{-- ¡ELIMINADO! --}}
