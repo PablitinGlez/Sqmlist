@@ -5,11 +5,12 @@
     <div class="bg-white shadow-sm py-2 sm:py-4 border-b border-gray-200 sticky top-16 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
             {{-- Botón Regresar --}}
-            <button onclick="window.history.back()"
-                    class="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors duration-200 text-xs sm:text-sm font-semibold"> {{-- Tamaño de texto ajustado --}}
-                <i class="fas fa-arrow-left mr-1 sm:mr-2"></i> <span class="hidden sm:inline">Regresar a la búsqueda</span> {{-- Ocultar texto en móviles --}}
-                <span class="inline sm:hidden">Regresar</span> {{-- Texto corto para móviles --}}
-            </button>
+           
+<button onclick="window.history.back()"
+        class="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors duration-200 text-xs sm:text-sm font-semibold">
+    <i class="fas fa-arrow-left mr-1 sm:mr-2"></i> <span class="hidden sm:inline">Regresar a la búsqueda</span>
+    <span class="inline sm:hidden">Regresar</span>
+</button>
 
             {{-- Acciones Derecha --}}
             {{-- Ajustar space-x para móviles, y flex-nowrap para evitar saltos de línea --}}
@@ -73,15 +74,18 @@
     </script>
 
     {{-- Aquí irá el resto del contenido de la página de detalles --}}
-    <div class="py-10 sm:py-20"> {{-- Ajuste del padding vertical principal --}}
+ <div class="py-10 sm:py-20"> {{-- Ajuste del padding vertical principal --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Detalles de la Propiedad: {{ $property->title ?? 'N/A' }}</h2> {{-- Ajuste del tamaño de texto --}}
+            {{-- Título principal de la propiedad --}}
+            <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Detalles de la Propiedad: {{ $property->title ?? 'N/A' }}</h2> {{-- Cambiado de sm:text-3xl a md:text-3xl para que sea más pequeño en sm --}}
             <div style="height: 1500px;">
                 Contenido principal de la propiedad...
             </div>
             <div id="contact-form-section" class="mt-8 sm:mt-12 p-4 sm:p-6 bg-white shadow-md rounded-lg"> {{-- Ajuste del padding --}}
-                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">Sección de Contacto (aquí irá el formulario)</h3> {{-- Ajuste del tamaño de texto --}}
-                <p class="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">Este es el ancla para el botón "Ver teléfono".</p> {{-- Ajuste del tamaño de texto --}}
+                {{-- Título de la sección de contacto --}}
+                <h3 class="text-lg md:text-2xl font-semibold text-gray-800">Sección de Contacto (aquí irá el formulario)</h3> {{-- Cambiado de text-xl a text-lg para móviles y de sm:text-2xl a md:text-2xl --}}
+                {{-- Párrafo de descripción en la sección de contacto --}}
+                <p class="mt-1 sm:mt-2 text-sm md:text-base text-gray-600">Este es el ancla para el botón "Ver teléfono".</p> {{-- Cambiado de sm:text-base a md:text-base --}}
             </div>
         </div>
     </div>

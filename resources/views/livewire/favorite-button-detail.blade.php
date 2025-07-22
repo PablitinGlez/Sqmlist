@@ -18,9 +18,9 @@
         @endif
     >
         {{-- Icono del corazón --}}
-        <i class="mr-0 sm:mr-2" :class="{ 'fas fa-heart': isFavorited, 'far fa-heart': ! isFavorited }"></i> {{-- Eliminar margen en móviles --}}
+        <i class="mr-0 sm:mr-2" :class="{ 'fas fa-heart': isFavorited, 'far fa-heart': ! isFavorited }"></i>
         {{-- Texto dinámico --}}
-        <span class="hidden sm:inline" x-text="isFavorited ? 'Guardado' : 'Guardar'"></span> {{-- Ocultar texto en móviles --}}
+        <span class="hidden sm:inline" x-text="isFavorited ? 'Guardado' : 'Guardar'"></span>
     </button>
 
     {{-- Tooltip (mensaje emergente) --}}
@@ -31,7 +31,12 @@
         x-transition:leave="transition ease-in duration-100"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-90"
-        class="absolute top-12 left-1/2 -translate-x-1/2 z-30 px-3 py-1 text-xs text-white bg-gray-800 rounded-md shadow-lg whitespace-nowrap"
+        {{-- Clases para centrar el tooltip en móviles --}}
+        class="absolute top-12 z-30 px-3 py-1 text-xs text-white bg-gray-800 rounded-md shadow-lg whitespace-nowrap
+               left-1/2 -translate-x-1/2 {{-- Centra el tooltip respecto a su padre --}}
+               sm:left-1/2 sm:-translate-x-1/2 {{-- Mantiene centrado en sm y mayores --}}
+               w-max max-w-[calc(100vw-2rem)] text-center
+               "
         style="display: none;"
     >
         @auth

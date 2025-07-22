@@ -10,7 +10,7 @@
         @livewire('favorite-button', ['property' => $property], key($property->id))
 
         {{-- Enlace principal para la navegación a la página de detalles --}}
-        <a href="{{ route('properties.show', $property->slug) }}" class="block h-full flex flex-col">
+        <a wire:navigate href="{{ route('properties.show', $property->slug) }}" class="block h-full flex flex-col">
 
             <!-- Carrusel de imágenes - altura fija -->
             <div class="relative h-48 overflow-hidden flex-shrink-0" x-data="{
