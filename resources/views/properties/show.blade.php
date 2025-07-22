@@ -15,13 +15,9 @@
             {{-- Ajustar space-x para móviles, y flex-nowrap para evitar saltos de línea --}}
             <div class="flex items-center space-x-2 sm:space-x-3 flex-nowrap">
                 {{-- Botón Guardar (Componente Livewire de Favoritos) --}}
-                {{-- El tamaño del texto para este componente se controla dentro de su propia vista/clase si es que define su propio estilo.
-                     Aquí no podemos controlarlo directamente sin sobrescribir las clases internas de Livewire.
-                     Si quieres ajustarlo, tendrías que ver la vista de 'favorite-button-detail'. --}}
                 @livewire('favorite-button-detail', ['property' => $property], key('detail-favorite-button-' . $property->id))
 
                 {{-- Botón Compartir --}}
-                {{-- Cambiado a text-xs para móviles --}}
                 <button id="shareButton"
                         class="inline-flex items-center px-2 py-1 sm:px-4 sm:py-2 rounded-full shadow-sm text-xs sm:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
                         onclick="copyToClipboard('{{ url()->current() }}', this)">
@@ -30,14 +26,12 @@
                 </button>
 
                 {{-- Botón Ver Teléfono --}}
-                {{-- Ocultar en móviles, mostrar en md y superiores. Cambiado a text-xs para móviles si se mostrara --}}
                 <a href="#contact-form-section"
                    class="hidden md:inline-flex items-center px-4 py-2 border border-blue-500 rounded-full shadow-sm text-xs md:text-sm font-medium text-blue-500 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                     <i class="fas fa-phone-alt mr-2"></i> Ver teléfono
                 </a>
 
                 {{-- Botón WhatsApp --}}
-                {{-- Ocultar en móviles, mostrar en md y superiores. Cambiado a text-xs para móviles si se mostrara --}}
                 @if($property->contact_whatsapp_number || ($property->user && $property->user->profileDetails && $property->user->profileDetails->whatsapp_number))
                     @php
                         $whatsappNumber = $property->contact_whatsapp_number ?? ($property->user->profileDetails->whatsapp_number ?? '');
@@ -76,17 +70,15 @@
     </script>
 
     {{-- Aquí irá el resto del contenido de la página de detalles --}}
-    {{-- Se ajustó el py-24 a py-10 para mantener consistencia con el sm:py-20 --}}
     <div class="py-24 sm:py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- INICIA: Pila de Navegación (Breadcrumbs) Modificada --}}
-            {{-- Cambiado a text-xs para móviles, sm:text-sm para pantallas pequeñas --}}
             <nav class="flex items-center text-xs sm:text-sm font-medium text-gray-500 mb-6 space-x-1 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
-                {{-- Inicio --}}
-                <a wire:navigate href="{{ url('/') }}" class="text-blue-600 hover:text-blue-800">Inicio</a>
-
-                <span class="mx-1 text-gray-400">/</span>
+                {{-- Inicio - OCULTADO EN MÓVILES, VISIBLE EN SM Y SUPERIORES --}}
+                <a wire:navigate href="{{ url('/') }}" class="hidden sm:inline text-blue-600 hover:text-blue-800">Inicio</a>
+                {{-- Separador para Inicio - OCULTADO EN MÓVILES, VISIBLE EN SM Y SUPERIORES --}}
+                <span class="hidden sm:inline mx-1 text-gray-400">/</span>
 
                 {{-- Estado (solo pasa parámetro de estado) --}}
                 @if($property->address->state_name)
@@ -182,22 +174,12 @@
             </nav>
             {{-- FIN: Pila de Navegación (Breadcrumbs) --}}
 
-            {{-- Título principal de la propiedad --}}
-            {{-- Cambiado a text-xl para móviles, md:text-3xl para pantallas medianas --}}
             <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Detalles de la Propiedad: {{ $property->title ?? 'N/A' }}</h2>
-
-            {{-- Contenido principal de la propiedad --}}
-            {{-- Asumo que el contenido aquí dentro manejará sus propios tamaños de texto,
-                 pero si hay un texto general, podrías añadir un 'text-sm' o 'text-base' por defecto. --}}
             <div style="height: 1500px;">
                 <p class="text-sm md:text-base text-gray-700">Contenido principal de la propiedad...</p>
             </div>
-
-            {{-- Sección de Contacto --}}
             <div id="contact-form-section" class="mt-8 sm:mt-12 p-4 sm:p-6 bg-white shadow-md rounded-lg">
-                {{-- Título de la sección de contacto: cambiado a text-lg para móviles, md:text-2xl para medianas --}}
                 <h3 class="text-lg md:text-2xl font-semibold text-gray-800">Sección de Contacto (aquí irá el formulario)</h3>
-                {{-- Párrafo descriptivo: cambiado a text-sm para móviles, md:text-base para medianas --}}
                 <p class="mt-1 sm:mt-2 text-sm md:text-base text-gray-600">Este es el ancla para el botón "Ver teléfono".</p>
             </div>
         </div>
