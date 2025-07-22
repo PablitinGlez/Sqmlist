@@ -19,9 +19,9 @@ class PropertyController extends Controller
             ->with([
                 'propertyType.category',
                 'images',
-                'address',  // ✅ Solo carga la dirección, no relaciones anidadas
+                'address',  
                 'user',
-                'featureValues.feature.featureSection'  // ✅ Corregido el nombre de la relación
+                'featureValues.feature.featureSection'  
             ])
             ->firstOrFail();
 

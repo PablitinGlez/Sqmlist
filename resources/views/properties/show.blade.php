@@ -1,112 +1,89 @@
-<div>
+<x-app-layout>
 
-    
-<div class="bg-white p-6 sm:p-8 rounded-lg shadow-md max-w-lg mx-auto">
-    <h3 class="text-xl font-bold text-gray-800 mb-2 text-center">Contacta con el Agente</h3>
-    <p class="text-gray-600 mb-6 text-center text-sm">Envía tus datos</p>
+    {{-- Sub-navegador/Barra de Acciones del Detalle --}}
+    {{-- Ajuste del tamaño del padding vertical en móviles para un diseño más compacto --}}
+    <div class="bg-white shadow-sm py-2 sm:py-4 border-b border-gray-200 sticky top-16 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+            {{-- Botón Regresar --}}
+            <button onclick="window.history.back()"
+                    class="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors duration-200 text-xs sm:text-sm font-semibold"> {{-- Tamaño de texto ajustado --}}
+                <i class="fas fa-arrow-left mr-1 sm:mr-2"></i> <span class="hidden sm:inline">Regresar a la búsqueda</span> {{-- Ocultar texto en móviles --}}
+                <span class="inline sm:hidden">Regresar</span> {{-- Texto corto para móviles --}}
+            </button>
 
-    {{-- Mostrar mensajes de éxito o error --}}
-    <x-validation-errors class="mb-4" />
+            {{-- Acciones Derecha --}}
+            {{-- Ajustar space-x para móviles, y flex-nowrap para evitar saltos de línea --}}
+            <div class="flex items-center space-x-2 sm:space-x-3 flex-nowrap">
+                {{-- Botón Guardar (Componente Livewire de Favoritos) --}}
+                @livewire('favorite-button-detail', ['property' => $property], key('detail-favorite-button-' . $property->id))
 
-    @session('success')
-        <div class="mb-4 font-medium text-sm text-green-600 bg-green-50 p-3 rounded-md">
-            {{ $value }}
-        </div>
-    @endsession
 
-    @session('error')
-        <div class="mb-4 font-medium text-sm text-red-600 bg-red-50 p-3 rounded-md">
-            {{ $value }}
-        </div>
-    @endsession
+                {{-- Botón Compartir --}}
+                <button id="shareButton"
+                        class="inline-flex items-center px-2 py-1 sm:px-4 sm:py-2 rounded-full shadow-sm text-xs sm:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
+                        onclick="copyToClipboard('{{ url()->current() }}', this)">
+                    <i class="fas fa-share-alt mr-0 sm:mr-2"></i> {{-- Eliminar margen en móviles --}}
+                    <span class="hidden sm:inline">Compartir</span> {{-- Ocultar texto en móviles --}}
+                </button>
 
-    <form method="POST" action="{{ route('properties.contact', $property->slug) }}" class="space-y-4">
-        @csrf
+                {{-- Botón Ver Teléfono --}}
+                {{-- Ocultar en móviles, mostrar en md y superiores --}}
+                <a href="#contact-form-section"
+                   class="hidden md:inline-flex items-center px-4 py-2 border border-blue-500 rounded-full shadow-sm text-sm font-medium text-blue-500 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                    <i class="fas fa-phone-alt mr-2"></i> Ver teléfono
+                </a>
 
-        {{-- Campos de Nombre y Teléfono en la misma fila --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-                <x-label for="name" value="Nombre" class="sr-only" /> {{-- sr-only oculta visualmente pero es accesible --}}
-                <x-input
-                    id="name"
-                    class="block mt-1 w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    type="text"
-                    name="name"
-                    :value="old('name')"
-                    placeholder="Nombre"
-                    required
-                    autofocus
-                />
-            </div>
-            <div>
-                <x-label for="phone" value="Teléfono" class="sr-only" />
-                <x-input
-                    id="phone"
-                    class="block mt-1 w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                    type="tel"
-                    name="phone"
-                    :value="old('phone')"
-                    placeholder="Teléfono"
-                />
+                {{-- Botón WhatsApp --}}
+                {{-- Ocultar en móviles, mostrar en md y superiores --}}
+                @if($property->contact_whatsapp_number || ($property->user && $property->user->profileDetails && $property->user->profileDetails->whatsapp_number))
+                    @php
+                        $whatsappNumber = $property->contact_whatsapp_number ?? ($property->user->profileDetails->whatsapp_number ?? '');
+                        $whatsappLink = 'https://wa.me/' . preg_replace('/[^0-9]/', '', $whatsappNumber) . '?text=' . urlencode('Hola, me interesa la propiedad: ' . ($property->title ?? 'esta propiedad') . ' - ' . route('properties.show', $property->slug ?? '#'));
+                    @endphp
+                    <a href="{{ $whatsappLink }}"
+                       target="_blank"
+                       class="hidden md:inline-flex items-center px-4 py-2 border border-transparent rounded-full shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                        <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                    </a>
+                @endif
             </div>
         </div>
-
-        {{-- Campo de Correo Electrónico --}}
-        <div>
-            <x-label for="email" value="Correo Electrónico" class="sr-only" />
-            <x-input
-                id="email"
-                class="block mt-1 w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                type="email"
-                name="email"
-                :value="old('email')"
-                placeholder="Correo Electrónico"
-                required
-            />
-        </div>
-
-        {{-- Campo de Descripción (Mensaje) --}}
-        <div>
-            <x-label for="message" value="Descripción" class="sr-only" />
-            <textarea
-                id="message"
-                name="message"
-                rows="4"
-                class="block mt-1 w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 resize-none"
-                placeholder="Descripción"
-                required
-            >{{ old('message') }}</textarea>
-        </div>
-
-        {{-- Botón de Enviar Mensaje --}}
-        <div class="flex justify-center mt-6">
-            <x-button class="w-full justify-center py-3 text-lg bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md shadow-sm transition-colors duration-200">
-               Contactar y ver telefono
-            </x-button>
-        </div>
-    </form>
-
-    {{-- Separador o texto "O" --}}
-    <p class="text-center text-gray-500 text-sm my-4">- O -</p>
-
-    {{-- Botones de Contacto Directo --}}
-    <div class="space-y-3">
-        {{-- Botón Ver Teléfono eso esta mal xd apenas lo vi --}}
-        <a href="tel:{{ $property->user->profileDetails->phone_number ?? $property->user->phone ?? '' }}"
-           class="flex items-center justify-center w-full py-3 text-lg bg-blue-400 hover:bg-blue-500 text-white font-semibold rounded-md shadow-sm transition-colors duration-200"
-           target="_blank"
-           wire:navigate>
-            <i class="fas fa-phone-alt mr-2"></i> 
-        </a>
-
-        {{-- Botón WhatsApp --}}
-        <a href="https://wa.me/{{ $property->user->profileDetails->whatsapp_number ?? $property->user->phone ?? '' }}?text=Hola,%20me%20interesa%20la%20propiedad:%20{{ urlencode($property->title) }}%20-%20{{ urlencode(route('properties.show', $property->slug)) }}"
-           class="flex items-center justify-center w-full py-3 text-lg bg-green-500 hover:bg-green-600 text-white font-semibold rounded-md shadow-sm transition-colors duration-200"
-           target="_blank"
-           wire:navigate>
-            <i class="fab fa-whatsapp mr-2"></i> WhatsApp
-        </a>
     </div>
-</div>
 
-</div>
+    {{-- Script para copiar al portapapeles --}}
+    <script>
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(function() {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check mr-2"></i> ¡Copiado!';
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                }, 2000);
+            }).catch(function(err) {
+                console.error('No se pudo copiar el texto: ', err);
+            });
+        }
+        // Script para el scroll suave
+        document.querySelector('a[href="#contact-form-section"]').addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    </script>
+
+    {{-- Aquí irá el resto del contenido de la página de detalles --}}
+    <div class="py-10 sm:py-20"> {{-- Ajuste del padding vertical principal --}}
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-xl sm:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">Detalles de la Propiedad: {{ $property->title ?? 'N/A' }}</h2> {{-- Ajuste del tamaño de texto --}}
+            <div style="height: 1500px;">
+                Contenido principal de la propiedad...
+            </div>
+            <div id="contact-form-section" class="mt-8 sm:mt-12 p-4 sm:p-6 bg-white shadow-md rounded-lg"> {{-- Ajuste del padding --}}
+                <h3 class="text-xl sm:text-2xl font-semibold text-gray-800">Sección de Contacto (aquí irá el formulario)</h3> {{-- Ajuste del tamaño de texto --}}
+                <p class="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">Este es el ancla para el botón "Ver teléfono".</p> {{-- Ajuste del tamaño de texto --}}
+            </div>
+        </div>
+    </div>
+
+</x-app-layout>

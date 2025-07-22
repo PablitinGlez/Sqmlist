@@ -218,10 +218,10 @@
                 ¡No esperes más para conectar con ellos!
             </p>
 
-            <a href="{{ route('register') }}" class="inline-flex items-center px-4 md:px-6 lg:px-8 py-2 md:py-3 lg:py-4 border border-transparent text-sm md:text-base lg:text-lg font-bold rounded-lg shadow-lg text-indigo-600 bg-white hover:bg-gray-50 transition-all duration-300 transform hover:scale-105">
-                <i class="fas fa-rocket mr-1 md:mr-2 text-sm"></i>
-                Empieza Ahora
-            </a>
+          <a href="/propiedades" class="inline-flex items-center px-4 md:px-6 lg:px-8 py-2 md:py-3 lg:py-4 border border-transparent text-xs md:text-sm lg:text-base font-bold rounded-lg shadow-lg text-indigo-600 bg-white hover:bg-gray-50 transition-all duration-300 transform hover:scale-105">
+    <i class="fas fa-rocket mr-1 md:mr-2 text-sm"></i>
+    Explorar Propiedades
+</a>
         </div>
     </div>
 
