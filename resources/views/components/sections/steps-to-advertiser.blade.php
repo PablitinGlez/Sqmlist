@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const isMobile = window.innerWidth < 768;
 
     // Configuración del ScrollTrigger con inicio más tardío
-  ScrollTrigger.create({
+   ScrollTrigger.create({
         trigger: "#steps-to-advertiser",
         start: isMobile ? "top top+=25%" : "top top+=15%", // Empezar más abajo para centrar mejor
         end: isMobile ? "+=200%" : "+=250%", // Ajustar proporcionalmente
