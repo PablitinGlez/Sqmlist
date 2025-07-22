@@ -226,13 +226,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ScrollTrigger.create({
         trigger: "#steps-to-advertiser",
-        // NEW: Adjusted 'start' value.
-        // "top center" means when the top of the trigger hits the center of the viewport.
-        // For mobile, "top top+=10%" adds a slight offset from the very top.
-        // This aims to ensure the content is visible before pinning starts.
-        start: isMobile ? "top top+=10%" : "top center", 
-        end: isMobile ? "+=350%" : "+=450%", 
-        scrub: isMobile ? 0.4 : 0.6, 
+        // Ajuste para que el pinning empiece cuando el trigger llega al top del viewport en móvil,
+        // y al centro en desktop para una visibilidad completa inicial.
+        start: isMobile ? "top top" : "top center", 
+        // Se reduce el 'end' para un scroll más ligero (menos distancia para la animación completa).
+        end: isMobile ? "+=300%" : "+=400%", 
+        // Se aumenta el 'scrub' para un scroll más suave/ligero (más "arrastre").
+        scrub: isMobile ? 0.6 : 0.8, 
         pin: ".sticky-container",
         anticipatePin: 1,
         invalidateOnRefresh: true,
