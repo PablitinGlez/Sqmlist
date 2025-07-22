@@ -63,8 +63,9 @@
                     
                     {{-- Paso 1: Registro --}}
                     <div class="step-content absolute inset-0 opacity-0 transform translate-y-10 pointer-events-none" data-step="1">
-                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-center h-full">
-                            <div class="text-center md:text-left px-2 md:px-0">
+                        {{-- Ajuste aquí: md:items-center para desktop, por defecto align-start en mobile --}}
+                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full"> 
+                            <div class="text-left px-2 md:px-0"> {{-- text-left para mobile y desktop --}}
                                 <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">Regístrate y Verifica</h3>
                                 <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
                                     Crea tu cuenta gratuita y verifica tu email. Es rápido, seguro y solo toma unos minutos.
@@ -75,7 +76,8 @@
                                     <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Proceso en menos de 5 minutos</li>
                                 </ul>
                             </div>
-                            <div class="flex justify-center mt-2 md:mt-0">
+                            {{-- Ajuste aquí: flex justify-start para mobile, md:justify-center para desktop --}}
+                            <div class="flex justify-start md:justify-center mt-2 md:mt-0"> 
                                 <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-blue-100 flex flex-col justify-between">
                                     <div class="space-y-2 md:space-y-3">
                                         <div class="h-2 md:h-3 bg-blue-200 rounded animate-pulse w-3/4"></div>
@@ -90,8 +92,9 @@
 
                     {{-- Paso 2: Solicitud --}}
                     <div class="step-content absolute inset-0 opacity-0 transform translate-y-10 pointer-events-none" data-step="2">
-                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-center h-full">
-                            <div class="text-center md:text-left px-2 md:px-0">
+                        {{-- Ajuste aquí: md:items-center para desktop, por defecto align-start en mobile --}}
+                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full">
+                            <div class="text-left px-2 md:px-0"> {{-- text-left para mobile y desktop --}}
                                 <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">Envía tu Solicitud</h3>
                                 <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
                                     Completa el formulario con tus datos y sube los documentos requeridos. 
@@ -102,7 +105,8 @@
                                     <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Información de contacto segura</li>
                                 </ul>
                             </div>
-                            <div class="flex justify-center mt-2 md:mt-0">
+                            {{-- Ajuste aquí: flex justify-start para mobile, md:justify-center para desktop --}}
+                            <div class="flex justify-start md:justify-center mt-2 md:mt-0">
                                 <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-green-100 flex flex-col">
                                     <div class="space-y-1 md:space-y-2 mb-auto"> {{-- Add mb-auto to push docs to bottom --}}
                                         <div class="text-xs md:text-xs text-gray-600">Tipo de Perfil</div>
@@ -122,8 +126,9 @@
 
                     {{-- Paso 3: Espera --}}
                     <div class="step-content absolute inset-0 opacity-0 transform translate-y-10 pointer-events-none" data-step="3">
-                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-center h-full">
-                            <div class="text-center md:text-left px-2 md:px-0">
+                        {{-- Ajuste aquí: md:items-center para desktop, por defecto align-start en mobile --}}
+                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full">
+                            <div class="text-left px-2 md:px-0"> {{-- text-left para mobile y desktop --}}
                                 <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">Espera la Aprobación</h3>
                                 <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
                                     Nuestro equipo revisará tu solicitud. Te notificaremos por email una vez aprobada.
@@ -134,11 +139,12 @@
                                     <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Soporte personalizado</li>
                                 </ul>
                             </div>
-                            <div class="flex justify-center mt-2 md:mt-0">
-                                <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-yellow-100 flex flex-col items-center justify-center">
-                                    <div class="w-8 md:w-12 h-8 md:h-12 border-2 md:border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-2 md:mb-3"></div>
-                                    <p class="text-yellow-600 font-semibold text-xs md:text-sm text-center">Revisando tu solicitud...</p>
-                                    <p class="text-xs md:text-xs text-gray-500 mt-1 text-center">Te notificaremos pronto</p>
+                            {{-- Ajuste aquí: flex justify-start para mobile, md:justify-center para desktop --}}
+                            <div class="flex justify-start md:justify-center mt-2 md:mt-0">
+                                <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-yellow-100 flex flex-col items-start justify-center"> {{-- items-start para alinear contenido interno a la izquierda --}}
+                                    <div class="w-8 md:w-12 h-8 md:h-12 border-2 md:border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mb-2 md:mb-3"></div> {{-- Eliminado mx-auto --}}
+                                    <p class="text-yellow-600 font-semibold text-xs md:text-sm">Revisando tu solicitud...</p> {{-- Eliminado text-center --}}
+                                    <p class="text-xs md:text-xs text-gray-500 mt-1">Te notificaremos pronto</p> {{-- Eliminado text-center --}}
                                 </div>
                             </div>
                         </div>
@@ -146,8 +152,9 @@
 
                     {{-- Paso 4: Publicar --}}
                     <div class="step-content absolute inset-0 opacity-0 transform translate-y-10 pointer-events-none" data-step="4">
-                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-center h-full">
-                            <div class="text-center md:text-left px-2 md:px-0">
+                        {{-- Ajuste aquí: md:items-center para desktop, por defecto align-start en mobile --}}
+                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full">
+                            <div class="text-left px-2 md:px-0"> {{-- text-left para mobile y desktop --}}
                                 <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">¡Comienza a Publicar!</h3>
                                 <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
                                     Una vez aprobado, podrás crear y publicar tus propiedades inmediatamente.
@@ -158,7 +165,8 @@
                                     <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Métricas y estadísticas detalladas</li>
                                 </ul>
                             </div>
-                            <div class="flex justify-center mt-2 md:mt-0">
+                            {{-- Ajuste aquí: flex justify-start para mobile, md:justify-center para desktop --}}
+                            <div class="flex justify-start md:justify-center mt-2 md:mt-0">
                                 <div class="w-40 sm:w-48 md:w-56 lg:w-64 h-28 sm:h-32 md:h-40 lg:h-48 bg-white rounded-lg shadow-lg p-2 md:p-4 border-2 border-purple-100 flex flex-col">
                                     <div class="flex justify-between items-center mb-2"> {{-- Added mb-2 for spacing --}}
                                         <div class="text-xs md:text-xs font-semibold text-purple-600">Mis Propiedades</div>
@@ -226,13 +234,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     ScrollTrigger.create({
         trigger: "#steps-to-advertiser",
-        // Ajuste para que el pinning empiece cuando el trigger llega al top del viewport en móvil,
-        // y al centro en desktop para una visibilidad completa inicial.
-        start: isMobile ? "top top" : "top center", 
-        // Se reduce el 'end' para un scroll más ligero (menos distancia para la animación completa).
-        end: isMobile ? "+=300%" : "+=400%", 
-        // Se aumenta el 'scrub' para un scroll más suave/ligero (más "arrastre").
-        scrub: isMobile ? 0.6 : 0.8, 
+        start: isMobile ? "top top+=10%" : "top center", 
+        // **Ajuste para scroll más ligero y evitar superposición:**
+        // Reducimos el 'end' para que la distancia de scroll sea menor por paso.
+        // `scrub` también se reduce para que la animación se complete más rápido al scrollear.
+        end: isMobile ? "+=180%" : "+=220%", // Valores más pequeños para un scroll más ligero
+        scrub: isMobile ? 0.15 : 0.25, // Valores más bajos para que la animación "siga" más rápido el scroll
         pin: ".sticky-container",
         anticipatePin: 1,
         invalidateOnRefresh: true,
@@ -255,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function activateStep(stepNumber) {
-        // Update progress circles
+        // Update progress circles (no changes here, they work well)
         for (let i = 1; i <= totalSteps; i++) {
             const stepItem = document.querySelector(`[data-step="${i}"]`);
             if (!stepItem) continue;
@@ -287,23 +294,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         
-        // Content display with improved animation for no overlap
+        // **Ajuste aquí para evitar superposición y acelerar transición de contenido:**
         document.querySelectorAll('.step-content').forEach((content) => {
             if (parseInt(content.dataset.step) === stepNumber) {
                 gsap.to(content, {
                     opacity: 1,
                     y: 0,
-                    duration: isMobile ? 0.5 : 0.8, 
-                    ease: "power2.out",
+                    // Duración más corta para que el contenido aparezca más rápido.
+                    duration: isMobile ? 0.3 : 0.4, // Valores reducidos
+                    // Ease que acelera la aparición.
+                    ease: "power2.out", // Mantener para una entrada suave
                     pointerEvents: 'auto',
                     zIndex: 10,
                 });
             } else {
                 gsap.to(content, {
                     opacity: 0,
-                    y: isMobile ? 30 : 50, 
-                    duration: isMobile ? 0.3 : 0.5, 
-                    ease: "power2.in",
+                    y: isMobile ? 20 : 30, // Reducir un poco el desplazamiento para que sea más rápido
+                    // Duración más corta para que el contenido desaparezca más rápido.
+                    duration: isMobile ? 0.2 : 0.3, // Valores reducidos, más rápidos que la entrada
+                    // Ease que acelera la salida.
+                    ease: "power2.in", // Mantener para una salida suave
                     pointerEvents: 'none',
                     zIndex: 1,
                 });
