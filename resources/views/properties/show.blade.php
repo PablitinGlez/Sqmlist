@@ -745,7 +745,6 @@
             </div>
    
 
-
 {{-- Sección de Propiedades Relacionadas --}}
 <div class="mt-8 col-span-full">
     @php
@@ -856,7 +855,7 @@
 
         {{-- Botón "Ver más" propiedades - Solo se muestra si hay propiedades similares --}}
         <div class="text-center mt-8">
-            <a href="{{ $morePropertiesUrl }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            <a href="{{ $morePropertiesUrl }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-xs sm:text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 Ver más propiedades en {{ $displayLocation }}
                 <i class="fas fa-arrow-right ml-2"></i>
             </a>
@@ -881,7 +880,7 @@
             
             {{-- Botón alternativo para buscar en el estado completo --}}
             @if($property->address->state_name)
-                <div class="mt-4 w-full flex justify-start">
+                <div class="mt-4 w-full flex justify-center">
                     <a href="{{ route('properties.index', ['ubicacion' => $property->address->state_name, 'operacion' => $property->operation_type]) }}" 
                        class="inline-flex items-center justify-center px-4 py-2 border border-blue-600 text-xs sm:text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Ver propiedades en {{ $property->address->state_name }}
