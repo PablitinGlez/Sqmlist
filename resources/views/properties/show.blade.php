@@ -489,6 +489,7 @@
                                 break;
                         }
 
+                       
                         if ($featureValue->feature->slug === 'anos_antiguedad') {
                             $featureValueDisplay = ucfirst($featureValueDisplay);
                         } elseif (in_array($featureValue->feature->slug, ['tamano_construccion_m2', 'tamano_terreno_m2'])) {
