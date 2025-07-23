@@ -70,11 +70,11 @@
     </script>
 
     {{-- Contenido principal de la página de detalles --}}
-    <div class="py-12 sm:py-16"> {{-- Ajustado el padding vertical --}}
+    <div class="py-16 sm:py-16"> {{-- Ajustado el padding vertical --}}
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- INICIA: Pila de Navegación (Breadcrumbs) Modificada --}}
-            <nav class="flex items-center text-xs sm:text-sm font-medium text-gray-500 mb-4 space-x-1 overflow-x-auto whitespace-nowrap pt-4" aria-label="Breadcrumb">
+            <nav class="flex items-center text-xs pt-4 sm:text-sm font-medium text-gray-500 mb-4 space-x-1 overflow-x-auto whitespace-nowrap" aria-label="Breadcrumb">
                 {{-- Inicio - OCULTADO EN MÓVILES, VISIBLE EN SM Y SUPERIORES --}}
                 <a wire:navigate href="{{ url('/') }}" class="hidden sm:inline text-blue-600 hover:text-blue-800">Inicio</a>
                 {{-- Separador para Inicio - OCULTADO EN MÓVILES, VISIBLE EN SM Y SUPERIORES --}}
@@ -369,7 +369,15 @@
                 <div class="w-full md:w-2/3 flex-grow space-y-8"> {{-- md:w-2/3 para la proporción, space-y-8 para separar las secciones --}}
 
                     {{-- Sección de Descripción --}}
-                    <div class="bg-white p-6 rounded-lg border border-gray-100">
+                    {{-- Alpine.js para la función de "Ver más/Ver menos" --}}
+                    <div x-data="{ expanded: false, contentHeight: 0, showButton: false }"
+                         x-init="$nextTick(() => {
+                             contentHeight = $refs.descriptionContent.scrollHeight;
+                             if (contentHeight > 96) { // Aprox. 4 líneas de texto (24px * 4 = 96px)
+                                 showButton = true;
+                             }
+                         })"
+                         class="bg-white p-6 rounded-lg border border-gray-100">
                         @php
                             $propertyTypeText = $property->propertyType ? $property->propertyType->name : 'Propiedad';
                             $operationText = match($property->operation_type) {
@@ -379,32 +387,47 @@
                                 default => 'Operación'
                             };
                         @endphp
-                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Descripción de {{ $propertyTypeText }} en {{ $operationText }}</h2>
-                        <div class="text-gray-700 leading-relaxed">
+                        {{-- CAMBIO: Aplicando text-sm en móvil y md:text-lg en escritorio --}}
+                        <p class="text-sm md:text-lg font-semibold text-gray-800 mb-4">
+                            Descripción de {{ $propertyTypeText }} en {{ $operationText }}
+                            <br class="sm:hidden"> {{-- Salto de línea solo en móviles --}}
+                        </p>
+                        {{-- El texto de la descripción sigue siendo text-xs sm:text-sm --}}
+                        <div class="text-gray-700 text-xs sm:text-sm leading-relaxed text-justify sm:text-left"
+                             :class="{ 'max-h-24 overflow-hidden': !expanded && showButton, 'max-h-full': expanded }"
+                             x-ref="descriptionContent"
+                             style="transition: max-height 0.3s ease-out;">
                             @if($property->description)
                                 {!! nl2br(e($property->description)) !!}
                             @else
                                 <p>No hay descripción disponible para esta propiedad.</p>
                             @endif
                         </div>
+                        <template x-if="showButton">
+                            <button @click="expanded = !expanded"
+                                    class="mt-4 text-blue-600 hover:text-blue-800 font-semibold text-xs sm:text-sm flex items-center">
+                                <span x-text="expanded ? 'Ver menos' : 'Ver más'"></span>
+                                <i class="ml-2 fas" :class="expanded ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+                            </button>
+                        </template>
                     </div>
 
                     {{-- ESPACIO PARA FUTURAS SECCIONES (Especificaciones, Características, Amenidades, etc.) --}}
                     {{-- Por ejemplo:
                     <div class="bg-white p-6 rounded-lg border border-gray-100">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Especificaciones</h3>
-                        <ul class="list-disc list-inside text-gray-700">
+                        <p class="text-sm md:text-lg font-semibold text-gray-800 mb-4">Especificaciones</p>
+                        <ul class="list-disc list-inside text-gray-700 text-xs sm:text-sm">
                             <li>Recámaras: {{ $property->bedrooms ?? 'N/A' }}</li>
                             <li>Baños: {{ $property->bathrooms ?? 'N/A' }}</li>
-                            <li>Medios Baños: {{ $property->half_bathrooms ?? 'N/A' }}</li>
+                            <li>Medios Baños: {{ $property->half_bathrooms ?? 'N/A' -}}</li>
                             <li>Construcción: {{ $property->construction_size ? $property->construction_size . ' m²' : 'N/A' }}</li>
                             <li>Terreno: {{ $property->lot_size ? $property->lot_size . ' m²' : 'N/A' }}</li>
                         </ul>
                     </div>
 
                     <div class="bg-white p-6 rounded-lg border border-gray-100">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Amenidades y Servicios</h3>
-                        <ul class="list-disc list-inside text-gray-700">
+                        <p class="text-sm md:text-lg font-semibold text-gray-800 mb-4">Amenidades y Servicios</p>
+                        <ul class="list-disc list-inside text-gray-700 text-xs sm:text-sm">
                             <li>Alberca</li>
                             <li>Estacionamiento</li>
                             <li>Seguridad 24/7</li>
