@@ -745,6 +745,7 @@
             </div>
    
 
+
 {{-- Sección de Propiedades Relacionadas --}}
 <div class="mt-8 col-span-full">
     @php
@@ -863,22 +864,26 @@
 
     @else
         {{-- Mensaje más específico cuando no hay propiedades similares --}}
-        <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
-            <p class="text-xl text-gray-600 mb-2">No encontramos propiedades similares en {{ $displayLocation }}.</p>
-            <p class="text-sm text-gray-500 mb-4">Intenta buscar en una ubicación más amplia para ver más opciones.</p>
-            <dotlottie-wc
-                src="https://lottie.host/aaca1413-4cbd-491a-bc04-33cff77eb212/SbaFy5Kw8Z.lottie"
-                style="width: 300px; height: 300px;"
-                speed="1"
-                autoplay
-                loop
-            ></dotlottie-wc>
+        <div class="flex flex-col items-center justify-center py-12 px-4">
+            <div class="text-start w-full">
+                <p class="text-xs sm:text-sm text-gray-600 mb-2">No encontramos propiedades similares en {{ $displayLocation }}.</p>
+                <p class="text-xs sm:text-sm text-gray-500 mb-4">Intenta buscar en una ubicación más amplia para ver más opciones.</p>
+            </div>
+            <div class="flex justify-center w-full">
+                <dotlottie-wc
+                    src="https://lottie.host/aaca1413-4cbd-491a-bc04-33cff77eb212/SbaFy5Kw8Z.lottie"
+                    style="width: 200px; height: 200px;"
+                    speed="1"
+                    autoplay
+                    loop
+                ></dotlottie-wc>
+            </div>
             
             {{-- Botón alternativo para buscar en el estado completo --}}
             @if($property->address->state_name)
-                <div class="mt-4">
+                <div class="mt-4 w-full flex justify-start">
                     <a href="{{ route('properties.index', ['ubicacion' => $property->address->state_name, 'operacion' => $property->operation_type]) }}" 
-                       class="inline-flex items-center justify-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                       class="inline-flex items-center justify-center px-4 py-2 border border-blue-600 text-xs sm:text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Ver propiedades en {{ $property->address->state_name }}
                         <i class="fas fa-search ml-2"></i>
                     </a>
@@ -895,8 +900,6 @@
     {{-- Incluir DotLottie Web Component --}}
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
 @endpush
-
-
         </div>
 
 
