@@ -3,14 +3,16 @@
 
 {{-- Contenedor principal con Alpine.js para manejar el estado del modal --}}
 <div x-data="{ showContactModal: false }">
+    
     {{-- Card de propiedad con altura fija --}}
     <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 h-[440px] flex flex-col">
 
         <!-- Componente Livewire de botón de favoritos -->
         @livewire('favorite-button', ['property' => $property], key($property->id))
 
-        {{-- Enlace principal para la navegación a la página de detalles --}}
-        <a wire:navigate href="{{ route('properties.show', $property->slug) }}" class="block h-full flex flex-col">
+        {{-- Contenedor principal clickeable --}}
+        <div class="block h-full flex flex-col cursor-pointer" 
+             @click="if(!$event.target.closest('.no-navigate')) { window.location.href = '{{ route('properties.show', $property->slug) }}' }">
 
             <!-- Carrusel de imágenes - altura fija -->
             <div class="relative h-48 overflow-hidden flex-shrink-0" x-data="{
@@ -18,15 +20,18 @@
                 images: {{ json_encode($property->images->pluck('path')->map(fn($path) => asset('storage/' . $path))->toArray() ?: [asset('images/placeholder.png')]) }},
                 get canGoNext() { return this.images.length > 1 && this.currentSlide < this.images.length - 1 },
                 get canGoPrev() { return this.currentSlide > 0 },
-                nextSlide() {
+                nextSlide(event) {
+                    event.stopPropagation();
                     if (this.canGoNext) this.currentSlide++
                     else if (this.images.length > 1) this.currentSlide = 0
                 },
-                prevSlide() {
+                prevSlide(event) {
+                    event.stopPropagation();
                     if (this.canGoPrev) this.currentSlide--
                     else if (this.images.length > 1) this.currentSlide = this.images.length - 1
                 },
-                goToSlide(index) {
+                goToSlide(index, event) {
+                    event.stopPropagation();
                     this.currentSlide = index
                 }
             }">
@@ -48,18 +53,18 @@
 
                 <!-- Controles de navegación -->
                 <template x-if="images.length > 1">
-                    <div>
-                        <button @click.stop="prevSlide()" x-show="canGoPrev"
-                                class="absolute left-3 top-1/2 transform -translate-y-1/2 z-10 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+                    <div class="no-navigate">
+                        <button @click="prevSlide($event)" x-show="canGoPrev"
+                                class="absolute left-3 top-1/2 transform -translate-y-1/2 z-20 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
                             <i class="fas fa-chevron-left text-white text-xs"></i>
                         </button>
-                        <button @click.stop="nextSlide()" x-show="canGoNext"
-                                class="absolute right-3 top-1/2 transform -translate-y-1/2 z-10 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+                        <button @click="nextSlide($event)" x-show="canGoNext"
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 z-20 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
                             <i class="fas fa-chevron-right text-white text-xs"></i>
                         </button>
-                        <div class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1 z-10">
+                        <div class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1 z-20">
                             <template x-for="(image, index) in images" :key="index">
-                                <button @click.stop="goToSlide(index)"
+                                <button @click="goToSlide(index, $event)"
                                         class="w-1.5 h-1.5 rounded-full transition-all duration-200"
                                         :class="currentSlide === index ? 'bg-white' : 'bg-white/50'">
                                 </button>
@@ -164,22 +169,22 @@
                     </p>
                 </div>
             </div>
-        </a> {{-- <--- ¡Cierre del enlace principal aquí! --}}
+        </div>
 
         {{-- Botones de acción - siempre en la parte inferior --}}
-        <div class="p-3 mt-auto pt-4 flex gap-2 flex-shrink-0">
+        <div class="p-3 mt-auto pt-4 flex gap-2 flex-shrink-0 no-navigate">
             @if($property->contact_whatsapp_number)
                 <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $property->contact_whatsapp_number) }}"
                     target="_blank"
                     class="flex-1 bg-green-500 text-white py-2 px-3 rounded-lg font-semibold text-sm hover:bg-green-600 transition-colors duration-200 flex items-center justify-center"
-                    onclick="event.stopPropagation()">
+                    @click.stop>
                     <i class="fab fa-whatsapp mr-1.5 text-base"></i> WhatsApp
                 </a>
             @endif
 
             {{-- Botón "Contactar" que abre el modal --}}
             <button type="button"
-                    @click="showContactModal = true; $event.stopPropagation()"
+                    @click.stop="showContactModal = true"
                     class="flex-1 border border-blue-500 text-blue-500 py-2 px-3 rounded-lg font-semibold text-sm hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 flex items-center justify-center">
                 <i class="fas fa-envelope mr-1.5 text-base"></i> Contactar
             </button>

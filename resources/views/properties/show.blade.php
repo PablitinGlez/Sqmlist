@@ -211,7 +211,7 @@
                     {{-- Dirección Completa - MANTENER TAMAÑO ORIGINAL --}}
                     <p class="text-lg font-bold text-gray-900 mb-2">
                         @if($property->address->neighborhood_name) {{ $property->address->neighborhood_name }}@endif
-                        @if($property->address->city_name), {{ $property->address->city_name }}@endif
+                        @if($property->address->municipality_name), {{ $property->address->municipality_name }}@endif
                         @if($property->address->state_name), {{ $property->address->state_name }}@endif
                         @if($property->address->zip_code), C.P. {{ $property->address->zip_code }}@endif
                     </p>
@@ -730,6 +730,7 @@
 </div>
 
 
+
                 
                 
 
@@ -742,10 +743,169 @@
                     </div>
                 </div>
             </div>
-            {{-- FIN: Contenido principal de la propiedad y formulario de contacto --}}
+   
+
+{{-- Sección de Propiedades Relacionadas --}}
+<div class="mt-8 col-span-full">
+    @php
+        $locationText = [];
+        if ($property->address->neighborhood_name) {
+            $locationText[] = $property->address->neighborhood_name;
+        }
+        // CORRECCIÓN: Usar municipality_name en lugar de city_name
+        if ($property->address->municipality_name && !in_array($property->address->municipality_name, $locationText)) {
+             $locationText[] = $property->address->municipality_name;
+        }
+        if ($property->address->state_name && !in_array($property->address->state_name, $locationText)) {
+            $locationText[] = $property->address->state_name;
+        }
+        $displayLocation = implode(', ', $locationText);
+
+        $operationTextForTitle = match($property->operation_type) {
+            'sale' => 'Venta',
+            'rent' => 'Renta',
+            'both' => 'Venta y Renta',
+            default => 'Operación'
+        };
+
+        // Prepara los parámetros para el botón "Ver más"
+        $morePropertiesParams = [];
+        if ($property->address->state_name) {
+            $morePropertiesParams['ubicacion'] = $property->address->state_name;
+            if ($property->address->municipality_name) {
+                $morePropertiesParams['ubicacion'] .= ',' . $property->address->municipality_name;
+            } elseif ($property->address->neighborhood_name) {
+                 $morePropertiesParams['ubicacion'] .= ',' . $property->address->neighborhood_name;
+            }
+        }
+        $morePropertiesParams['operacion'] = $property->operation_type;
+        $morePropertiesUrl = route('properties.index', $morePropertiesParams);
+    @endphp
+
+    <h2 class="text-xl font-semibold text-gray-800 mb-6">
+        Más {{ $property->propertyType->name ?? 'Propiedades' }} en {{ $operationTextForTitle }} cerca de {{ $displayLocation }}
+    </h2>
+
+    @if($similarProperties->isNotEmpty())
+        <div class="relative">
+            <div x-data="{
+                swiper: null,
+                init() {
+                    this.swiper = new Swiper(this.$refs.container, {
+                        loop: false,
+                        centeredSlides: false,
+                        // Configuración importante para permitir clicks
+                        allowTouchMove: true,
+                        simulateTouch: true,
+                        touchRatio: 1,
+                        touchAngle: 45,
+                        preventClicks: false,  // Permite clicks
+                        preventClicksPropagation: false,  // No previene propagación de clicks
+                        navigation: {
+                            nextEl: this.$refs.nextButton,
+                            prevEl: this.$refs.prevButton,
+                        },
+                        // Breakpoints para ajustar slidesPerView y spaceBetween
+                        breakpoints: {
+                            // Móviles pequeños (0px - 639px)
+                            0: {
+                                slidesPerView: 1.1,
+                                spaceBetween: 16,
+                            },
+                            // Tabletas (640px - 767px)
+                            640: { // sm breakpoint
+                                slidesPerView: 2.1,
+                                spaceBetween: 20,
+                            },
+                            // Escritorio pequeño (768px - 1023px)
+                            768: { // md breakpoint
+                                slidesPerView: 3,
+                                spaceBetween: 24,
+                            },
+                            // Escritorio mediano y grande (1024px en adelante)
+                            1024: { // lg breakpoint
+                                slidesPerView: 4,
+                                spaceBetween: 24,
+                            }
+                        }
+                    });
+                }
+            }" x-init="init()" class="relative">
+                <div class="swiper-container overflow-hidden" x-ref="container">
+                    <div class="swiper-wrapper">
+                        @foreach($similarProperties as $similarProperty)
+                            <div class="swiper-slide h-auto">
+                                {{-- Aquí va la card de propiedad actualizada --}}
+                                @include('components.property-card', ['property' => $similarProperty])
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+                {{-- Botones de navegación para Swiper --}}
+                <button @click="swiper.slidePrev()" x-ref="prevButton"
+                        class="absolute top-1/2 -left-4 z-30 -translate-y-1/2 bg-white rounded-full shadow-md p-2 hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-blue-500 hidden md:flex items-center justify-center">
+                    <i class="fas fa-chevron-left text-gray-700"></i>
+                </button>
+                <button @click="swiper.slideNext()" x-ref="nextButton"
+                        class="absolute top-1/2 -right-4 z-30 -translate-y-1/2 bg-white rounded-full shadow-md p-2 hover:bg-gray-100 transition focus:outline-none focus:ring-2 focus:ring-blue-500 hidden md:flex items-center justify-center">
+                    <i class="fas fa-chevron-right text-gray-700"></i>
+                </button>
+            </div>
+        </div>
+
+        {{-- Botón "Ver más" propiedades - Solo se muestra si hay propiedades similares --}}
+        <div class="text-center mt-8">
+            <a href="{{ $morePropertiesUrl }}" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Ver más propiedades en {{ $displayLocation }}
+                <i class="fas fa-arrow-right ml-2"></i>
+            </a>
+        </div>
+
+    @else
+        {{-- Mensaje más específico cuando no hay propiedades similares --}}
+        <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
+            <p class="text-xl text-gray-600 mb-2">No encontramos propiedades similares en {{ $displayLocation }}.</p>
+            <p class="text-sm text-gray-500 mb-4">Intenta buscar en una ubicación más amplia para ver más opciones.</p>
+            <dotlottie-wc
+                src="https://lottie.host/aaca1413-4cbd-491a-bc04-33cff77eb212/SbaFy5Kw8Z.lottie"
+                style="width: 300px; height: 300px;"
+                speed="1"
+                autoplay
+                loop
+            ></dotlottie-wc>
+            
+            {{-- Botón alternativo para buscar en el estado completo --}}
+            @if($property->address->state_name)
+                <div class="mt-4">
+                    <a href="{{ route('properties.index', ['ubicacion' => $property->address->state_name, 'operacion' => $property->operation_type]) }}" 
+                       class="inline-flex items-center justify-center px-4 py-2 border border-blue-600 text-sm font-medium rounded-md text-blue-600 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Ver propiedades en {{ $property->address->state_name }}
+                        <i class="fas fa-search ml-2"></i>
+                    </a>
+                </div>
+            @endif
+        </div>
+    @endif
+</div>
+
+@push('scripts')
+    {{-- Incluir Swiper.js para el carrusel --}}
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    {{-- Incluir DotLottie Web Component --}}
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+@endpush
+
 
         </div>
+
+
+
+
     </div>
+    
+
+
 </x-app-layout>
 
 

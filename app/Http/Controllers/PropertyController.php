@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str; // Importante: Asegúrate de que esta línea esté presente
+use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
@@ -28,7 +28,6 @@ class PropertyController extends Controller
 
             // Intentar aplicar filtro por estado (primera parte de la ubicación)
             if (isset($locationParts[0]) && !empty($locationParts[0])) {
-                // Si la DB guarda nombres con espacios y mayúsculas, usar tal cual o normalizar si es necesario
                 $stateName = trim($locationParts[0]);
                 $query->whereHas('address', function ($q) use ($stateName) {
                     $q->where('state_name', $stateName);
@@ -37,7 +36,6 @@ class PropertyController extends Controller
 
             // Intentar aplicar filtro por colonia/municipio (segunda parte de la ubicación)
             if (isset($locationParts[1]) && !empty($locationParts[1])) {
-                // Si la DB guarda nombres con espacios y mayúsculas, usar tal cual o normalizar si es necesario
                 $neighborhoodName = trim($locationParts[1]);
                 $query->whereHas('address', function ($q) use ($neighborhoodName) {
                     $q->where('neighborhood_name', $neighborhoodName);
@@ -52,11 +50,9 @@ class PropertyController extends Controller
 
         // Aplicar filtro por tipo de propiedad ('tipo')
         if ($request->filled('tipo')) {
-            $propertyTypeSlugOrName = $request->input('tipo'); // Puede ser slug o nombre, según cómo lo mandes desde Blade
+            $propertyTypeSlugOrName = $request->input('tipo');
             $query->whereHas('propertyType', function ($q) use ($propertyTypeSlugOrName) {
-                // Asumiendo que 'tipo' llega como slug y la columna en DB es 'slug'
                 $q->where('slug', $propertyTypeSlugOrName);
-                // Si 'tipo' llegara como nombre, usarías: $q->where('name', $propertyTypeSlugOrName);
             });
         }
 
@@ -64,14 +60,14 @@ class PropertyController extends Controller
         $query->orderBy('created_at', 'desc');
 
         // Obtener los resultados paginados
-        $properties = $query->paginate(12); // Define cuántas propiedades por página
+        $properties = $query->paginate(12);
 
         // Retornar la vista de listado de propiedades con los resultados
         return view('properties.index', compact('properties'));
     }
 
     /**
-     * Muestra los detalles de una propiedad específica.
+     * Muestra los detalles de una propiedad específica y propiedades similares.
      *
      * @param string $slug El slug de la propiedad.
      * @return \Illuminate\View\View|\Illuminate\Http\RedirectResponse
@@ -81,16 +77,87 @@ class PropertyController extends Controller
         // Busca la propiedad por su slug y carga todas las relaciones necesarias
         $property = Property::where('slug', $slug)
             ->with([
-                'propertyType', // Aseguramos que la relación propertyType se cargue directamente
-                'propertyType.category', // Y también su categoría si la necesitas para otras partes de la página
+                'propertyType',
+                'propertyType.category',
                 'images',
                 'address',
-                'user',
+                'user.profileDetails',
                 'featureValues.feature.featureSection'
             ])
-            ->firstOrFail(); // Si no se encuentra, Laravel automáticamente lanza un 404
+            ->firstOrFail();
 
-        return view('properties.show', compact('property'));
+        // --- Lógica CORREGIDA para obtener propiedades similares ---
+        $similarProperties = collect();
+        $limit = 8;
+
+        if ($property->address) {
+            $currentPropertyId = $property->id;
+            $stateName = $property->address->state_name;
+            $municipalityName = $property->address->municipality_name;
+            $neighborhoodName = $property->address->neighborhood_name;
+
+            // 1. PRIORIDAD MÁXIMA: Buscar por colonia exacta + municipio + estado
+            if ($neighborhoodName && $municipalityName && $stateName) {
+                $similarProperties = Property::published()
+                    ->where('id', '!=', $currentPropertyId)
+                    ->with(['address', 'propertyType', 'images'])
+                    ->whereHas('address', function ($query) use ($neighborhoodName, $municipalityName, $stateName) {
+                        $query->where('neighborhood_name', $neighborhoodName)
+                            ->where('municipality_name', $municipalityName)
+                            ->where('state_name', $stateName);
+                    })
+                    ->inRandomOrder()
+                    ->limit($limit)
+                    ->get();
+            }
+
+            // 2. SEGUNDA PRIORIDAD: Si no hay suficientes, buscar solo por municipio + estado
+            if ($similarProperties->count() < $limit && $municipalityName && $stateName) {
+                $remainingLimit = $limit - $similarProperties->count();
+                $excludeIds = $similarProperties->pluck('id')->toArray();
+                $excludeIds[] = $currentPropertyId; // También excluir la propiedad actual
+
+                $municipalityProperties = Property::published()
+                    ->whereNotIn('id', $excludeIds)
+                    ->with(['address', 'propertyType', 'images'])
+                    ->whereHas('address', function ($query) use ($municipalityName, $stateName) {
+                        $query->where('municipality_name', $municipalityName)
+                            ->where('state_name', $stateName);
+                    })
+                    ->inRandomOrder()
+                    ->limit($remainingLimit)
+                    ->get();
+
+                $similarProperties = $similarProperties->merge($municipalityProperties);
+            }
+
+            // 3. TERCERA PRIORIDAD: Si aún no hay suficientes, buscar solo por estado
+            if ($similarProperties->count() < $limit && $stateName) {
+                $remainingLimit = $limit - $similarProperties->count();
+                $excludeIds = $similarProperties->pluck('id')->toArray();
+                $excludeIds[] = $currentPropertyId;
+
+                $stateProperties = Property::published()
+                    ->whereNotIn('id', $excludeIds)
+                    ->with(['address', 'propertyType', 'images'])
+                    ->whereHas('address', function ($query) use ($stateName) {
+                        $query->where('state_name', $stateName);
+                    })
+                    ->inRandomOrder()
+                    ->limit($remainingLimit)
+                    ->get();
+
+                $similarProperties = $similarProperties->merge($stateProperties);
+            }
+
+            // ELIMINAMOS EL PASO 4 que agregaba propiedades aleatorias sin criterio de ubicación
+            // Ahora solo mostramos propiedades que realmente coinciden con la ubicación
+        }
+
+        // Si no se encontraron propiedades similares, $similarProperties seguirá siendo una colección vacía
+        // y eso está bien - es mejor mostrar "no hay propiedades similares" que mostrar propiedades no relacionadas
+
+        return view('properties.show', compact('property', 'similarProperties'));
     }
 
     /**
@@ -108,7 +175,7 @@ class PropertyController extends Controller
             case 'state':
                 // Solo parámetro de estado
                 if ($property->address->state_name) {
-                    $params['ubicacion'] = $property->address->state_name; // Envía el nombre del estado
+                    $params['ubicacion'] = $property->address->state_name;
                 }
                 break;
 
@@ -119,54 +186,53 @@ class PropertyController extends Controller
 
                     if ($property->address->neighborhood_name) {
                         $locationParts[] = $property->address->neighborhood_name;
+                    } elseif ($property->address->municipality_name) {
+                        $locationParts[] = $property->address->municipality_name;
                     }
 
-                    $params['ubicacion'] = implode(',', $locationParts); // Envía nombres separados por coma
+                    $params['ubicacion'] = implode(',', $locationParts);
                 }
                 break;
 
             case 'operation':
-                // Estado + Colonia + Operación
+                // Estado + Colonia/Municipio + Operación
+                $locationParts = [];
                 if ($property->address->state_name) {
-                    $locationParts = [];
-                    if ($property->address->state_name) {
-                        $locationParts[] = $property->address->state_name;
-                    }
-                    if ($property->address->neighborhood_name) {
-                        $locationParts[] = $property->address->neighborhood_name;
-                    }
-
-                    if (!empty($locationParts)) {
-                        $params['ubicacion'] = implode(',', $locationParts);
-                    }
+                    $locationParts[] = $property->address->state_name;
+                }
+                if ($property->address->neighborhood_name) {
+                    $locationParts[] = $property->address->neighborhood_name;
+                } elseif ($property->address->municipality_name) {
+                    $locationParts[] = $property->address->municipality_name;
                 }
 
-                // Agregar tipo de operación
+                if (!empty($locationParts)) {
+                    $params['ubicacion'] = implode(',', $locationParts);
+                }
+
                 $params['operacion'] = $property->operation_type;
                 break;
 
             case 'property_type':
-                // Estado + Colonia + Operación + Tipo de Propiedad
+                // Estado + Colonia/Municipio + Operación + Tipo de Propiedad
+                $locationParts = [];
                 if ($property->address->state_name) {
-                    $locationParts = [];
-                    if ($property->address->state_name) {
-                        $locationParts[] = $property->address->state_name;
-                    }
-                    if ($property->address->neighborhood_name) {
-                        $locationParts[] = $property->address->neighborhood_name;
-                    }
-
-                    if (!empty($locationParts)) {
-                        $params['ubicacion'] = implode(',', $locationParts);
-                    }
+                    $locationParts[] = $property->address->state_name;
+                }
+                if ($property->address->neighborhood_name) {
+                    $locationParts[] = $property->address->neighborhood_name;
+                } elseif ($property->address->municipality_name) {
+                    $locationParts[] = $property->address->municipality_name;
                 }
 
-                // Agregar tipo de operación
+                if (!empty($locationParts)) {
+                    $params['ubicacion'] = implode(',', $locationParts);
+                }
+
                 $params['operacion'] = $property->operation_type;
 
-                // Agregar tipo de propiedad
                 if ($property->propertyType) {
-                    $params['tipo'] = $property->propertyType->slug; // Envía el slug del tipo de propiedad
+                    $params['tipo'] = $property->propertyType->slug;
                 }
                 break;
         }
