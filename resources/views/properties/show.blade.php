@@ -520,7 +520,103 @@
         @endif
     </div>
 </div>
+
+{{-- Sección de Amenidades y Servicios con Tabs --}}
+<div x-data="{ activeTab: 'amenities' }" class="bg-white rounded-lg border border-gray-100 overflow-hidden">
+    {{-- Encabezado con Tabs --}}
+    <div class="flex border-b border-gray-100">
+        <button
+            @click="activeTab = 'amenities'"
+            :class="{ 'bg-blue-500 text-white': activeTab === 'amenities', 'bg-white text-gray-700': activeTab !== 'amenities' }"
+            class="flex-1 py-3 px-4 text-start  transition-colors duration-200 ease-in-out focus:outline-none text-xs sm:text- font-semibold text-white"
+        >
+            Amenidades
+        </button>
+        <button
+            @click="activeTab = 'services'"
+            :class="{ 'bg-blue-500 text-white': activeTab === 'services', 'bg-white text-gray-700': activeTab !== 'services' }"
+            class="flex-1 py-3 px-4 text-start text-xs sm:text- font-semibold text-white transition-colors duration-200 ease-in-out focus:outline-none"
+        >
+            Servicios
+        </button>
+    </div>
+
+    {{-- Contenido de las Tabs --}}
+    <div class="p-6">
+        {{-- Contenido de Amenidades --}}
+        <div x-show="activeTab === 'amenities'">
+            @php
+                $amenities = $property->featureValues->filter(function ($featureValue) {
+                    return $featureValue->feature &&
+                           $featureValue->feature->featureSection &&
+                           $featureValue->feature->featureSection->slug === 'amenidades' &&
+                           $featureValue->casted_value;
+                })->sortBy(function ($featureValue) {
+                    return $featureValue->feature->order ?? 999;
+                });
+            @endphp
+
+            @if($amenities->isNotEmpty())
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-4 gap-x-6">
+                    @foreach($amenities as $featureValue)
+                        <div class="flex items-center text-gray-700">
+                            <div class="flex-shrink-0 mr-2 text-green-500">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="text-xs">
+                                {{ $featureValue->feature->name ?? 'Amenidad desconocida' }}
+                                @if ($featureValue->feature->data_type !== 'boolean' && $featureValue->casted_value)
+                                    <span class="text-gray-900 font-medium">{{ $featureValue->casted_value }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
                 </div>
+            @else
+                <p class="text-gray-600 text-xs">No hay amenidades registradas para esta propiedad.</p>
+            @endif
+        </div>
+
+        {{-- Contenido de Servicios --}}
+        <div x-show="activeTab === 'services'" x-cloak>
+            @php
+                $services = $property->featureValues->filter(function ($featureValue) {
+                    return $featureValue->feature &&
+                           $featureValue->feature->featureSection &&
+                           $featureValue->feature->featureSection->slug === 'servicios' &&
+                           $featureValue->casted_value;
+                })->sortBy(function ($featureValue) {
+                    return $featureValue->feature->order ?? 999;
+                });
+            @endphp
+
+            @if($services->isNotEmpty())
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-y-4 gap-x-6">
+                    @foreach($services as $featureValue)
+                        <div class="flex items-center text-gray-700">
+                            <div class="flex-shrink-0 mr-2 text-green-500">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="text-xs">
+                                {{ $featureValue->feature->name ?? 'Servicio desconocido' }}
+                                @if ($featureValue->feature->data_type !== 'boolean' && $featureValue->casted_value)
+                                    <span class="text-gray-900 font-medium">{{ $featureValue->casted_value }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @else
+                <p class="text-gray-600 text-xs">No hay servicios registrados para esta propiedad.</p>
+            @endif
+        </div>
+    </div>
+</div>
+                </div>
+
+
+                
+                
 
                 {{-- Columna Derecha: Formulario de Contacto --}}
                 {{-- w-full para móviles, md:w-1/3 para la proporción --}}

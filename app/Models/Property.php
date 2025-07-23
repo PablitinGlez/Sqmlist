@@ -286,5 +286,8 @@ class Property extends Model
         return $this->belongsToMany(User::class, 'user_favorite_properties', 'property_id', 'user_id')->withTimestamps();
     }
 
+
+    
+
     
 }
