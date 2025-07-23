@@ -490,15 +490,19 @@
                         }
 
                        
-                        if ($featureValue->feature->slug === 'anos_antiguedad') {
-                            $featureValueDisplay = ucfirst($featureValueDisplay);
-                        } elseif (in_array($featureValue->feature->slug, ['tamano_construccion_m2', 'tamano_terreno_m2'])) {
-                            if (is_numeric($featureValue->value)) {
-                                $featureValueDisplay = number_format($featureValue->value, 0) . ' m²';
-                            }
-                        } elseif ($featureValue->feature->slug === 'tipo_inmueble') {
-                            $featureValueDisplay = ucfirst($featureValueDisplay);
-                        }
+                    if ($featureValue->feature->slug === 'anos_antiguedad') {
+    $featureValueDisplay = ucfirst($featureValueDisplay);
+ 
+    if (strtolower($featureValueDisplay) !== 'nuevo') {
+        $featureValueDisplay .= ' años';
+    }
+} elseif (in_array($featureValue->feature->slug, ['tamano_construccion_m2', 'tamano_terreno_m2'])) {
+    if (is_numeric($featureValue->value)) {
+        $featureValueDisplay = number_format($featureValue->value, 0) . ' m²';
+    }
+} elseif ($featureValue->feature->slug === 'tipo_inmueble') {
+    $featureValueDisplay = ucfirst($featureValueDisplay);
+}
                     @endphp
                     <div class="flex flex-col items-start text-gray-700">
                         <div class="flex items-center mb-1">
