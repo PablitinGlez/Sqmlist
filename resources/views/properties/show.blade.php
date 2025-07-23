@@ -665,6 +665,68 @@
 {{-- CORREGIDO: Cambiado services.Maps.api_key por services.google_maps.api_key --}}
 <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&callback=initPropertyMap"></script>
 @endpush
+
+
+<div class="bg-white rounded-lg border border-gray-100 p-4 sm:p-6 mt-6">
+    <h2 class="text-sm sm:text-base font-semibold text-gray-800 mb-4">Datos del Anunciante</h2>
+    
+    @if($property->user) {{-- Aseguramos que la propiedad tenga un usuario asociado --}}
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div class="flex items-start space-x-3 sm:space-x-4 flex-1">
+                {{-- Imagen de Perfil del Anunciante --}}
+                <img class="h-16 w-16 sm:h-20 sm:w-20 rounded-full object-cover flex-shrink-0" 
+                     src="{{ $property->user->profile_photo_url }}" 
+                     alt="{{ $property->user->name }}">
+                
+                <div class="flex-1 min-w-0">
+                    {{-- Tipo de Usuario (Agente, Dueño Directo, Inmobiliaria) en un Badge --}}
+                    @php
+                        $businessType = $property->user->getBusinessTypeLabel();
+                        $badgeClass = '';
+                        if ($property->user->isAgent()) {
+                            $badgeClass = 'bg-blue-100 text-blue-800'; // Estilo para Agente
+                        } elseif ($property->user->isOwner()) {
+                            $badgeClass = 'bg-green-100 text-green-800'; // Estilo para Dueño Directo
+                        } elseif ($property->user->isRealEstateCompany()) {
+                            $badgeClass = 'bg-purple-100 text-purple-800'; // Estilo para Inmobiliaria
+                        }
+                    @endphp
+                    
+                    @if($businessType)
+                        <span class="inline-flex items-center px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium {{ $badgeClass }}">
+                            {{ $businessType }}
+                        </span>
+                    @endif
+                    
+                    {{-- Nombre del Usuario/Anunciante --}}
+                    <h3 class="mt-2 ml-2 text-sm sm:text-base font-normal text-gray-900 truncate">{{ $property->user->name }}</h3>
+                    
+                    {{-- Biografía del Anunciante (Comentado por ahora) --}}
+                    {{--
+                    @if($property->user->profileDetails && $property->user->profileDetails->biography)
+                        <p class="mt-2 text-gray-600">
+                            {{ $property->user->profileDetails->biography }}
+                        </p>
+                    @endif
+                    --}}
+                </div>
+            </div>
+            
+            {{-- INDICADOR DE USUARIO CERTIFICADO / CONFIABLE --}}
+            <div class="flex justify-start ml-2 sm:justify-end sm:ml-0 mt-2 sm:mt-0">
+                <button class="verified-btn">
+                    <svg viewBox="0 0 576 512" height="1em" class="logoIcon">
+                        <path d="M309 106c11.4-7 19-19.7 19-34c0-22.1-17.9-40-40-40s-40 17.9-40 40c0 14.4 7.6 27 19 34L209.7 220.6c-9.1 18.2-32.7 23.4-48.6 10.7L72 160c5-6.7 8-15 8-24c0-22.1-17.9-40-40-40S0 113.9 0 136s17.9 40 40 40c.2 0 .5 0 .7 0L86.4 427.4c5.5 30.4 32 52.6 63 52.6H426.6c30.9 0 57.4-22.1 63-52.6L535.3 176c.2 0 .5 0 .7 0c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40c0 9 3 17.3 8 24l-89.1 71.3c-15.9 12.7-39.5 7.5-48.6-10.7L309 106z"></path>
+                    </svg>
+                    <span class="btn-text">Anunciante Verificado</span>
+                </button>
+            </div>
+        </div>
+        
+    @else
+        <p class="text-gray-600 text-sm sm:text-base">Información del anunciante no disponible.</p>
+    @endif
+</div>
 </div>
 
 
@@ -685,3 +747,83 @@
         </div>
     </div>
 </x-app-layout>
+
+
+
+
+<style>
+    /* Botón Verificado Responsive */
+.verified-btn {
+    /* Tamaños móvil */
+    width: 150px;
+    height: 28px;
+    font-size: 0.6rem;
+    
+    /* Tamaños desktop */
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: rgb(121, 103, 3);
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    z-index: 2;
+    transition-duration: 0.3s;
+    background-size: 200% 200%;
+    flex-shrink: 0;
+}
+
+/* Responsive para pantallas más grandes */
+@media (min-width: 640px) {
+    .verified-btn {
+        width: 190px;
+        height: 32px;
+        font-size: 0.7rem;
+        gap: 8px;
+    }
+}
+
+@media (min-width: 768px) {
+    .verified-btn {
+        height: 34px;
+        font-size: 0.75rem;
+    }
+}
+
+.logoIcon {
+    flex-shrink: 0;
+}
+
+.logoIcon path {
+    fill: rgb(121, 103, 3);
+}
+
+.verified-btn:hover {
+    transform: scale(0.95);
+    transition-duration: 0.3s;
+    animation: gradient 5s ease infinite;
+    background-position: right;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Texto del botón responsive */
+.btn-text {
+    white-space: nowrap;
+    overflow: hidden;
+}
+</style>
