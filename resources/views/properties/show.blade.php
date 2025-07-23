@@ -281,8 +281,8 @@
                                 @if($loop->last && $property->images->count() > 5)
                                     <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                                        <button class="text-blue-600 rounded-full bg-white hover:bg-gray-100 transition-all font-semibold flex items-center
-                                                       px-2 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm"
-                                               @click.stop="openModal = true; currentImage = '{{ $property->images->first()->full_url }}'">
+                                                     px-2 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm"
+                                                     @click.stop="openModal = true; currentImage = '{{ $property->images->first()->full_url }}'">
                                             <i class="fas fa-images mr-1 sm:mr-2"></i>
                                             <span class="inline sm:hidden">Ver todo</span>
                                             <span class="hidden sm:inline">Ver todas las fotos</span>
@@ -348,10 +348,10 @@
                         <div class="mt-4 px-4 pb-4 grid grid-cols-5 md:grid-cols-8 lg:grid-cols-10 gap-2 overflow-x-auto">
                             @foreach($property->images as $image)
                                 <img src="{{ $image->full_url }}"
-                                     alt="{{ $image->alt_text }}"
-                                     class="w-16 h-16 object-cover rounded-md cursor-pointer border-2"
-                                     :class="{ 'border-blue-500': currentImage === '{{ $image->full_url }}', 'border-transparent hover:border-gray-400': currentImage !== '{{ $image->full_url }}' }"
-                                     @click="currentImage = '{{ $image->full_url }}'">
+                                            alt="{{ $image->alt_text }}"
+                                            class="w-16 h-16 object-cover rounded-md cursor-pointer border-2"
+                                            :class="{ 'border-blue-500': currentImage === '{{ $image->full_url }}', 'border-transparent hover:border-gray-400': currentImage !== '{{ $image->full_url }}' }"
+                                            @click="currentImage = '{{ $image->full_url }}'">
                             @endforeach
                         </div>
                         @endif
@@ -412,43 +412,122 @@
                         </template>
                     </div>
 
-                    {{-- ESPACIO PARA FUTURAS SECCIONES (Especificaciones, Características, Amenidades, etc.) --}}
-                    {{-- Por ejemplo:
-                    <div class="bg-white p-6 rounded-lg border border-gray-100">
-                        <p class="text-sm md:text-lg font-semibold text-gray-800 mb-4">Especificaciones</p>
-                        <ul class="list-disc list-inside text-gray-700 text-xs sm:text-sm">
-                            <li>Recámaras: {{ $property->bedrooms ?? 'N/A' }}</li>
-                            <li>Baños: {{ $property->bathrooms ?? 'N/A' }}</li>
-                            <li>Medios Baños: {{ $property->half_bathrooms ?? 'N/A' -}}</li>
-                            <li>Construcción: {{ $property->construction_size ? $property->construction_size . ' m²' : 'N/A' }}</li>
-                            <li>Terreno: {{ $property->lot_size ? $property->lot_size . ' m²' : 'N/A' }}</li>
-                        </ul>
-                    </div>
+                 {{-- Sección de Características Principales --}}
+<div class="bg-white rounded-lg border border-gray-100 overflow-hidden">
+    {{-- Header azul --}}
+    <div class="bg-blue-500 p-2 sm:p-4">
+        <h2 class="text-xs sm:text- font-semibold text-white">Características principales</h2>
+    </div>
 
-                    <div class="bg-white p-6 rounded-lg border border-gray-100">
-                        <p class="text-sm md:text-lg font-semibold text-gray-800 mb-4">Amenidades y Servicios</p>
-                        <ul class="list-disc list-inside text-gray-700 text-xs sm:text-sm">
-                            <li>Alberca</li>
-                            <li>Estacionamiento</li>
-                            <li>Seguridad 24/7</li>
-                            <li>Jardín</li>
-                        </ul>
-                    </div>
-                    --}}
+    <div class="p-6">
+        @php
+            $generalFeatures = $property->featureValues->filter(function ($featureValue) {
+                return $featureValue->feature &&
+                       $featureValue->feature->featureSection &&
+                       $featureValue->feature->featureSection->name === 'Características Generales';
+            })->sortBy(function ($featureValue) {
+                return $featureValue->feature->order ?? 999;
+            });
 
+            $orderedSlugs = [
+                'tipo_inmueble',
+                'num_recamaras',
+                'num_banos',
+                'num_estacionamientos',
+                'tamano_construccion_m2',
+                'tamano_terreno_m2',
+                'anos_antiguedad',
+                'num_niveles',
+            ];
+
+            $displayFeatures = [];
+            foreach ($orderedSlugs as $slug) {
+                $feature = $generalFeatures->firstWhere('feature.slug', $slug);
+                if ($feature) {
+                    $displayFeatures[] = $feature;
+                }
+            }
+            foreach ($generalFeatures as $feature) {
+                if (!in_array($feature->feature->slug, $orderedSlugs)) {
+                    $displayFeatures[] = $feature;
+                }
+            }
+        @endphp
+
+        @if(!empty($displayFeatures))
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-y-6 gap-x-8"> {{-- Aumentado gap-y de 4 a 6 para más separación --}}
+                @foreach($displayFeatures as $featureValue)
+                    @php
+                        $iconClass = $featureValue->feature->icon ?? 'fas fa-question';
+                        $featureName = $featureValue->feature->name ?? 'Característica Desconocida';
+                        $featureValueDisplay = $featureValue->value ?? 'No especificado';
+
+                        switch ($featureValue->feature->slug) {
+                            case 'tamano_construccion_m2':
+                                $featureName = 'Área construida';
+                                break;
+                            case 'tamano_terreno_m2':
+                                $featureName = 'Área terreno';
+                                break;
+                            case 'num_niveles':
+                                $featureName = 'Plantas';
+                                break;
+                            case 'anos_antiguedad':
+                                $featureName = 'Antigüedad';
+                                break;
+                            case 'num_recamaras':
+                                $featureName = 'Recámaras';
+                                break;
+                            case 'num_banos':
+                                $featureName = 'Baños';
+                                break;
+                            case 'num_estacionamientos':
+                                $featureName = 'Estacionamiento';
+                                break;
+                            case 'tipo_inmueble':
+                                $featureName = 'Tipo de inmueble';
+                                break;
+                        }
+
+                        if ($featureValue->feature->slug === 'anos_antiguedad') {
+                            $featureValueDisplay = ucfirst($featureValueDisplay);
+                        } elseif (in_array($featureValue->feature->slug, ['tamano_construccion_m2', 'tamano_terreno_m2'])) {
+                            if (is_numeric($featureValue->value)) {
+                                $featureValueDisplay = number_format($featureValue->value, 0) . ' m²';
+                            }
+                        } elseif ($featureValue->feature->slug === 'tipo_inmueble') {
+                            $featureValueDisplay = ucfirst($featureValueDisplay);
+                        }
+                    @endphp
+                    <div class="flex flex-col items-start text-gray-700">
+                        <div class="flex items-center mb-1">
+                            <div class="flex-shrink-0 mr-2 text-gray-500 text-sm"> {{-- Reducido tamaño del icono --}}
+                                <i class="{{ $iconClass }}"></i>
+                            </div>
+                            <div class="text-xs text-gray-500">{{ $featureName }}</div> {{-- Reducido de text-sm a text-xs --}}
+                        </div>
+                        <div class="text-xs text-gray-900">{{ $featureValueDisplay }}</div> {{-- Removido font-semibold y reducido de text-lg a text-base --}}
+                    </div>
+                @endforeach
+            </div>
+        @else
+            <p class="text-gray-600 text-sm">No hay características principales especificadas para esta propiedad.</p>
+        @endif
+    </div>
+</div>
                 </div>
 
-                {{-- Columna Derecha: Formulario de Contacto (Sticky) --}}
-                {{-- md:w-1/3 para la proporción, self-start para mantenerlo arriba en el scroll --}}
-                <div id="contact-form-section" class="w-full md:w-1/3 sticky md:top-24 self-start bg-white p-6 rounded-lg shadow-lg border border-gray-100">
-                    {{-- Aquí se cargará tu componente Livewire del formulario de contacto --}}
-                    {{-- Asegúrate de pasar el propertyId al componente Livewire si lo necesita --}}
-                    @livewire('contact-property-form', ['propertyId' => $property->id])
+                {{-- Columna Derecha: Formulario de Contacto --}}
+                {{-- w-full para móviles, md:w-1/3 para la proporción --}}
+                <div class="w-full md:w-1/3">
+                    <div id="contact-form-section" class="bg-white p-6 rounded-lg border border-gray-100 ">
+
+                        @livewire('contact-property-form', ['propertyId' => $property->id])
+                    </div>
                 </div>
             </div>
             {{-- FIN: Contenido principal de la propiedad y formulario de contacto --}}
 
         </div>
     </div>
-
 </x-app-layout>
