@@ -612,7 +612,60 @@
         </div>
     </div>
 </div>
-                </div>
+{{-- Sección del Mapa de Google Maps --}}
+<div class="bg-white rounded-lg border border-gray-100 p-6 mt-6">
+    <h2 class=" text-xs sm:text-  font-semibold text-gray-800 mb-4">Ubicación de la Propiedad</h2>
+    
+    @if($property->address && $property->address->latitude && $property->address->longitude)
+        <div id="propertyMap" style="height: 250px; width: 100%; border-radius: 8px; overflow: hidden;"></div>
+    @else
+        <p class="text-gray-600">No se encontraron coordenadas de ubicación para esta propiedad.</p>
+    @endif
+</div>
+
+@push('scripts')
+<script>
+    function initPropertyMap() {
+        const latitude = {{ $property->address->latitude ?? 'null' }};
+        const longitude = {{ $property->address->longitude ?? 'null' }};
+
+        // Verifica si las coordenadas son válidas antes de intentar renderizar el mapa
+        if (latitude !== null && longitude !== null && latitude !== 0 && longitude !== 0) {
+            const mapElement = document.getElementById('propertyMap');
+            
+            // Asegúrate de que el elemento del mapa exista y tenga dimensiones
+            if (mapElement) {
+                const mapOptions = {
+                    center: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+                    zoom: 16,
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    fullscreenControl: false,
+                    zoomControl: true,
+                    gestureHandling: 'cooperative',
+                    clickableIcons: false,
+                    styles: []
+                };
+
+                const map = new google.maps.Map(mapElement, mapOptions);
+
+                new google.maps.Marker({
+                    position: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+                    map: map,
+                    title: 'Ubicación de la Propiedad',
+                    icon: {
+                        url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%231E90FF" class="icon icon-tabler icons-tabler-filled icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12.707 2.293l9 9c.63 .63 .184 1.707 -.707 1.707h-1v6a3 3 0 0 1 -3 3h-1v-7a3 3 0 0 0 -2.824 -2.995l-.176 -.005h-2a3 3 0 0 0 -3 3v7h-1a3 3 0 0 1 -3 -3v-6h-1c-.89 0 -1.337 -1.077 -.707 -1.707l9 -9a1 1 0 0 1 1.414 0m.293 11.707a1 1 0 0 1 1 1v7h-4v-7a1 1 0 0 1 .883 -.993l.117 -.007z" /></svg>',
+                        scaledSize: new google.maps.Size(20, 20)
+                    }
+                });
+            }
+        }
+    }
+</script>
+{{-- CORREGIDO: Cambiado services.Maps.api_key por services.google_maps.api_key --}}
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&callback=initPropertyMap"></script>
+@endpush
+</div>
 
 
                 
