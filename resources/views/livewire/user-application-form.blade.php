@@ -2,7 +2,6 @@
     <h1 class="text-3xl font-extrabold text-gray-900 mb-6 text-center">Solicitud de Perfil de Usuario</h1>
     <p class="text-center text-gray-600 mb-8">Por favor, completa el siguiente formulario para solicitar tu tipo de perfil en nuestra plataforma.</p>
 
-    {{-- Mensajes de sesión --}}
     @if (session()->has('success'))
         <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded-md" role="alert">
             <p class="font-bold">¡Éxito!</p>
@@ -25,8 +24,7 @@
     @endif
 
     <form wire:submit.prevent="submit" class="space-y-8">
-        
-        {{-- Sección: Tipo de Perfil --}}
+
         <div>
             <label for="userType" class="block text-base font-semibold text-gray-800 mb-2">
                 Tipo de Perfil <span class="text-red-500">*</span>
@@ -48,18 +46,17 @@
             @enderror
         </div>
 
-        {{-- Sección: Datos de Contacto --}}
         <div class="border-t border-gray-200 pt-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Datos de Contacto</h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="phoneNumber" class="block text-base font-medium text-gray-700 mb-2">
                         Teléfono <span class="text-red-500">*</span>
                     </label>
-                    <input type="tel" wire:model.blur="phoneNumber" id="phoneNumber" 
-                            placeholder="Ej. 525512345678"
-                                             
+                    <input type="tel" wire:model.blur="phoneNumber" id="phoneNumber"
+                                placeholder="Ej. 525512345678"
+
                             class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('phoneNumber') border-red-500 @enderror">
                     @error('phoneNumber')
                         <p class="text-red-500 text-sm mt-2 flex items-center">
@@ -75,9 +72,9 @@
                     <label for="whatsappNumber" class="block text-base font-medium text-gray-700 mb-2">
                         Número de WhatsApp (Opcional)
                     </label>
-                    <input type="tel" wire:model.blur="whatsappNumber" id="whatsappNumber" 
-                            placeholder="Ej. 525512345678"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('whatsappNumber') border-red-500 @enderror">
+                    <input type="tel" wire:model.blur="whatsappNumber" id="whatsappNumber"
+                                placeholder="Ej. 525512345678"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('whatsappNumber') border-red-500 @enderror">
                     @error('whatsappNumber')
                         <p class="text-red-500 text-sm mt-2 flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -92,9 +89,9 @@
                     <label for="contactEmail" class="block text-base font-medium text-gray-700 mb-2">
                         Email de Contacto (Opcional)
                     </label>
-                    <input type="email" wire:model.blur="contactEmail" id="contactEmail" 
-                            placeholder="tu@email.com"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('contactEmail') border-red-500 @enderror">
+                    <input type="email" wire:model.blur="contactEmail" id="contactEmail"
+                                placeholder="tu@email.com"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('contactEmail') border-red-500 @enderror">
                     @error('contactEmail')
                         <p class="text-red-500 text-sm mt-2 flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -107,7 +104,6 @@
             </div>
         </div>
 
-        {{-- Campos para Agentes e Inmobiliarias --}}
         @if($this->needsLicense())
         <div class="border-t border-gray-200 pt-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">
@@ -117,7 +113,7 @@
                     Información Profesional
                 @endif
             </h2>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="yearsExperience" class="block text-base font-medium text-gray-700 mb-2">
@@ -128,7 +124,7 @@
                         @endif
                     </label>
                     <select wire:model.blur="yearsExperience" id="yearsExperience"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('yearsExperience') border-red-500 @enderror">
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('yearsExperience') border-red-500 @enderror">
                         <option value="">Selecciona...</option>
                         @for($i = 0; $i <= 50; $i++)
                             <option value="{{ $i }}">{{ $i }} año{{ $i != 1 ? 's' : '' }}</option>
@@ -153,8 +149,8 @@
                         @endif
                     </label>
                     <input type="text" wire:model.blur="realEstateCompany" id="realEstateCompany"
-                            placeholder="Nombre de la inmobiliaria o empresa"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('realEstateCompany') border-red-500 @enderror">
+                                placeholder="Nombre de la inmobiliaria o empresa"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('realEstateCompany') border-red-500 @enderror">
                     @error('realEstateCompany')
                         <p class="text-red-500 text-sm mt-2 flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -171,8 +167,8 @@
                         RFC <span class="text-red-500">*</span>
                     </label>
                     <input type="text" wire:model.blur="rfc" id="rfc"
-                            placeholder="Ej. XAXX010101000"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('rfc') border-red-500 @enderror">
+                                placeholder="Ej. XAXX010101000"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('rfc') border-red-500 @enderror">
                     @error('rfc')
                         <p class="text-red-500 text-sm mt-2 flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -187,18 +183,16 @@
         </div>
         @endif
 
-        {{-- Sección: Documentos --}}
         <div class="border-t border-gray-200 pt-8">
             <h2 class="text-2xl font-bold text-gray-800 mb-6">Documentos Requeridos</h2>
-            
+
             <div class="space-y-6">
-                {{-- Tipo de Identificación --}}
                 <div>
                     <label for="identificationType" class="block text-base font-medium text-gray-700 mb-2">
                         Tipo de Identificación <span class="text-red-500">*</span>
                     </label>
                     <select wire:model.blur="identificationType" id="identificationType"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('identificationType') border-red-500 @enderror">
+                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('identificationType') border-red-500 @enderror">
                         <option value="">Selecciona...</option>
                         <option value="INE">INE</option>
                         <option value="Pasaporte">Pasaporte</option>
@@ -215,13 +209,12 @@
                     @enderror
                 </div>
 
-                {{-- Archivo de Identificación --}}
                 <div>
                     <label for="identificationFile" class="block text-base font-medium text-gray-700 mb-2">
                         Documento de Identificación <span class="text-red-500">*</span>
                         <span class="text-gray-500 text-sm">(PDF, JPG, PNG - Max 2MB)</span>
                     </label>
-                    
+
                     <div x-data="{ fileName: null }"
                          x-on:file-validated.window="
                              if ($event.detail.field === 'identificationFile') {
@@ -246,20 +239,20 @@
                                     </svg>
                                     <span class="text-green-700 font-medium text-sm" x-text="'Archivo seleccionado: ' + fileName"></span>
                                 </div>
-                                <button type="button" wire:click="clearIdentificationFile" 
+                                <button type="button" wire:click="clearIdentificationFile"
                                         class="text-red-600 hover:text-red-800 font-medium text-sm">
                                     Eliminar
                                 </button>
                             </div>
                         </template>
                     </div>
-                    
-                    <input type="file" 
-                           wire:model="identificationFile" 
-                           id="identificationFile"
-                           accept=".pdf,.jpg,.jpeg,.png"
-                           class="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer @error('identificationFile') border-red-500 @enderror">
-                    
+
+                    <input type="file"
+                                wire:model="identificationFile"
+                                id="identificationFile"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                class="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer @error('identificationFile') border-red-500 @enderror">
+
                     @error('identificationFile')
                         <p class="text-red-500 text-sm mt-2 flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -270,14 +263,13 @@
                     @enderror
                 </div>
 
-                {{-- Licencia Inmobiliaria --}}
                 @if($this->needsLicense())
                 <div>
                     <label for="licenseFile" class="block text-base font-medium text-gray-700 mb-2">
                         Licencia Inmobiliaria <span class="text-red-500">*</span>
                         <span class="text-gray-500 text-sm">(PDF, JPG, PNG - Max 2MB)</span>
                     </label>
-                    
+
                     <div x-data="{ fileName: null }"
                          x-on:file-validated.window="
                              if ($event.detail.field === 'licenseFile') {
@@ -302,20 +294,20 @@
                                     </svg>
                                     <span class="text-green-700 font-medium text-sm" x-text="'Archivo seleccionado: ' + fileName"></span>
                                 </div>
-                                <button type="button" wire:click="clearLicenseFile" 
+                                <button type="button" wire:click="clearLicenseFile"
                                         class="text-red-600 hover:text-red-800 font-medium text-sm">
                                     Eliminar
                                 </button>
                             </div>
                         </template>
                     </div>
-                    
-                    <input type="file" 
-                           wire:model="licenseFile" 
-                           id="licenseFile"
-                           accept=".pdf,.jpg,.jpeg,.png"
-                           class="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer @error('licenseFile') border-red-500 @enderror">
-                    
+
+                    <input type="file"
+                                wire:model="licenseFile"
+                                id="licenseFile"
+                                accept=".pdf,.jpg,.jpeg,.png"
+                                class="w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer @error('licenseFile') border-red-500 @enderror">
+
                     @error('licenseFile')
                         <p class="text-red-500 text-sm mt-2 flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -329,14 +321,13 @@
             </div>
         </div>
 
-        {{-- Botones de acción --}}
         <div class="flex justify-end space-x-4 border-t border-gray-200 pt-8">
-            <a href="{{ route('home') }}" 
-               class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75"  wire:navigate>
+            <a href="{{ route('home') }}"
+               class="px-6 py-2 border border-gray-300 rounded-md text-gray-700 font-medium hover:bg-gray-50 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75" wire:navigate>
                 Cancelar
             </a>
-            
-            <button type="submit" 
+
+            <button type="submit"
                     wire:loading.attr="disabled"
                     wire:target="submit"
                     class="px-8 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">

@@ -1,8 +1,3 @@
-{{-- resources/views/pages/contact.blade.php --}}
-{{--
-    Esta vista presenta el formulario de contacto para que los usuarios puedan enviar mensajes.
-    Incluye una sección de información de contacto y el formulario para rellenar los datos.
---}}
 <x-app-layout>
     <div class="min-h-screen bg-white flex items-center justify-center py-4 mt-8">
         <section class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,10 +12,10 @@
                     <div class="relative z-10 flex flex-col h-full">
                         <div>
                             <h2 class="text-2xl font-bold mb-4">
-                                Información de Contacto
+                                Lorem Ipsum Dolor
                             </h2>
                             <p class="text-gray-300 mb-12">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             </p>
 
                             <div class="space-y-8">
@@ -28,14 +23,14 @@
                                     <div class="w-6 h-6 flex items-center justify-center">
                                         <i class="fas fa-phone-alt w-5 h-5 text-white"></i>
                                     </div>
-                                    <span class="text-white">+1012 3456 789</span>
+                                    <span class="text-white">Lorem Ipsum</span>
                                 </div>
 
                                 <div class="flex items-center space-x-4">
                                     <div class="w-6 h-6 flex items-center justify-center">
                                         <i class="fas fa-envelope w-5 h-5 text-white"></i>
                                     </div>
-                                    <span class="text-white">demo@gmail.com</span>
+                                    <span class="text-white">lorem@ipsum.com</span>
                                 </div>
 
                                 <div class="flex items-start space-x-4">
@@ -81,7 +76,7 @@
 
                         <div class="grid md:grid-cols-2 gap-6 ">
                             <div>
-                                <x-label for="first_name" value="Nombre" />
+                                <x-label for="first_name" value="Lorem" />
                                 <x-input
                                     id="first_name"
                                     class="block mt-1 w-full"
@@ -93,7 +88,7 @@
                                 />
                             </div>
                             <div>
-                                <x-label for="last_name" value="Apellido" />
+                                <x-label for="last_name" value="Ipsum" />
                                 <x-input
                                     id="last_name"
                                     class="block mt-1 w-full"
@@ -107,7 +102,7 @@
 
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
-                                <x-label for="email" value="Correo Electrónico" />
+                                <x-label for="email" value="Dolor Sit Amet" />
                                 <x-input
                                     id="email"
                                     class="block mt-1 w-full"
@@ -118,7 +113,7 @@
                                 />
                             </div>
                             <div>
-                                <x-label for="phone" value="Número de Teléfono" />
+                                <x-label for="phone" value="Consectetur" />
                                 <x-input
                                     id="phone"
                                     class="block mt-1 w-full"
@@ -130,44 +125,44 @@
                         </div>
 
                         <div>
-                            <x-label for="subject" value="Selecciona un Motivo" />
+                            <x-label for="subject" value="Adipiscing Elit" />
                             <select
                                 id="subject"
                                 name="subject"
                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
                                 required
                             >
-                                <option value="">Selecciona una opción</option>
+                                <option value="">Lorem ipsum</option>
                                 <option value="consulta_general" {{ old('subject') == 'consulta_general' ? 'selected' : '' }}>
-                                    Consulta General
+                                    Incididunt Ut Labore
                                 </option>
                                 <option value="soporte_tecnico" {{ old('subject') == 'soporte_tecnico' ? 'selected' : '' }}>
-                                    Soporte Técnico
+                                    Et Dolore Magna
                                 </option>
                                 <option value="ventas" {{ old('subject') == 'ventas' ? 'selected' : '' }}>
-                                    Ventas
+                                    Aliqua
                                 </option>
                                 <option value="otros" {{ old('subject') == 'otros' ? 'selected' : '' }}>
-                                    Otros
+                                    Sed Do Eiusmod
                                 </option>
                             </select>
                         </div>
 
                         <div>
-                            <x-label for="message" value="Mensaje" />
+                            <x-label for="message" value="Tempor" />
                             <textarea
                                 id="message"
                                 name="message"
                                 rows="4"
                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full resize-none"
-                                placeholder="Escribe tu mensaje.."
+                                placeholder="Lorem ipsum dolor sit amet.."
                                 required
                             >{{ old('message') }}</textarea>
                         </div>
 
                         <div class="flex justify-end">
                             <x-button class="bg-gray-900 hover:bg-gray-800">
-                                Enviar Mensaje
+                                Lorem Ipsum
                             </x-button>
                         </div>
                     </form>

@@ -1,4 +1,4 @@
-{{-- Dropdown de notificaciones completo y corregido --}}
+
 <div class="relative"
      x-data="{ open: @entangle('showDropdown') }"
      x-init="
@@ -121,7 +121,7 @@
                        class="flex items-start px-4 py-3 hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100 last:border-b-0 opacity-75 cursor-pointer">
                         <div class="flex-shrink-0 mt-1">
                             @php
-                                $iconColor = 'text-gray-500'; // Default color
+                                $iconColor = 'text-gray-500'; 
                                 
                                 if(isset($notification->data['status'])) {
                                     $iconColor = $notification->data['status'] === \App\Models\UserApplication::STATUS_APPROVED 

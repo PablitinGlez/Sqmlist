@@ -1,6 +1,5 @@
 <div class="flex flex-wrap items-center justify-start gap-4 p-4 rounded-lg mt-32 max-w-7xl mx-auto px-8">
 
-    {{-- 1. Barra de Búsqueda por Ubicación (Ancho ajustado) --}}
     <div class="relative w-full md:w-1/3 lg:w-1/4">
         <input
             type="text"
@@ -10,7 +9,6 @@
             @focus="showLocationSuggestions = true"
             @click.outside="showLocationSuggestions = false"
         >
-        {{-- Botón para limpiar el campo de búsqueda de ubicación --}}
         @if($locationSearch)
             <button
                 type="button"
@@ -23,7 +21,6 @@
             </button>
         @endif
 
-        {{-- Sugerencias de Ubicación --}}
         <div
             x-show="showLocationSuggestions && locationSuggestions.length > 0"
             x-transition:enter="transition ease-out duration-100"
@@ -48,7 +45,6 @@
         </div>
     </div>
 
-    {{-- 2. Dropdown: Tipo de Operación (Título centrado, ancho consistente) --}}
     <div x-data="{
         open: false,
         toggle() { this.open = !this.open; },
@@ -86,7 +82,6 @@
         </div>
     </div>
 
-    {{-- 3. Dropdown: Tipo de Propiedad (Título centrado, ancho consistente) --}}
     <div x-data="{ open: false }" @click.outside="open = false" class="relative w-full sm:w-auto">
         <button
             @click="open = !open"
@@ -98,12 +93,10 @@
 
         <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none max-h-60 overflow-y-auto" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" wire:cloak>
             <div class="py-1" role="none">
-                {{-- Opción "Todos los tipos" --}}
                 <a href="#" wire:click.prevent="$set('selectedPropertyTypeSlug', null)" @click="open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ $selectedPropertyTypeSlug === null ? 'bg-indigo-50 text-indigo-700' : '' }}">
                     Todos los tipos
                 </a>
                 @foreach($propertyTypes as $type)
-                    {{-- Eliminado wire:navigate de aquí --}}
                     <a href="#" wire:click.prevent="$set('selectedPropertyTypeSlug', '{{ $type->slug }}')" @click="open = false" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ $selectedPropertyTypeSlug === $type->slug ? 'bg-indigo-50 text-indigo-700' : '' }}">
                         {{ $type->name }}
                     </a>
@@ -112,7 +105,6 @@
         </div>
     </div>
 
-    {{-- 4. Dropdown: Precio (Título centrado, ancho consistente) --}}
     <div x-data="{ open: false }" @click.outside="open = false" class="relative w-full sm:w-auto">
         <button
             @click="open = !open"
@@ -142,19 +134,15 @@
         </div>
     </div>
 
-    {{-- 5. Dropdown: Filtros Adicionales (En nueva fila en responsive, alineado a la derecha) --}}
     <div x-data="{ open: false }" @click.outside="open = false" class="relative w-full sm:w-auto md:ml-auto">
-        {{-- Botón principal de Filtros (Icono añadido y título centrado) --}}
         <button
             @click="open = !open"
             class="flex items-center justify-center h-10 px-4 py-2 border border-gray-300 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 min-w-[12rem] w-full"
-            {{-- Deshabilitar el botón si se selecciona un tipo de propiedad que no tiene filtros relevantes --}}
             @if ($selectedPropertyTypeSlug && $filteredFeatures->isEmpty())
                 disabled
                 title="No hay filtros adicionales para este tipo de propiedad"
             @endif
         >
-            {{-- Icono de filtro --}}
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-filter mr-1">
                 <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
             </svg>
@@ -163,11 +151,9 @@
         </button>
 
         <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute z-10 mt-2 w-96 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-4 max-h-80 overflow-y-auto left-0 md:left-auto md:right-0" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" wire:cloak>
-            {{-- Mensaje si no hay filtros disponibles para el tipo de propiedad --}}
             @if ($filteredFeatures->isEmpty() && $selectedPropertyTypeSlug)
                 <p class="text-gray-500 text-sm text-center py-4">No hay filtros adicionales para este tipo de propiedad.</p>
             @else
-                {{-- Recámaras --}}
                 @if ($recamarasOptions->isNotEmpty())
                     <div class="mb-4">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Recámaras</label>
@@ -186,7 +172,6 @@
                     </div>
                 @endif
 
-                {{-- Baños --}}
                 @if ($banosOptions->isNotEmpty())
                     <div class="mb-4">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Baños</label>
@@ -205,7 +190,6 @@
                     </div>
                 @endif
 
-                {{-- Estacionamiento --}}
                 @if ($estacionamientosOptions->isNotEmpty())
                     <div class="mb-4">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Estacionamiento</label>
@@ -224,7 +208,6 @@
                     </div>
                 @endif
 
-                {{-- Superficie Construida --}}
                 @php
                     $hasSuperficieConstruida = $filteredFeatures->contains('slug', 'tamano_construccion_m2');
                 @endphp
@@ -280,7 +263,6 @@
                     </div>
                 @endif
 
-                {{-- Superficie de Terreno --}}
                 @php
                     $hasSuperficieTerreno = $filteredFeatures->contains('slug', 'tamano_terreno_m2');
                 @endphp
@@ -336,13 +318,8 @@
                     </div>
                 @endif
 
-                {{-- Línea divisoria --}}
-                @if ($amenityFeatures->isNotEmpty() && ($recamarasOptions->isNotEmpty() || $banosOptions->isNotEmpty() || $estacionamientosOptions->isNotEmpty() || $hasSuperficieConstruida || $hasSuperficieTerreno))
-                    <hr class="my-4 border-gray-200">
-                @endif
-
-                {{-- Amenidades --}}
                 @if ($amenityFeatures->isNotEmpty())
+                    <hr class="my-4 border-gray-200">
                     <div class="mb-4">
                         <label class="block text-sm font-semibold text-gray-700 mb-2">Amenidades</label>
                         <div class="grid grid-cols-2 gap-2">
@@ -360,7 +337,6 @@
                     </div>
                 @endif
 
-                {{-- Botón para cerrar el dropdown --}}
                 <div class="mt-4 text-right">
                     <button @click="open = false" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Cerrar Filtros</button>
                 </div>
@@ -368,5 +344,5 @@
         </div>
     </div>
 
-    
+
 </div>

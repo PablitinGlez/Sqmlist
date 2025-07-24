@@ -3,7 +3,7 @@
         <div class="bg-white overflow-hidden sm:rounded-lg p-6 lg:p-8">
             <h1 class="text-2xl font-semibold text-gray-900 mb-6 text-center">
                 Mis Notificaciones
-             </h1>
+            </h1>
 
             @auth
                 @if ($notifications->isEmpty())
@@ -26,9 +26,9 @@
                     <div class="flex justify-end mb-4">
                         <button
                             wire:click="markAllAsRead"
-                            :disabled="$unreadCount === 0" {{-- <--- ¡NUEVO! Deshabilita si no hay notificaciones sin leer --}}
+                            :disabled="$unreadCount === 0"
                             class="px-4 py-2 rounded-md transition-colors text-sm
-                                {{ $unreadCount === 0 ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600' }}" {{-- <--- ¡NUEVO! Clases condicionales --}}
+                                {{ $unreadCount === 0 ? 'bg-gray-300 text-gray-600 cursor-not-allowed' : 'bg-blue-500 text-white hover:bg-blue-600' }}"
                         >
                             <i class="fas fa-check-double mr-1"></i> Marcar todas como leídas
                         </button>
@@ -71,9 +71,8 @@
                     </div>
                 @endif
             @else
-                {{-- Message for unauthenticated users --}}
                 <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
-                   
+
                     <p class="mt-6 text-xl font-semibold text-gray-700">
                         ¡Inicia sesión para ver tus notificaciones!
                     </p>

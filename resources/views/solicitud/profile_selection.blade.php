@@ -1,8 +1,4 @@
-{{--
-    Esta vista permite a los usuarios seleccionar el tipo de perfil de anunciante
-    con el que se identifican (Dueño Directo, Agente, Inmobiliaria).
-    Muestra las opciones disponibles y redirige al formulario de solicitud con el tipo preseleccionado.
---}}
+
 <x-app-layout>
     <div class="bg-transparent relative overflow-hidden mt-24">
         <div class="absolute top-0 left-0 right-0 h-[330px] bg-gradient-to-t from-blue-50 to-transparent"></div>

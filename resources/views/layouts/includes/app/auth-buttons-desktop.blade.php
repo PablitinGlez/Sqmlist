@@ -14,7 +14,8 @@
         </a>
     @endguest
 
-    @
+    @auth
+        
         @livewire('notifications-dropdown')
 
         <div class="ms-1 md:ms-3 relative">
@@ -45,7 +46,7 @@
                 </x-slot>
 
                 <x-slot name="content">
-                    <!-- Sección de Cuenta -->
+              
                     <div class="block px-4 py-2 text-xs text-gray-400">
                         {{ __('Manage Account') }}
                     </div>
@@ -54,7 +55,7 @@
                         {{ __('Profile') }}
                     </x-dropdown-link>
 
-                    {{-- ¡NUEVO! Enlace a Mis Favoritos --}}
+                
                     <x-dropdown-link href="{{ route('user.favorites.index') }}" wire:navigate>
                         <div class="flex items-center">
                            
@@ -70,7 +71,7 @@
                         </div>
                     </x-dropdown-link>
 
-                
+               
                     @if (Auth::user()->hasRole('admin'))
                         <div class="border-t border-gray-200"></div>
                         <x-dropdown-link href="{{ route('filament.admin.pages.dashboard') }}">
@@ -98,7 +99,7 @@
                         </x-dropdown-link>
                     @endif
 
-                  
+          
                     <div class="border-t border-gray-200"></div>
                     <form method="POST" action="{{ route('logout') }}" x-data>
                         @csrf
