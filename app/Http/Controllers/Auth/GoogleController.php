@@ -9,12 +9,6 @@ use Laravel\Socialite\Facades\Socialite;
 use Exception;
 use Illuminate\Auth\Events\Verified;
 
-/**
- * Controlador para la autenticación de usuarios a través de Google Socialite.
- * Gestiona la redirección a Google, la recepción del callback,
- * la creación o vinculación de usuarios y el disparo del evento de verificación
- * de correo electrónico cuando la cuenta es nueva o recién verificada.
- */
 class GoogleController extends Controller
 {
     public function redirectToGoogle()

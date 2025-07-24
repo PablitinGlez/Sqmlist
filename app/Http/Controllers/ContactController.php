@@ -9,26 +9,14 @@ use App\Mail\ContactFormMail;
 use App\Mail\ContactConfirmationMail;
 
 
-/**
- * Controlador ContactController
- * Gestiona la visualización y procesamiento del formulario de contacto público.
- * Guarda los mensajes en la base de datos y envía correos de notificación/confirmación.
- */
 class ContactController extends Controller
 {
-   
+
     public function create()
     {
         return view('pages.contact');
     }
 
-    /**
-     * Procesa y almacena un nuevo mensaje del formulario de contacto.
-     * Envía notificaciones por correo electrónico al administrador y al remitente.
-     *
-     * @param \Illuminate\Http\Request
-     * @return \Illuminate\Http\RedirectResponse 
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
