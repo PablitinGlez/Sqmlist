@@ -6,38 +6,23 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserApplication;
 
-/**
- * Controlador ProfileSelectionController
- * Permite a un usuario autenticado seleccionar el tipo de perfil de anunciante que desea ser.
- * Redirige al usuario según su estado actual (si ya tiene un rol o una solicitud en curso).
- */
 class ProfileSelectionController extends Controller
 {
-    /**
-     * Aplica el middleware 'auth' a todas las acciones del controlador.
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Muestra el formulario de selección de perfil o redirige al usuario.
-     *
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     */
     public function showSelectionForm()
     {
         $user = Auth::user();
 
-        // Si el usuario ya tiene un rol de anunciante, redirige al dashboard.
         $hasAdvertiserRole = $user->hasAnyRole(['owner', 'agent', 'real_estate_company']);
         if ($hasAdvertiserRole) {
             session()->flash('info', 'Ya tienes un perfil de anunciante activo. Administra tus propiedades desde tu panel de control.');
             return redirect('/dashboard');
         }
 
-        // Si el usuario tiene una solicitud pendiente o aprobada, redirige a la página de estado.
         $latestApplication = $user->userApplications()->latest()->first();
         if (
             $latestApplication &&
@@ -48,7 +33,6 @@ class ProfileSelectionController extends Controller
             return redirect()->route('solicitud.estado');
         }
 
-        // Define las opciones de perfil a mostrar en el formulario.
         $profiles = [
             'owner' => [
                 'title' => 'Particular',

@@ -11,15 +11,13 @@
     <link rel="preconnect" href="https://kit.fontawesome.com">
     <script src="https://kit.fontawesome.com/529714676e.js" crossorigin="anonymous"></script>
     
-    {{-- LottieFiles Web Component Script --}}
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
 
 
-         {{-- GSAP y ScrollTrigger CDN --}}
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/DrawSVGPlugin.min.js"></script> {{-- <--- ¡NUEVO! --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/DrawSVGPlugin.min.js"></script> 
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -53,11 +51,10 @@
     @filamentScripts
     @stack('scripts')
 
-    {{-- Script para mostrar notificaciones toast --}}
     <script>
         document.addEventListener('livewire:initialized', () => {
             Livewire.on('show-toast', (event) => {
-                const type = event[0].type || 'info'; // 'success', 'error', 'warning', 'info'
+                const type = event[0].type || 'info';
                 const message = event[0].message || 'Operación completada.';
 
                 const toastContainer = document.getElementById('toast-container');
@@ -69,11 +66,10 @@
                 }
 
                 const toast = document.createElement('div');
-                // Añadimos 'flex items-center' para alinear el icono y el texto
                 toast.className = `p-3 rounded-lg shadow-md text-white text-sm animate-fade-in-up flex items-center`;
 
                 let bgColor = '';
-                let iconClass = ''; // Variable para la clase del icono
+                let iconClass = '';
 
                 const icons = {
                     success: 'fas fa-check-circle',
@@ -103,19 +99,16 @@
                 }
                 toast.classList.add(bgColor);
                 
-                // Crear el elemento del icono
                 const iconElement = document.createElement('i');
-                iconElement.className = `${iconClass} mr-2`; // Añade margen a la derecha del icono
+                iconElement.className = `${iconClass} mr-2`;
                 toast.appendChild(iconElement);
 
-                // Crear el elemento de texto para el mensaje
                 const textElement = document.createElement('span');
                 textElement.textContent = message;
                 toast.appendChild(textElement);
 
                 document.getElementById('toast-container').appendChild(toast);
 
-                // Eliminar el toast después de 3 segundos
                 setTimeout(() => {
                     toast.classList.add('animate-fade-out-down');
                     toast.addEventListener('animationend', () => toast.remove());
@@ -124,7 +117,6 @@
         });
     </script>
     <style>
-        /* Animaciones para el toast */
         @keyframes fadeInOutUp {
             0% { opacity: 0; transform: translateY(20px); }
             10% { opacity: 1; transform: translateY(0); }
