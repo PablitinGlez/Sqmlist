@@ -206,18 +206,12 @@ class GlobalFilterNav extends Component
 
     public function updatedMinPrice(): void
     {
-        if ($this->minPrice !== null && $this->maxPrice !== null && $this->minPrice > $this->maxPrice) {
-            $this->maxPrice = $this->minPrice;
-        }
         $this->updatePriceDisplay();
         $this->emitFilters();
     }
 
     public function updatedMaxPrice(): void
     {
-        if ($this->maxPrice !== null && $this->minPrice !== null && $this->maxPrice < $this->minPrice) {
-            $this->minPrice = $this->maxPrice;
-        }
         $this->updatePriceDisplay();
         $this->emitFilters();
     }
@@ -264,36 +258,24 @@ class GlobalFilterNav extends Component
     public function updatedMinSuperficieConstruida($value): void
     {
         $this->minSuperficieConstruida = $this->cleanNumericValue($value);
-        if ($this->minSuperficieConstruida !== null && $this->maxSuperficieConstruida !== null && $this->minSuperficieConstruida > $this->maxSuperficieConstruida) {
-            $this->maxSuperficieConstruida = $this->minSuperficieConstruida;
-        }
         $this->emitFilters();
     }
 
     public function updatedMaxSuperficieConstruida($value): void
     {
         $this->maxSuperficieConstruida = $this->cleanNumericValue($value);
-        if ($this->maxSuperficieConstruida !== null && $this->minSuperficieConstruida !== null && $this->maxSuperficieConstruida < $this->minSuperficieConstruida) {
-            $this->minSuperficieConstruida = $this->maxSuperficieConstruida;
-        }
         $this->emitFilters();
     }
 
     public function updatedMinSuperficieTerreno($value): void
     {
         $this->minSuperficieTerreno = $this->cleanNumericValue($value);
-        if ($this->minSuperficieTerreno !== null && $this->maxSuperficieTerreno !== null && $this->minSuperficieTerreno > $this->maxSuperficieTerreno) {
-            $this->maxSuperficieTerreno = $this->minSuperficieTerreno;
-        }
         $this->emitFilters();
     }
 
     public function updatedMaxSuperficieTerreno($value): void
     {
         $this->maxSuperficieTerreno = $this->cleanNumericValue($value);
-        if ($this->maxSuperficieTerreno !== null && $this->minSuperficieTerreno !== null && $this->maxSuperficieTerreno < $this->minSuperficieTerreno) {
-            $this->minSuperficieTerreno = $this->maxSuperficieTerreno;
-        }
         $this->emitFilters();
     }
 
@@ -383,6 +365,11 @@ class GlobalFilterNav extends Component
         $this->amenityFeatures = collect();
         $this->filteredFeatures = collect();
 
+        $this->minSuperficieConstruida = null;
+        $this->maxSuperficieConstruida = null;
+        $this->minSuperficieTerreno = null;
+        $this->maxSuperficieTerreno = null;
+
         if ($this->allFeaturesCache === null) {
             $this->allFeaturesCache = Feature::where('is_filterable', true)
                 ->with('featureSection', 'propertyTypes')
@@ -470,7 +457,7 @@ class GlobalFilterNav extends Component
                 }
             } elseif ($key === 'locationSearch') {
                 $cleanedFilters[$key] = $value;
-            } elseif ($value !== null && $value !== '') {
+            } elseif ($value !== null && $value !== '' && (!is_array($value) || !empty($value))) {
                 $cleanedFilters[$key] = $value;
             }
         }
