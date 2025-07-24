@@ -1,66 +1,49 @@
-{{--
-    Esta sección describe el proceso de publicación de un inmueble
-    mediante una línea de tiempo interactiva y animada con Alpine.js.
-    resources/views/components/sections/how-it-works.blade.php
-    VERSIÓN RESPONSIVE MEJORADA
---}}
 <section class="py-8 md:py-16 bg-white overflow-hidden" data-how-it-works-section>
     <x-partials.container>
-        <div 
-            x-data="timelineData()" 
+        <div
+            x-data="timelineData()"
             x-init="startTimeline()"
             class="max-w-7xl mx-auto"
         >
-            <!-- Título -->
-           
-<div class="text-left mb-8 md:mb-16 md:text-center px-4">
-    <h2 class="text-lg md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 md:mb-4">
-        Publica tu inmueble gratis y en simples pasos
-    </h2>
-    <p class="text-sm md:text-lg text-gray-600 md:max-w-2xl md:mx-auto">
-        Sigue estos pasos para publicar tu propiedad de manera rápida y sencilla
-    </p>
-</div>
+            <div class="text-left mb-8 md:mb-16 md:text-center px-4">
+                <h2 class="text-lg md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 md:mb-4">
+                    Publica tu inmueble gratis y en simples pasos
+                </h2>
+                <p class="text-sm md:text-lg text-gray-600 md:max-w-2xl md:mx-auto">
+                    Sigue estos pasos para publicar tu propiedad de manera rápida y sencilla
+                </p>
+            </div>
 
-            <!-- Layout responsive: Stack en móvil, Grid en desktop -->
             <div class="flex flex-col lg:grid lg:grid-cols-2 gap-6 lg:gap-12 items-start lg:items-center">
-                
-                <!-- Línea de tiempo - Versión móvil optimizada -->
+
                 <div class="relative w-full order-2 lg:order-1">
-                    <!-- Línea vertical - más pequeña en móvil -->
                     <div class="absolute left-4 md:left-8 top-0 w-0.5 h-full bg-gray-200 z-0"></div>
-                    <!-- Línea de progreso -->
-                    <div 
+                    <div
                         class="absolute left-4 md:left-8 top-0 w-0.5 bg-gradient-to-b from-blue-600 to-blue-500 transition-all duration-1000 ease-in-out z-0"
                         :style="`height: ${progressHeight}%`"
                     ></div>
 
-                    <!-- Pasos - espaciado optimizado para móvil -->
                     <div class="space-y-4 md:space-y-8">
                         <template x-for="(step, index) in steps" :key="index">
-                            <div 
+                            <div
                                 class="flex items-start relative"
                                 :class="{ 'opacity-100': step.completed, 'opacity-50': !step.completed }"
                             >
-                                <!-- Círculo del paso - más pequeño en móvil -->
-                                <div 
+                                <div
                                     class="relative w-8 h-8 md:w-12 lg:w-16 md:h-12 lg:h-16 rounded-full flex items-center justify-center text-sm md:text-base lg:text-lg font-bold transition-all duration-500 z-20 bg-white border-2 md:border-4 shrink-0"
                                     :class="step.completed ? 'border-blue-500 text-blue-500' : 'border-gray-300 text-gray-400'"
                                     :style="step.active ? `background: conic-gradient(#3b82f6 ${step.progress * 3.6}deg, #e5e7eb ${step.progress * 3.6}deg)` : ''"
                                 >
-                                    <!-- Círculo interno blanco -->
-                                    <div 
+                                    <div
                                         class="absolute inset-0.5 md:inset-1 bg-white rounded-full flex items-center justify-center z-30"
                                         x-show="step.active"
                                     >
                                         <span x-text="step.number" class="text-blue-500 font-bold text-xs md:text-sm lg:text-base z-30"></span>
                                     </div>
-                                    
-                                    <!-- Número del paso (cuando no está activo) -->
+
                                     <span x-show="!step.active" x-text="step.number" class="relative z-30 text-xs md:text-sm lg:text-base"></span>
-                                    
-                                    <!-- Ícono de completado -->
-                                    <div 
+
+                                    <div
                                         x-show="step.completed && !step.active"
                                         x-transition
                                         class="absolute inset-0 flex items-center justify-center text-white bg-blue-500 rounded-full z-50"
@@ -69,14 +52,13 @@
                                     </div>
                                 </div>
 
-                                <!-- Contenido del paso - espaciado optimizado -->
                                 <div class="ml-3 md:ml-6 flex-1 min-w-0">
-                                    <h3 
+                                    <h3
                                         class="text-sm md:text-lg lg:text-xl font-semibold mb-1 md:mb-2 transition-colors duration-300 leading-tight"
                                         :class="step.completed || step.active ? 'text-gray-900' : 'text-gray-500'"
                                         x-text="step.title"
                                     ></h3>
-                                    <p 
+                                    <p
                                         class="text-xs md:text-sm lg:text-base text-gray-600 transition-colors duration-300 leading-relaxed"
                                         :class="step.completed || step.active ? 'text-gray-600' : 'text-gray-400'"
                                         x-text="step.description"
@@ -87,14 +69,11 @@
                     </div>
                 </div>
 
-                <!-- Área de contenido visual - Optimizada para móvil -->
                 <div class="relative w-full order-1 lg:order-2">
-                    <!-- Altura responsive -->
                     <div class="relative h-64 md:h-80 lg:h-[400px] flex items-center justify-center">
-                        <!-- Contenedor de imágenes -->
                         <div class="relative w-full h-full max-w-sm md:max-w-md lg:max-w-lg mx-auto">
                             <template x-for="(step, index) in steps" :key="index">
-                                <div 
+                                <div
                                     x-show="currentStep === index"
                                     x-transition:enter="transition ease-out duration-500"
                                     x-transition:enter-start="opacity-0 transform scale-95"
@@ -104,41 +83,37 @@
                                     x-transition:leave-end="opacity-0 transform scale-95"
                                     class="absolute inset-0 flex items-center justify-center p-4"
                                 >
-                               
-                                   <div x-show="index === 0" class="w-full h-full">
-                                        <img 
-                                            src="/images/step1.png" 
+                                    <div x-show="index === 0" class="w-full h-full">
+                                        <img
+                                            src="/images/step1.png"
                                             alt="Ubicar inmueble en mapa"
                                             class="w-full h-full object-cover"
                                         >
-                                    </div> 
-                                    
-                                    <!-- PASO 2: Características -->
-                                     <div x-show="index === 1" class="w-full h-full">
-                                        <img 
-                                            src="/images/paso2.png" 
+                                    </div>
+
+                                    <div x-show="index === 1" class="w-full h-full">
+                                        <img
+                                            src="/images/paso2.png"
                                             alt="Describir características del inmueble"
                                             class="w-full h-full object-cover "
                                         >
-                                    </div> 
-                                    
+                                    </div>
+
                                     <div x-show="index === 2" class="w-full h-full">
-                                        <img 
-                                            src="/images/paso3.png" 
+                                        <img
+                                            src="/images/paso3.png"
                                             alt="Subir fotos y videos"
                                             class="w-full h-full object-cover"
                                         >
-                                    </div> 
-                                    
-                                     <div x-show="index === 3" class="w-full h-full">
-                                        <img 
-                                            src="/images/paso4.png" 
+                                    </div>
+
+                                    <div x-show="index === 3" class="w-full h-full">
+                                        <img
+                                            src="/images/paso4.png"
                                             alt="Establecer datos de contacto"
                                             class="w-full h-full object-cover"
                                         >
-                                    </div> 
-
-                                 
+                                    </div>
                                 </div>
                             </template>
                         </div>
@@ -146,22 +121,20 @@
                 </div>
             </div>
 
-            <!-- Botón de acción - responsive -->
             <div class="text-center mt-8 md:mt-12 px-4 relative z-50">
-                <button 
+                <button
                     @click="restartTimeline()"
                     class="btn-primary inline-flex items-center px-6 md:px-8 py-3 md:py-4 font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-sm md:text-base"
                     style="background: linear-gradient(to right, #3b82f6, #2563eb) !important; color: white !important; z-index: 9999 !important;"
                 >
                     <i class="fas fa-plus-circle mr-2"></i>
-                    Comienza a publicar 
-                
-             
-            </div>
+                    Comienza a publicar
+                </button>
+
 
                <div class="mt-6 md:mt-8 flex flex-row justify-center items-center space-x-4 md:space-x-6 relative z-40">
-                    <button 
-                        @click="pauseTimeline()" 
+                    <button
+                        @click="pauseTimeline()"
                         x-show="!isPaused"
                         class="flex items-center justify-center bg-white text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-all duration-200 hover:shadow-sm"
                         style="min-height: 32px; visibility: visible !important; opacity: 1 !important;"
@@ -169,8 +142,8 @@
                         <i class="fas fa-pause mr-1 sm:mr-2 text-xs sm:text-sm"></i>
                         <span class="whitespace-nowrap">Pausar</span>
                     </button>
-                    <button 
-                        @click="resumeTimeline()" 
+                    <button
+                        @click="resumeTimeline()"
                         x-show="isPaused"
                         class="flex items-center justify-center bg-blue-50 text-blue-600 hover:text-blue-700 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-all duration-200 hover:shadow-sm"
                         style="min-height: 32px; visibility: visible !important; opacity: 1 !important;"
@@ -178,8 +151,8 @@
                         <i class="fas fa-play mr-1 sm:mr-2 text-xs sm:text-sm"></i>
                         <span class="whitespace-nowrap">Continuar</span>
                     </button>
-                    <button 
-                        @click="restartTimeline()" 
+                    <button
+                        @click="restartTimeline()"
                         class="flex items-center justify-center bg-white text-gray-600 hover:text-gray-800 border border-gray-200 hover:border-gray-300 rounded-full px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium transition-all duration-200 hover:shadow-sm"
                         style="min-height: 32px; visibility: visible !important; opacity: 1 !important;"
                     >
@@ -187,6 +160,7 @@
                         <span class="whitespace-nowrap">Reiniciar</span>
                     </button>
                 </div>
+            </div>
         </div>
     </x-partials.container>
 </section>
@@ -199,7 +173,7 @@ function timelineData() {
         isPaused: false,
         intervalId: null,
         stepProgress: 0,
-        
+
         steps: [
             {
                 number: 1,
@@ -242,12 +216,12 @@ function timelineData() {
                 progress: 0
             }
         ],
-        
+
         startTimeline() {
             this.resetTimeline();
             this.runTimeline();
         },
-        
+
         resetTimeline() {
             this.currentStep = 0;
             this.progressHeight = 0;
@@ -258,53 +232,46 @@ function timelineData() {
                 step.progress = 0;
             });
         },
-        
+
         runTimeline() {
             if (this.intervalId) {
                 clearInterval(this.intervalId);
             }
-            
+
             this.intervalId = setInterval(() => {
                 if (this.isPaused) return;
-                
-                // Incrementar progreso del paso actual
+
                 this.stepProgress += 1;
                 this.steps[this.currentStep].progress = this.stepProgress;
-                
-                // Si el paso actual está completo (100%)
+
                 if (this.stepProgress >= 100) {
-                    // Marcar como completado
                     this.steps[this.currentStep].completed = true;
                     this.steps[this.currentStep].active = false;
-                    
-                    // Avanzar al siguiente paso
+
                     if (this.currentStep < this.steps.length - 1) {
                         this.currentStep++;
                         this.steps[this.currentStep].active = true;
                         this.stepProgress = 0;
-                        
-                        // Actualizar altura del progreso
+
                         this.progressHeight = (this.currentStep / (this.steps.length - 1)) * 100;
                     } else {
-                        // Completar último paso
                         this.progressHeight = 100;
-                        // Reiniciar después de un tiempo
                         setTimeout(() => {
                             this.startTimeline();
                         }, 3000);
                     }
                 }
-            }, 50); // 50ms = progreso suave
+            }, 50);
         },
-        
+
         pauseTimeline() {
             this.isPaused = true;
         },
-        
+
         resumeTimeline() {
             this.isPaused = false;
         },
-        
+
         restartTimeline() {
             this.startTimeline();
         }
@@ -313,7 +280,6 @@ function timelineData() {
 </script>
 
 <style>
-/* Animaciones adicionales */
 @keyframes pulse-blue {
     0%, 100% {
         box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
@@ -328,94 +294,80 @@ function timelineData() {
 }
 
 .btn-primary {
-            background: linear-gradient(to right, #3b82f6, #2563eb) !important;
-            color: white !important;
-            position: relative !important;
-            z-index: 9999 !important;
-            display: inline-flex !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-        }
+    background: linear-gradient(to right, #3b82f6, #2563eb) !important;
+    color: white !important;
+    position: relative !important;
+    z-index: 9999 !important;
+    display: inline-flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
 
-        .btn-primary:hover {
-            background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
-            transform: scale(1.05);
-        }
+.btn-primary:hover {
+    background: linear-gradient(to right, #2563eb, #1d4ed8) !important;
+    transform: scale(1.05);
+}
 
+.btn-control {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    z-index: 999 !important;
+}
 
-         /* Botones de control - Visibilidad garantizada */
-        .btn-control {
-            visibility: visible !important;
-            opacity: 1 !important;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            position: relative !important;
-            z-index: 999 !important;
-        }
+.controls-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1rem !important;
+    margin-top: 1rem !important;
+}
 
-        /* Contenedor de controles */
-        .controls-container {
-            display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 1rem !important;
-            margin-top: 1rem !important;
-        }
-
-
-
-/* Mejoras responsive adicionales */
 @media (max-width: 640px) {
-    /* Asegurar que no hay overflow horizontal */
     .overflow-hidden {
         overflow-x: hidden;
     }
-    
-    /* Optimizar espaciado en móvil */
+
     [data-how-it-works-section] {
         padding-left: 0;
         padding-right: 0;
     }
 }
 
-/* Breakpoint específico para tablets */
 @media (min-width: 641px) and (max-width: 1023px) {
-    /* Ajustes específicos para tablets si es necesario */
     .lg\:grid-cols-2 {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
 }
 
- .controls-container {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 1rem !important;
-            margin-top: 1.5rem !important;
-        }
+.controls-container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1rem !important;
+    margin-top: 1.5rem !important;
+}
 
-        @media (max-width: 640px) {
-            .controls-container {
-                margin-top: 1.5rem !important;
-                gap: 0.75rem !important;
-            }
-            
-            /* Botones más pequeños en móvil pero siempre horizontales */
-            .btn-control {
-                padding: 0.5rem 0.75rem !important;
-                font-size: 0.75rem !important;
-            }
-        }
+@media (max-width: 640px) {
+    .controls-container {
+        margin-top: 1.5rem !important;
+        gap: 0.75rem !important;
+    }
 
-        /* Mejoras responsive adicionales */
-        @media (max-width: 640px) {
-            .overflow-hidden {
-                overflow-x: hidden;
-            }
-        }
+    .btn-control {
+        padding: 0.5rem 0.75rem !important;
+        font-size: 0.75rem !important;
+    }
+}
 
-
+@media (max-width: 640px) {
+    .overflow-hidden {
+        overflow-x: hidden;
+    }
+}
 </style>

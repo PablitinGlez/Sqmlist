@@ -368,48 +368,5 @@
         </div>
     </div>
 
-    {{-- Sección de Depuración: Filtros Aplicados --}}
-    <div class="w-full mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800">
-        <h4 class="font-semibold mb-2">Filtros Actuales </h4>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-            <div><strong>Ubicación:</strong> {{ $locationSearch ?: 'Ninguna' }}</div>
-            <div><strong>Operación:</strong> {{ $operationDisplay }} (Venta: {{ $isForSale ? 'Sí' : 'No' }}, Renta: {{ $isForRent ? 'Sí' : 'No' }})</div>
-            <div><strong>Tipo Propiedad:</strong> {{ $propertyTypeDisplayName }} (Slug: {{ $selectedPropertyTypeSlug ?: 'N/A' }})</div>
-            <div><strong>Precio:</strong> {{ $priceDisplay }} (Min: {{ $minPrice ?: 'N/A' }}, Max: {{ $maxPrice ?: 'N/A' }})</div>
-
-            <div class="col-span-full mt-2">
-                <strong>Filtros Adicionales:</strong>
-                <ul class="list-disc list-inside ml-4">
-                    @php
-                        $significantFilters = [];
-                        foreach ($filters as $key => $value) {
-                            if (is_bool($value)) {
-                                $significantFilters[] = "$key: " . ($value ? 'Sí' : 'No');
-                            } elseif (!is_null($value) && $value !== '' && $value !== 'Todos') {
-                                $significantFilters[] = "$key: $value";
-                            }
-                        }
-                        if ($minSuperficieConstruida !== null) { // Solo mostrar si no es null
-                            $significantFilters[] = "Superficie Construida Mínima: " . $minSuperficieConstruida . " m²";
-                        }
-                        if ($maxSuperficieConstruida !== null) { // Solo mostrar si no es null
-                            $significantFilters[] = "Superficie Construida Máxima: " . $maxSuperficieConstruida . " m²";
-                        }
-                        if ($minSuperficieTerreno !== null) { // Solo mostrar si no es null
-                            $significantFilters[] = "Superficie Terreno Mínima: " . $minSuperficieTerreno . " m²";
-                        }
-                        if ($maxSuperficieTerreno !== null) { // Solo mostrar si no es null
-                            $significantFilters[] = "Superficie Terreno Máxima: " . $maxSuperficieTerreno . " m²";
-                        }
-                    @endphp
-
-                    @forelse ($significantFilters as $filterText)
-                        <li>{{ $filterText }}</li>
-                    @empty
-                        <p class="ml-4">Ningún filtro adicional aplicado.</p>
-                    @endforelse
-                </ul>
-            </div>
-        </div>
-    </div>
+    
 </div>

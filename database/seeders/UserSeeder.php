@@ -15,23 +15,23 @@ class UserSeeder extends Seeder
     {
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
-        // Usuario Admin 1
+   
         $admin1 = User::firstOrCreate(
             ['email' => 'admin1@admin.com'],
             [
                 'name' => 'Admin 1',
-                'password' => bcrypt('A$dmin1Secure2024!'), // Contraseña segura
+                'password' => bcrypt('A$dmin1Secure2024!'),
                 'email_verified_at' => now(),
             ]
         );
         $admin1->assignRole($adminRole);
 
-        // Usuario Admin 2
+    
         $admin2 = User::firstOrCreate(
             ['email' => 'admin2@admin.com'],
             [
                 'name' => 'Admin 2',
-                'password' => bcrypt('S@feP4sswordAdmin2!'), // Contraseña segura
+                'password' => bcrypt('S@feP4sswordAdmin2!'),
                 'email_verified_at' => now(),
             ]
         );

@@ -1,8 +1,8 @@
-/* Animaciones para los skeletons */
 @keyframes skeleton-loading {
     0% {
         background-position: -200px 0;
     }
+
     100% {
         background-position: calc(200px + 100%) 0;
     }
@@ -14,7 +14,6 @@
     background-size: 200px 100%;
 }
 
-/* Variaciones de colores para los skeletons */
 .skeleton-light {
     background: linear-gradient(90deg, #f8f9fa 25%, #e9ecef 50%, #f8f9fa 75%);
     background-size: 200px 100%;
@@ -25,7 +24,6 @@
     background-size: 200px 100%;
 }
 
-/* Transiciones suaves */
 .fade-enter {
     opacity: 0;
     transform: translateY(10px);
@@ -48,21 +46,22 @@
     transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
-/* Pulso más sutil para los skeletons */
 .animate-skeleton {
     animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 @keyframes skeleton-pulse {
-    0%, 100% {
+
+    0%,
+    100% {
         opacity: 1;
     }
+
     50% {
         opacity: 0.5;
     }
 }
 
-/* Animación de carga para el contenedor principal */
 .loading-container {
     position: relative;
     overflow: hidden;
@@ -83,6 +82,7 @@
     0% {
         left: -100%;
     }
+
     100% {
         left: 100%;
     }

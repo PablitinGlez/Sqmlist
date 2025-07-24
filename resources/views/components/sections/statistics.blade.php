@@ -1,8 +1,5 @@
-{{--
-    Esta sección muestra estadísticas clave de la empresa,
-    como propiedades vendidas, clientes satisfechos y años de experiencia,
-    para generar confianza en los usuarios.
---}}
+
+
 <section class="py-16 bg-white">
     <x-partials.container>
         <div class="text-center mb-12">

@@ -1,4 +1,3 @@
-/* Loader de navegación optimizado */
 .navigation-loader {
     position: fixed;
     top: 0;
@@ -28,7 +27,6 @@
     gap: 1rem;
 }
 
-/* Barra de progreso superior alternativa */
 .progress-bar {
     position: fixed;
     top: 0;
@@ -44,13 +42,11 @@
     width: 100%;
 }
 
-/* Evitar flash de contenido */
 .navigation-loading .main-content {
     opacity: 0.7;
     pointer-events: none;
 }
 
-/* Skeleton loader para contenido específico */
 .skeleton {
     background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
     background-size: 200% 100%;
@@ -61,6 +57,7 @@
     0% {
         background-position: 200% 0;
     }
+
     100% {
         background-position: -200% 0;
     }

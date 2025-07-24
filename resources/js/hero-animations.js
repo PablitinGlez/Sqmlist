@@ -1,4 +1,6 @@
-// Registra los plugins de GSAP que vas a usar
+import { gsap } from 'gsap';
+import { TextPlugin } from 'gsap/TextPlugin';
+
 gsap.registerPlugin(TextPlugin);
 
 document.addEventListener('hero-content-loaded', () => {
@@ -9,44 +11,34 @@ document.addEventListener('hero-content-loaded', () => {
         return;
     }
     
-    // Almacena el texto original del título
     const originalTitleText = heroTitle.textContent;
     
-    // CLAVE: Limpia completamente el contenido inicial
     heroTitle.innerHTML = '';
     
-    // Configuración inicial - elemento visible pero sin texto
     gsap.set(heroTitle, {
         opacity: 1,
-        text: "" // Asegura que empiece completamente vacío
+        text: ""
     });
     
-    // Timeline para controlar mejor la secuencia
     const tl = gsap.timeline();
     
-    // Pequeño delay antes de empezar la escritura
-    tl.to({}, { duration: 0.5 }) // Delay inicial de 0.5 segundos
+    tl.to({}, { duration: 0.5 })
     
-    // Efecto de escritura
     .to(heroTitle, {
-        duration: 2, // Duración de 4 segundos
-        ease: "none", // Sin easing para efecto de escritura natural
+        duration: 2,
+        ease: "none",
         text: {
             value: originalTitleText,
-            speed: 1, // Velocidad constante
-            delimiter: "" // Carácter por carácter
+            speed: 1,
+            delimiter: ""
         },
         onStart: () => {
-            // Añadir cursor parpadeante
             heroTitle.classList.add('typing-cursor');
         },
         onComplete: () => {
-            // Asegura que el texto final esté completo
             heroTitle.textContent = originalTitleText;
-            // Remueve el cursor parpadeante
             heroTitle.classList.remove('typing-cursor');
             
-            // Pequeña animación final de "bounce"
             gsap.fromTo(heroTitle, 
                 { scale: 1 }, 
                 {
