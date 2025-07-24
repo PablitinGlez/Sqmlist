@@ -16,9 +16,6 @@ use Illuminate\Database\Eloquent\Model;
 use App\Filament\Admin\Resources\UserApplicationResource\Pages;
 use App\Traits\AdminOnlyResourceTrait;
 
-/**
- * gestiona las solicitudes de perfil de usuario en el panel de administración.
- */
 class UserApplicationResource extends Resource
 {
     use AdminOnlyResourceTrait;
@@ -29,8 +26,7 @@ class UserApplicationResource extends Resource
     protected static ?string $modelLabel = 'Solicitud de Perfil';
     protected static ?string $pluralModelLabel = 'Solicitudes de Perfil';
 
-        // Grupo de navegación (opcional, para organizar en el sidebar)
-        protected static ?string $navigationGroup = 'Gestión de Usuarios';
+    protected static ?string $navigationGroup = 'Gestión de Usuarios';
 
     protected static ?int $navigationSort = 1;
 

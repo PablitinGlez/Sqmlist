@@ -7,19 +7,19 @@ use App\Models\PropertyContact;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\ImageColumn;  // ← IMPORT AÑADIDO
-use Filament\Tables\Columns\TextColumn;   // ← IMPORT AÑADIDO
-use Filament\Tables\Filters\TernaryFilter; // ← IMPORT AÑADIDO
+use Filament\Tables\Columns\ImageColumn;  
+use Filament\Tables\Columns\TextColumn;   
+use Filament\Tables\Filters\TernaryFilter; 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\ViewAction;        // ← IMPORT AÑADIDO
-use Filament\Tables\Actions\DeleteAction;      // ← IMPORT AÑADIDO
-use Filament\Tables\Actions\BulkActionGroup;   // ← IMPORT AÑADIDO
-use Filament\Tables\Actions\DeleteBulkAction;  // ← IMPORT AÑADIDO
-use Filament\Tables\Actions\BulkAction;        // ← IMPORT AÑADIDO
+use Filament\Tables\Actions\ViewAction;        
+use Filament\Tables\Actions\DeleteAction;      
+use Filament\Tables\Actions\BulkActionGroup;   
+use Filament\Tables\Actions\DeleteBulkAction;  
+use Filament\Tables\Actions\BulkAction;        
 
 class ArchivedPropertyContacts extends ListRecords
 {
@@ -35,12 +35,12 @@ class ArchivedPropertyContacts extends ListRecords
     {
         $query = PropertyContact::query()
             ->where('is_archived', true)
-            ->orderByDesc('archived_at') // Ordenar por fecha de archivo
-            ->orderByDesc('created_at'); // Luego por fecha de creación
+            ->orderByDesc('archived_at')
+            ->orderByDesc('created_at'); 
 
         $user = Auth::user();
 
-        // ¡MUY IMPORTANTE! Asegurarse de que el anunciante solo vea sus propios mensajes archivados
+    
         $query->whereHas('property', function (Builder $propertyQuery) use ($user) {
             $propertyQuery->where('user_id', $user->id);
         });

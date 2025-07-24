@@ -12,30 +12,24 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\Facades\Hash; // Importar Hash para encriptar la contraseña
-use Spatie\Permission\Models\Role; // Importar el modelo Role de Spatie
-use Illuminate\Support\Facades\Auth; // Importar el facade Auth
-use Filament\Notifications\Notification; // Importar Notification para mensajes de éxito/error
-use Illuminate\Support\Collection; // Importar Collection para acciones masivas
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+use Filament\Notifications\Notification;
+use Illuminate\Support\Collection;
 
 class UserResource extends Resource
 {
-    // Asociar el recurso con el modelo User
     protected static ?string $model = User::class;
 
-    // Icono que aparecerá en la navegación del panel de administración
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    // Etiqueta de navegación (singular)
     protected static ?string $modelLabel = 'Usuario';
 
-    // Etiqueta de navegación (plural)
     protected static ?string $pluralModelLabel = 'Usuarios';
 
-    // Grupo de navegación (opcional, para organizar en el sidebar)
     protected static ?string $navigationGroup = 'Gestión de Usuarios';
 
-    // Mapeo de nombres de roles internos a nombres legibles en español
     protected static array $roleLabels = [
         'admin' => 'Administrador',
         'agent' => 'Agente Inmobiliario',
@@ -52,58 +46,54 @@ class UserResource extends Resource
                     ->label('Nombre')
                     ->required()
                     ->maxLength(255)
-                    ->disabled(fn (string $operation): bool => $operation === 'edit'), // Deshabilitado en edición
+                    ->disabled(fn(string $operation): bool => $operation === 'edit'),
                 Forms\Components\TextInput::make('email')
                     ->label('Email')
                     ->email()
                     ->required()
                     ->maxLength(255)
-                    ->unique(ignoreRecord: true) // Asegura que el email sea único, ignorando el usuario actual al editar
-                    ->disabled(fn (string $operation): bool => $operation === 'edit'), // Deshabilitado en edición
+                    ->unique(ignoreRecord: true)
+                    ->disabled(fn(string $operation): bool => $operation === 'edit'),
                 Forms\Components\DateTimePicker::make('email_verified_at')
                     ->label('Email Verificado En')
                     ->nullable()
-                    ->native(false) // Para usar el selector de fecha de Filament
+                    ->native(false)
                     ->placeholder('No verificado')
-                    ->disabled(fn (string $operation): bool => $operation === 'edit'), // Deshabilitado en edición
-                
-                // Campo de selección para el estado del usuario
+                    ->disabled(fn(string $operation): bool => $operation === 'edit'),
+
                 Forms\Components\Select::make('status')
                     ->label('Estado de la Cuenta')
-                    ->options(User::STATUS_OPTIONS) // Usa las constantes definidas en el modelo User
+                    ->options(User::STATUS_OPTIONS)
                     ->required()
-                    ->default(User::STATUS_ACTIVE), // Por defecto, una nueva cuenta está activa
+                    ->default(User::STATUS_ACTIVE),
 
-                // Campos de contraseña (ocultos en edición)
                 Forms\Components\TextInput::make('password')
                     ->label('Contraseña')
                     ->password()
-                    ->required(fn (string $operation): bool => $operation === 'create') // Requerido solo al crear
-                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state)) // Encriptar la contraseña
-                    ->dehydrated(fn (?string $state): bool => filled($state)) // No guardar si está vacío
-                    ->revealable() // Permite mostrar/ocultar la contraseña
+                    ->required(fn(string $operation): bool => $operation === 'create')
+                    ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
+                    ->dehydrated(fn(?string $state): bool => filled($state))
+                    ->revealable()
                     ->autocomplete('new-password')
-                    ->hidden(fn (string $operation): bool => $operation === 'edit'), // Oculto en edición
+                    ->hidden(fn(string $operation): bool => $operation === 'edit'),
                 Forms\Components\TextInput::make('password_confirmation')
                     ->label('Confirmar Contraseña')
                     ->password()
-                    ->required(fn (string $operation): bool => $operation === 'create') // Requerido solo al crear
-                    ->dehydrated(false) // No guardar este campo en la base de datos
+                    ->required(fn(string $operation): bool => $operation === 'create')
+                    ->dehydrated(false)
                     ->revealable()
                     ->autocomplete('new-password')
-                    ->same('password') // Debe ser igual al campo 'password'
-                    ->hidden(fn (string $operation): bool => $operation === 'edit'), // Oculto en edición
-                
-                // Selector de Roles (usando Spatie Permissions)
+                    ->same('password')
+                    ->hidden(fn(string $operation): bool => $operation === 'edit'),
+
                 Forms\Components\Select::make('roles')
                     ->label('Roles')
-                    ->multiple() // Permite seleccionar múltiples roles
-                    ->relationship('roles', 'name') // Relación con el modelo Role de Spatie
-                    // Usar options() para mapear los nombres de los roles a español
-                    ->options(fn () => Role::all()->pluck('name', 'id')->map(fn ($name) => static::$roleLabels[$name] ?? $name)->toArray())
-                    ->preload() // Carga todos los roles disponibles para el selector
-                    ->searchable() // Permite buscar roles por nombre
-                    ->required(), // Un usuario siempre debe tener al menos un rol
+                    ->multiple()
+                    ->relationship('roles', 'name')
+                    ->options(fn() => Role::all()->pluck('name', 'id')->map(fn($name) => static::$roleLabels[$name] ?? $name)->toArray())
+                    ->preload()
+                    ->searchable()
+                    ->required(),
             ]);
     }
 
@@ -121,31 +111,29 @@ class UserResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('email_verified_at')
                     ->label('Email Verificado')
-                    ->boolean() // Muestra un icono de check/cruz
+                    ->boolean()
                     ->sortable(),
-                
-                // Columna para el estado del usuario
+
                 Tables\Columns\BadgeColumn::make('status')
                     ->label('Estado')
-                    ->formatStateUsing(fn (string $state): string => User::STATUS_OPTIONS[$state] ?? $state) // Muestra el texto en español
+                    ->formatStateUsing(fn(string $state): string => User::STATUS_OPTIONS[$state] ?? $state)
                     ->colors([
-                        'success' => User::STATUS_ACTIVE, // Verde para activo
-                        'danger' => User::STATUS_INACTIVE, // Rojo para inactivo
+                        'success' => User::STATUS_ACTIVE,
+                        'danger' => User::STATUS_INACTIVE,
                     ])
                     ->sortable(),
 
-                Tables\Columns\TextColumn::make('roles.name') // Muestra los nombres de los roles
+                Tables\Columns\TextColumn::make('roles.name')
                     ->label('Roles')
-                    ->badge() // Muestra los roles como "badges" (etiquetas)
-                    // Usar formatStateUsing para traducir los nombres de los roles
-                    ->formatStateUsing(fn (string $state): string => static::$roleLabels[$state] ?? $state)
-                    ->color(fn (string $state): string => match ($state) {
-                        'admin' => 'danger', // Color rojo para el rol 'admin'
-                        'agent' => 'info',   // Color azul claro para 'agent'
-                        'owner' => 'warning', // Color amarillo para 'owner'
-                        'real_estate_company' => 'success', // Color verde para 'real_estate_company'
-                        'user' => 'gray', // Color gris para 'user'
-                        default => 'gray', // Por defecto
+                    ->badge()
+                    ->formatStateUsing(fn(string $state): string => static::$roleLabels[$state] ?? $state)
+                    ->color(fn(string $state): string => match ($state) {
+                        'admin' => 'danger',
+                        'agent' => 'info',
+                        'owner' => 'warning',
+                        'real_estate_company' => 'success',
+                        'user' => 'gray',
+                        default => 'gray',
                     })
                     ->searchable()
                     ->sortable(),
@@ -153,45 +141,40 @@ class UserResource extends Resource
                     ->label('Creado En')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true), // Oculto por defecto
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label('Actualizado En')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true), // Oculto por defecto
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                // Filtro por roles
                 Tables\Filters\SelectFilter::make('roles')
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->preload()
                     ->searchable()
                     ->label('Filtrar por Rol')
-                    // Usar options() para el filtro de roles
-                    ->options(fn () => Role::all()->pluck('name', 'name')->map(fn ($name) => static::$roleLabels[$name] ?? $name)->toArray()),
-                
-                // Filtro por estado de verificación de email
+                    ->options(fn() => Role::all()->pluck('name', 'name')->map(fn($name) => static::$roleLabels[$name] ?? $name)->toArray()),
+
                 Tables\Filters\TernaryFilter::make('email_verified_at')
                     ->label('Email Verificado')
                     ->boolean(),
 
-                // Filtro por estado de cuenta
                 Tables\Filters\SelectFilter::make('status')
                     ->label('Estado de Cuenta')
                     ->options(User::STATUS_OPTIONS)
-                    ->default(User::STATUS_ACTIVE) // Por defecto, mostrar solo activos
+                    ->default(User::STATUS_ACTIVE)
                     ->placeholder('Todos los estados'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(), // Botón para editar
-                
-                // Acción para desactivar cuenta
+                Tables\Actions\EditAction::make(),
+
                 Tables\Actions\Action::make('deactivate')
                     ->label('Desactivar')
                     ->icon('heroicon-o-x-circle')
                     ->color('danger')
-                    ->requiresConfirmation() // Pide confirmación antes de ejecutar
+                    ->requiresConfirmation()
                     ->action(function (User $record) {
                         if ($record->id === Auth::id()) {
                             Notification::make()
@@ -206,14 +189,13 @@ class UserResource extends Resource
                             ->success()
                             ->send();
                     })
-                    ->visible(fn (User $record): bool => $record->isActive()), // Solo visible si la cuenta está activa
+                    ->visible(fn(User $record): bool => $record->isActive()),
 
-                // Acción para activar cuenta
                 Tables\Actions\Action::make('activate')
                     ->label('Activar')
                     ->icon('heroicon-o-check-circle')
                     ->color('success')
-                    ->requiresConfirmation() // Pide confirmación antes de ejecutar
+                    ->requiresConfirmation()
                     ->action(function (User $record) {
                         $record->update(['status' => User::STATUS_ACTIVE]);
                         Notification::make()
@@ -221,11 +203,10 @@ class UserResource extends Resource
                             ->success()
                             ->send();
                     })
-                    ->visible(fn (User $record): bool => $record->isInactive()), // Solo visible si la cuenta está inactiva
+                    ->visible(fn(User $record): bool => $record->isInactive()),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    // Acción masiva para desactivar
                     Tables\Actions\BulkAction::make('deactivateSelected')
                         ->label('Desactivar Seleccionados')
                         ->icon('heroicon-o-x-circle')
@@ -233,8 +214,8 @@ class UserResource extends Resource
                         ->requiresConfirmation()
                         ->action(function (Collection $records) {
                             $loggedInUserId = Auth::id();
-                            $recordsToDeactivate = $records->filter(fn ($record) => $record->id !== $loggedInUserId);
-                            
+                            $recordsToDeactivate = $records->filter(fn($record) => $record->id !== $loggedInUserId);
+
                             if ($recordsToDeactivate->isEmpty()) {
                                 Notification::make()
                                     ->title('No se pueden desactivar las cuentas seleccionadas (incluye tu propia cuenta o ya están inactivas).')
@@ -250,7 +231,6 @@ class UserResource extends Resource
                                 ->send();
                         }),
 
-                    // Acción masiva para activar
                     Tables\Actions\BulkAction::make('activateSelected')
                         ->label('Activar Seleccionados')
                         ->icon('heroicon-o-check-circle')
@@ -269,10 +249,7 @@ class UserResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            // Aquí puedes definir Relation Managers si los necesitas, por ejemplo, para ProfileDetails
-            // RelationManagers\ProfileDetailsRelationManager::class,
-        ];
+        return [];
     }
 
     public static function getPages(): array
@@ -286,14 +263,12 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        // Obtener el ID del usuario autenticado
         $authenticatedUserId = Auth::id();
 
-        // Excluir al usuario autenticado de la lista
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ])
-            ->where('id', '!=', $authenticatedUserId); // Excluir el ID del usuario actual
+            ->where('id', '!=', $authenticatedUserId);
     }
 }

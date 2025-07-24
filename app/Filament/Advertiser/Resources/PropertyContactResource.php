@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup; // Importar ActionGroup
+use Filament\Tables\Actions\ActionGroup; 
 
 class PropertyContactResource extends Resource
 {
@@ -86,13 +86,13 @@ class PropertyContactResource extends Resource
     {
         return $table
             ->columns([
-                // Nueva columna para la imagen de la propiedad
+          
                 Tables\Columns\ImageColumn::make('property.featuredImage.path')
                     ->label('Imagen')
-                    ->width(80) // Ancho de la imagen en la tabla
-                    ->height(50) // Alto de la imagen en la tabla
-                    ->circular() // Hace la imagen circular (opcional, puedes quitarlo)
-                    ->defaultImageUrl(url('images/placeholder.png')) // Imagen de fallback si no hay imagen principal
+                    ->width(80)
+                    ->height(50) 
+                    ->circular() 
+                    ->defaultImageUrl(url('images/placeholder.png')) 
                     ->tooltip(fn(PropertyContact $record): string => $record->property->title ?? 'Propiedad sin título')
                     ->toggleable(isToggledHiddenByDefault: false),
 

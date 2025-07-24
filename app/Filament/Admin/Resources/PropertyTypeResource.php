@@ -14,9 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Filters\SelectFilter;
 
-/**
- * Este recurso de Filament gestiona los tipos de propiedad, permitiendo su creación, edición y visualización.
- */
+
 class PropertyTypeResource extends Resource
 {
     protected static ?string $model = PropertyType::class;

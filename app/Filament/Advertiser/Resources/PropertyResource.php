@@ -3,19 +3,13 @@
 namespace App\Filament\Advertiser\Resources;
 
 use App\Filament\Advertiser\Resources\PropertyResource\Pages;
-
 use App\Models\Category;
-
 use App\Models\Property;
 use App\Models\PropertyType;
 use Filament\Forms;
-
 use Filament\Forms\Components\Radio;
-
 use Filament\Forms\Components\Select;
-
 use Filament\Forms\Components\Wizard;
-
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -26,9 +20,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
-
 use Illuminate\Support\Facades\Config;
-
 
 class PropertyResource extends Resource
 {
@@ -39,7 +31,6 @@ class PropertyResource extends Resource
     protected static ?string $modelLabel = 'Propiedad';
     protected static ?int $navigationSort = 1;
 
- 
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
@@ -49,7 +40,7 @@ class PropertyResource extends Resource
                 'propertyType.features.featureSection',
                 'featureValues.feature',
                 'images' => function ($query) {
-                    $query->orderBy('order', 'asc'); 
+                    $query->orderBy('order', 'asc');
                 }
             ])
             ->withoutGlobalScopes([
@@ -57,16 +48,6 @@ class PropertyResource extends Resource
             ]);
     }
 
-    /**
-     * 
-     * 
-     * 
-     *
-     * @param PropertyType|null
-     * @param Model|null 
-     * @param bool 
-     * @return array
-     */
     private static function getFeatureSectionsTabs(?PropertyType $propertyType, ?Model $record, bool $disabled): array
     {
         if (!$propertyType) {
@@ -118,7 +99,7 @@ class PropertyResource extends Resource
                                 ->placeholder($placeholder)
                                 ->numeric()
                                 ->disabled($disabled)
-                                ->dehydrated(true) // SIEMPRE deshidratar para guardar
+                                ->dehydrated(true)
                                 ->afterStateHydrated(function ($component, $state) use ($record, $feature) {
                                     if ($record && $record->exists && $record->relationLoaded('featureValues')) {
                                         $featureValue = $record->featureValues->firstWhere('feature_id', $feature->id);
@@ -142,7 +123,7 @@ class PropertyResource extends Resource
                                 ->options($options)
                                 ->columns(2)
                                 ->disabled($disabled)
-                                ->dehydrated(true) // SIEMPRE deshidratar para guardar
+                                ->dehydrated(true)
                                 ->afterStateHydrated(function ($component, $state) use ($record, $feature) {
                                     if ($record && $record->exists && $record->relationLoaded('featureValues')) {
                                         $featureValue = $record->featureValues->firstWhere('feature_id', $feature->id);
@@ -158,7 +139,7 @@ class PropertyResource extends Resource
                                 ->label($label)
                                 ->default(false)
                                 ->disabled($disabled)
-                                ->dehydrated(true) // SIEMPRE deshidratar para guardar
+                                ->dehydrated(true)
                                 ->afterStateHydrated(function ($component, $state) use ($record, $feature) {
                                     if ($record && $record->exists && $record->relationLoaded('featureValues')) {
                                         $featureValue = $record->featureValues->firstWhere('feature_id', $feature->id);
@@ -175,7 +156,7 @@ class PropertyResource extends Resource
                                 ->label($label)
                                 ->placeholder($placeholder)
                                 ->disabled($disabled)
-                                ->dehydrated(true) // SIEMPRE deshidratar para guardar
+                                ->dehydrated(true)
                                 ->afterStateHydrated(function ($component, $state) use ($record, $feature) {
                                     if ($record && $record->exists && $record->relationLoaded('featureValues')) {
                                         $featureValue = $record->featureValues->firstWhere('feature_id', $feature->id);
@@ -204,17 +185,8 @@ class PropertyResource extends Resource
         return $tabsForFeatures;
     }
 
-    /**
-     * Define el esquema del formulario para la PROPIEDAD EN MODO EDICIÓN/REVISIÓN.
-     * Este método es ahora reutilizable y puede controlar si los campos están deshabilitados.
-     *
-     * @param Form $form El objeto Form de Filament.
-     * @param bool $disabled Si es true, todos los campos se deshabilitarán.
-     * @return array
-     */
     public static function getEditFormSchema(Form $form, bool $disabled = false): array
     {
-        // Obtener el registro actual
         $record = $form->getRecord();
         $propertyTypeId = $record->property_type_id ?? null;
 
@@ -235,23 +207,22 @@ class PropertyResource extends Resource
                 ->schema([
                     Forms\Components\TextInput::make('id')
                         ->label('ID de Propiedad')
-                        ->disabled() // Siempre deshabilitado
+                        ->disabled()
                         ->columnSpan(1),
                     Forms\Components\Select::make('user_id')
                         ->relationship('user', 'name')
                         ->label('Anunciante')
-                        ->disabled() // Siempre deshabilitado
+                        ->disabled()
                         ->columnSpan(1),
                     Forms\Components\Select::make('property_type_id')
                         ->relationship('propertyType', 'name')
                         ->label('Tipo de Propiedad')
-                        ->disabled() // El tipo de propiedad NO se puede cambiar en edición
+                        ->disabled()
                         ->columnSpan(1),
-                    // Campo Title - Solo lectura en edición
                     Forms\Components\TextInput::make('title')
                         ->label('Título de la Propiedad')
-                        ->disabled() // Deshabilitado en edición
-                        ->dehydrated(false) // No deshidratar (no se guarda si está deshabilitado)
+                        ->disabled()
+                        ->dehydrated(false)
                         ->columnSpan(1),
                     Forms\Components\TextInput::make('price')
                         ->label('Precio')
@@ -272,7 +243,7 @@ class PropertyResource extends Resource
                         ->required()
                         ->disabled($disabled)
                         ->columnSpan(1),
-                    Forms\Components\Textarea::make('description') // Directamente en la sección general
+                    Forms\Components\Textarea::make('description')
                         ->label('Descripción')
                         ->rows(5)
                         ->maxLength(1500)
@@ -288,7 +259,7 @@ class PropertyResource extends Resource
                         ->required()
                         ->disabled($disabled)
                         ->afterStateHydrated(function ($component, $state, $record) {
-                            if (empty($state) && $record === null) { // Solo precargar si es un nuevo registro
+                            if (empty($state) && $record === null) {
                                 $user = auth()->user();
                                 $value = $user->profileDetails->whatsapp_number ?? null;
                                 $component->state($value);
@@ -311,7 +282,7 @@ class PropertyResource extends Resource
                         ->required()
                         ->disabled($disabled)
                         ->afterStateHydrated(function ($component, $state, $record) {
-                            if (empty($state) && $record === null) { // Solo precargar si es un nuevo registro
+                            if (empty($state) && $record === null) {
                                 $user = auth()->user();
                                 $value = $user->profileDetails->phone_number ?? null;
                                 $component->state($value);
@@ -332,7 +303,7 @@ class PropertyResource extends Resource
                         ->required()
                         ->disabled($disabled)
                         ->afterStateHydrated(function ($component, $state, $record) {
-                            if (empty($state) && $record === null) { // Solo precargar si es un nuevo registro
+                            if (empty($state) && $record === null) {
                                 $user = auth()->user();
                                 $value = $user->profileDetails->contact_email ?? $user->email ?? null;
                                 $component->state($value);
@@ -342,20 +313,20 @@ class PropertyResource extends Resource
 
             Forms\Components\Section::make('Dirección de la Propiedad')
                 ->schema([
-                    Forms\Components\TextInput::make('full_address') // Campo para la dirección concatenada
+                    Forms\Components\TextInput::make('full_address')
                         ->label('Dirección Completa')
-                        ->disabled() // La dirección NO es editable
+                        ->disabled()
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->full_address ?? 'Sin dirección')
                         ->columnSpanFull(),
                     Forms\Components\TextInput::make('street')
                         ->label('Calle')
-                        ->disabled() // La dirección NO es editable
+                        ->disabled()
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->street ?? 'Sin calle'),
                     Forms\Components\TextInput::make('outdoor_number')
                         ->label('Número Exterior')
-                        ->disabled() // La dirección NO es editable
+                        ->disabled()
                         ->dehydrated(false)
                         ->formatStateUsing(function ($record) {
                             $address = $record->address;
@@ -367,7 +338,7 @@ class PropertyResource extends Resource
                         }),
                     Forms\Components\TextInput::make('interior_number')
                         ->label('Número Interior')
-                        ->disabled() // La dirección NO es editable
+                        ->disabled()
                         ->dehydrated(false)
                         ->formatStateUsing(function ($record) {
                             $address = $record->address;
@@ -379,22 +350,22 @@ class PropertyResource extends Resource
                         }),
                     Forms\Components\TextInput::make('neighborhood_name')
                         ->label('Colonia')
-                        ->disabled() // La dirección NO es editable
+                        ->disabled()
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->neighborhood_name ?? 'Sin colonia'),
                     Forms\Components\TextInput::make('municipality_name')
                         ->label('Municipio')
-                        ->disabled() // La dirección NO es editable
+                        ->disabled()
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->municipality_name ?? 'Sin municipio'),
                     Forms\Components\TextInput::make('state_name')
                         ->label('Estado')
-                        ->disabled() // La dirección NO es editable
+                        ->disabled()
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->state_name ?? 'Sin estado'),
                     Forms\Components\TextInput::make('postal_code')
                         ->label('Código Postal')
-                        ->disabled() // La dirección NO es editable
+                        ->disabled()
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->postal_code ?? 'Sin CP'),
 
@@ -403,13 +374,13 @@ class PropertyResource extends Resource
                         ->content(function ($record) {
                             $lat = $record->address->latitude ?? 19.4326;
                             $lng = $record->address->longitude ?? -99.1332;
-                            $apiKey = Config::get('services.google_maps.api_key');
+                            $apiKey = Config::get('services.Maps.api_key');
 
                             if (!$apiKey) {
                                 return new HtmlString('<p class="text-red-500">La clave de la API de Google Maps no está configurada.</p>');
                             }
 
-                            $mapId = 'map-' . uniqid(); // Generar un ID único para cada mapa
+                            $mapId = 'map-' . uniqid();
 
                             return new HtmlString("
                                 <div wire:ignore>
@@ -421,7 +392,6 @@ class PropertyResource extends Resource
                                         const lat = {$lat};
                                         const lng = {$lng};
                                         
-                                        // Crear namespace global para evitar conflictos
                                         if (!window.propertyMaps) {
                                             window.propertyMaps = {};
                                         }
@@ -433,14 +403,10 @@ class PropertyResource extends Resource
                                                 return;
                                             }
 
-                                            // Si ya existe un mapa para este elemento, destruirlo
                                             if (window.propertyMaps[mapId]) {
-                                                // No es necesario destruir explícitamente en Filament si el componente se re-renderiza
-                                                // pero podemos limpiar la referencia para evitar duplicados lógicos
                                                 window.propertyMaps[mapId] = null;
                                             }
                                             
-                                            // Limpiar contenido
                                             mapElement.innerHTML = '';
                                             
                                             if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
@@ -463,7 +429,6 @@ class PropertyResource extends Resource
 
                                             const map = new google.maps.Map(mapElement, mapOptions);
                                             
-                                            // Guardar referencia del mapa
                                             window.propertyMaps[mapId] = map;
 
                                             new google.maps.Marker({
@@ -487,7 +452,6 @@ class PropertyResource extends Resource
                                             if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
                                                 initMapInstance();
                                             } else {
-                                                // Verificar si el script ya se está cargando
                                                 if (!window.googleMapsLoading) {
                                                     window.googleMapsLoading = true;
                                                     
@@ -508,7 +472,6 @@ class PropertyResource extends Resource
                                                     
                                                     document.head.appendChild(script);
                                                 } else {
-                                                    // Si ya se está cargando, esperar y reintentar
                                                     setTimeout(function() {
                                                         loadGoogleMaps();
                                                     }, 500);
@@ -516,12 +479,10 @@ class PropertyResource extends Resource
                                             }
                                         }
                                         
-                                        // Inicializar con un pequeño delay para asegurar DOM ready
                                         setTimeout(function() {
                                             loadGoogleMaps();
                                         }, 100);
                                         
-                                        // Observer para reinicializar cuando el elemento sea visible
                                         if (typeof IntersectionObserver !== 'undefined') {
                                             const observer = new IntersectionObserver(function(entries) {
                                                 entries.forEach(function(entry) {
@@ -552,49 +513,8 @@ class PropertyResource extends Resource
             Forms\Components\Section::make('Especificaciones de la Propiedad')
                 ->schema([
                     Forms\Components\Tabs::make('Especificaciones')
-                        // ✅ Llamada al método helper que solo devuelve las pestañas de FEATURES
                         ->tabs(static::getFeatureSectionsTabs($propertyType, $record, $disabled))
                         ->columnSpanFull(),
-                ])
-                ->columnSpanFull(),
-
-            Forms\Components\Section::make('Imágenes de la Propiedad') // Directamente en la sección general
-                ->schema([
-                    Forms\Components\FileUpload::make('images')
-                        ->label('Imágenes')
-                        ->multiple()
-                        ->image()
-                        ->reorderable()
-                        ->panelLayout('grid')
-                        ->imageEditor()
-                        ->imageEditorAspectRatios([
-                            '16:9',
-                            '4:3',
-                            '1:1',
-                        ])
-                        ->acceptedFileTypes(['image/jpeg', 'image/jpg', 'image/png'])
-                        ->maxSize(10240)
-                        ->maxFiles(20)
-                        ->directory('properties')
-                        ->visibility('public')
-                        ->required()
-                        ->helperText('Sube hasta 20 imágenes. Máximo 10MB por archivo. Formatos: JPG, PNG. Puedes reordenar arrastrando las imágenes.')
-                        ->columnSpanFull()
-                        ->disabled($disabled)
-                        // CONFIGURACIÓN PARA EDICIÓN - Hidratar desde la relación images
-                        ->afterStateHydrated(function ($component, $state, $record) {
-                            if ($record && $record->exists && $record->relationLoaded('images')) {
-                                // Obtener las rutas de las imágenes existentes ordenadas por 'order'
-                                $imagePaths = $record->images()
-                                    ->orderBy('order')
-                                    ->pluck('path')
-                                    ->toArray();
-
-                                $component->state($imagePaths);
-                            }
-                        })
-                        // CONFIGURACIÓN PARA DESHIDRATACIÓN - Siempre permitir que se envíe
-                        ->dehydrated(true)
                 ])
                 ->columnSpanFull(),
         ];
@@ -602,14 +522,14 @@ class PropertyResource extends Resource
 
     public static function form(Form $form): Form
     {
-        // Determinar si estamos en la página de edición o creación
+
         $isEditing = $form->getOperation() === 'edit';
 
         if ($isEditing) {
-            // Si estamos editando, usamos el esquema de edición/revisión con campos habilitados
-            return $form->schema(static::getEditFormSchema($form, false)); // false = campos habilitados
+    
+            return $form->schema(static::getEditFormSchema($form, false)); 
         } else {
-            // Si estamos creando, usamos el Wizard original
+      
             return $form
                 ->schema([
                     Wizard::make([
@@ -628,21 +548,21 @@ class PropertyResource extends Resource
                             ])
                             ->columns(1)
                             ->afterValidation(function (Forms\Get $get, array $state) {
-                                // Lógica de validación para el paso de ubicación si es necesaria
+                             
                             }),
 
                         Forms\Components\Wizard\Step::make('Generales')
                             ->schema([
                                 Forms\Components\Placeholder::make('')
                                     ->content(new HtmlString('<h2 class="text-xl font-semibold text-gray-800 mb-4">¿Cuéntanos qué quieres publicar?</h2>')),
-                                // Nuevo campo para el Título de la Propiedad
+                       
                                 Forms\Components\TextInput::make('title')
                                     ->label('Título de la Propiedad')
                                     ->placeholder('Ej. Casa bonita de dos pisos con jardín')
                                     ->helperText('Ingresa un título corto y descriptivo para que las personas encuentren más fácil tu propiedad.')
                                     ->required()
                                     ->maxLength(40)
-                                    ->columnSpanFull(), // Ocupa todo el ancho
+                                    ->columnSpanFull(), 
                                 Radio::make('operation_type')
                                     ->label('Tipo de operación')
                                     ->options([
@@ -676,7 +596,7 @@ class PropertyResource extends Resource
                             ])
                             ->columns(1)
                             ->afterValidation(function (Forms\Get $get, array $state) {
-                                // Lógica de validación para el paso de generales si es necesaria
+                        
                             }),
 
                         Forms\Components\Wizard\Step::make('Especificaciones')
@@ -706,10 +626,10 @@ class PropertyResource extends Resource
                                     ];
                                 }
 
-                                // En el wizard de creación, el record es null, así que pasamos null
-                                $tabs = static::getFeatureSectionsTabs($propertyType, null, false); // Solo las pestañas de features
+                             
+                                $tabs = static::getFeatureSectionsTabs($propertyType, null, false);
 
-                                // Añadir las pestañas de Multimedia y Descripción al final
+                        
                                 $tabs[] = Forms\Components\Tabs\Tab::make('Multimedia')
                                     ->icon('heroicon-o-photo')
                                     ->schema([
@@ -743,7 +663,7 @@ class PropertyResource extends Resource
                                             ])
                                             ->columnSpanFull(),
                                     ])
-                                    ->columns(1); // Asegura que el contenido de la pestaña se organiza en 1 columna
+                                    ->columns(1); 
 
                                 $tabs[] = Forms\Components\Tabs\Tab::make('Descripción')
                                     ->icon('heroicon-o-document-text')
@@ -751,7 +671,7 @@ class PropertyResource extends Resource
                                         Forms\Components\Section::make('Describe tu propiedad')
                                             ->description('Agrega datos relevantes como: Acabados de la propiedad, Servicios adicionales, Reglamentos, Lugares cercanos como escuelas, hospitales, tiendas departamentales, Entretenimiento, etc.')
                                             ->schema([
-                                                Forms\Components\Textarea::make('description') // Cambiado a Textarea para descripciones largas
+                                                Forms\Components\Textarea::make('description') 
                                                     ->label('Descripción')
                                                     ->placeholder('Describe tu propiedad detalladamente...')
                                                     ->columnSpanFull()
@@ -759,7 +679,7 @@ class PropertyResource extends Resource
                                             ])
                                             ->columnSpanFull(),
                                     ])
-                                    ->columns(1); // Asegura que el contenido de la pestaña se organiza en 1 columna
+                                    ->columns(1);
 
                                 return [
                                     Forms\Components\Tabs::make('Especificaciones de la Propiedad')
@@ -769,11 +689,9 @@ class PropertyResource extends Resource
                             })
                             ->columns(1)
                             ->afterValidation(function (Forms\Get $get, array $state) {
-                                // Lógica de validación para el paso de especificaciones si es necesaria
+                             
                             }),
 
-                        // ELIMINADOS: Los pasos individuales de Multimedia y Descripción.
-                        // Ahora están dentro de las pestañas de 'Especificaciones' en el Wizard.
 
                         Forms\Components\Wizard\Step::make('Precio')
                             ->schema([
