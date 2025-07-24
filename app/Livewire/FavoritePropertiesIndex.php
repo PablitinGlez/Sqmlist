@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\On; // <--- ¡Asegúrate de importar este atributo!
+use Livewire\Attributes\On;
 
 class FavoritePropertiesIndex extends Component
 {
@@ -14,11 +14,8 @@ class FavoritePropertiesIndex extends Component
 
     public string $search = '';
 
-    /**
-     * Define los listeners de eventos.
-     * Cuando se despacha 'favorite-updated', se llama al método 'render' (recarga el componente).
-     */
-    #[On('favorite-updated')] // <--- ¡NUEVO! Escucha el evento 'favorite-updated'
+  
+    #[On('favorite-updated')] 
     public function render()
     {
         if (!Auth::check()) {

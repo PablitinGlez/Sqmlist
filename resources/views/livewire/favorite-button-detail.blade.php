@@ -1,5 +1,3 @@
-{{-- resources/views/livewire/favorite-button-detail.blade.php --}}
-
 <div x-data="{ isFavorited: @json($isFavorited), tooltip: false }" class="relative inline-block">
     <button
         class="inline-flex items-center px-2 py-1 sm:px-4 sm:py-2 rounded-full shadow-sm text-xs sm:text-sm font-medium bg-white transition-colors duration-200
@@ -17,13 +15,10 @@
             @mouseleave="tooltip = false"
         @endif
     >
-        {{-- Icono del corazón --}}
         <i class="mr-0 sm:mr-2" :class="{ 'fas fa-heart': isFavorited, 'far fa-heart': ! isFavorited }"></i>
-        {{-- Texto dinámico --}}
         <span class="hidden sm:inline" x-text="isFavorited ? 'Guardado' : 'Guardar'"></span>
     </button>
 
-    {{-- Tooltip (mensaje emergente) --}}
     <div x-show="tooltip"
         x-transition:enter="transition ease-out duration-200"
         x-transition:enter-start="opacity-0 scale-90"
@@ -31,10 +26,9 @@
         x-transition:leave="transition ease-in duration-100"
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-90"
-        {{-- Clases para centrar el tooltip en móviles --}}
         class="absolute top-12 z-30 px-3 py-1 text-xs text-white bg-gray-800 rounded-md shadow-lg whitespace-nowrap
-               left-1/2 -translate-x-1/2 {{-- Centra el tooltip respecto a su padre --}}
-               sm:left-1/2 sm:-translate-x-1/2 {{-- Mantiene centrado en sm y mayores --}}
+               left-1/2 -translate-x-1/2
+               sm:left-1/2 sm:-translate-x-1/2
                w-max max-w-[calc(100vw-2rem)] text-center
                "
         style="display: none;"

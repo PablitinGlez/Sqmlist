@@ -1,17 +1,11 @@
-{{-- resources/views/welcome.blade.php --}}
-{{--
-    Esta vista representa la página principal de la aplicación,
-    sirviendo como el punto de aterrizaje para los usuarios.
-    Organiza varias secciones del sitio mediante componentes Blade.
---}}
+
 <x-app-layout>
     <x-sections.hero></x-sections.hero>
     <x-sections.introduction></x-sections.introduction>
         <x-sections.steps-to-advertiser></x-sections.steps-to-advertiser>
     <x-sections.explore-cities></x-sections.explore-cities>
     <x-sections.featured-properties></x-sections.featured-properties>
-    {{-- <x-sections.statistics></x-sections.statistics> --}} {{-- ¡ELIMINADO! --}}
-    <x-sections.our-solutions></x-sections.our-solutions> {{-- <--- ¡NUEVO! --}}
+    <x-sections.our-solutions></x-sections.our-solutions>
     <x-sections.how-it-works></x-sections.how-it-works> 
     @livewire('featured-locations') 
 

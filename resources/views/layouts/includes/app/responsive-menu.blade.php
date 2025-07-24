@@ -1,21 +1,7 @@
-{{--
-|--------------------------------------------------------------------------
-| Responsive Menu Blade
-|--------------------------------------------------------------------------
-|
-| Este archivo Blade renderiza el menú de navegación completo para dispositivos
-| móviles, incluyendo los enlaces principales con soporte para dropdowns,
-| el botón dinámico "Publicar" / "Estado de Solicitud", y las opciones
-| de autenticación y perfil de usuario. Recibe todas las variables necesarias
-| del 'NavigationComposer'.
-|
---}}
 <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-    {{-- Enlaces de Navegación Responsive --}}
     <div class="pt-2 pb-3 space-y-1">
         @foreach ($navigationLinks as $item)
-            @if(isset($item['type']) && $item['type'] === 'dropdown') {{-- Usamos 'type' para identificar los dropdowns --}}
-                {{-- Elemento con Dropdown en Móvil (En Venta / En Renta) --}}
+            @if(isset($item['type']) && $item['type'] === 'dropdown')
                 <div x-data="{ mainDropdownOpen: false }" class="relative">
                     <button @click="mainDropdownOpen = !mainDropdownOpen"
                             class="flex items-center justify-between w-full ps-3 pe-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out"
@@ -41,7 +27,6 @@
                          class="bg-white/90 backdrop-blur-sm rounded-md ring-black ring-opacity-5 mx-4 mt-1"
                          x-cloak>
                         <div class="py-1">
-                            {{-- Modificación clave: Iterar sobre las categorías (states, property_types, bedrooms) --}}
                             @foreach($item['dropdown_items'] as $categoryName => $options)
                                 <div x-data="{ categoryOpen: false }" class="relative">
                                     <button @click="categoryOpen = !categoryOpen"
@@ -51,7 +36,7 @@
                                             @if($categoryName === 'states') Estados
                                             @elseif($categoryName === 'property_types') Tipo de propiedad
                                             @elseif($categoryName === 'bedrooms') Recámaras
-                                            @else {{ ucfirst(str_replace('_', ' ', $categoryName)) }} {{-- Fallback por si hay otras categorías --}}
+                                            @else {{ ucfirst(str_replace('_', ' ', $categoryName)) }}
                                             @endif
                                         </span>
                                         <svg class="ms-2 size-4 transition-transform duration-200"
@@ -79,14 +64,13 @@
                                             ]) }}"
                                                class="block text-xs text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors duration-150"
                                                wire:navigate
-                                               @click="mainDropdownOpen = false; open = false"> {{-- Cerrar ambos dropdowns y el menú principal --}}
+                                               @click="mainDropdownOpen = false; open = false">
                                                 {{ $categoryName === 'bedrooms' ? $option['label'] : $option->name }}
                                             </a>
                                         @endforeach
                                     </div>
                                 </div>
                             @endforeach
-                            {{-- Enlace principal "Ver todas las propiedades" --}}
                             <div class="px-4 py-2 border-t border-gray-100">
                                 <a href="{{ $item['route'] }}"
                                    class="block text-center text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors duration-150"
@@ -99,7 +83,6 @@
                     </div>
                 </div>
             @else
-                {{-- Elemento sin Dropdown en Móvil --}}
                 <a href="{{ $item['route'] }}"
                    :class="{
                         'text-white hover:text-gray-200 hover:bg-white/20 border-white/30': scrolled,
@@ -112,13 +95,11 @@
         @endforeach
     </div>
 
-    {{-- Sección de Botones de Autenticación y Perfil --}}
     <div :class="{
         'border-white/30': scrolled,
         'border-gray-200': !scrolled
     }" class="pt-4 pb-1 border-t">
 
-        {{-- Botón dinámico "Publicar" / "Estado de Solicitud" --}}
         @if ($shouldShowButton)
             <div class="px-4 mb-3">
                 <a href="{{ $buttonRoute }}"
@@ -169,11 +150,11 @@
 
                 @if($hasAdvertiserRole)
                     <a href="/dashboard" 
-                       :class="{
+                        :class="{
                             'text-white hover:text-gray-200 hover:bg-white/20 border-white/30': scrolled,
                             'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-transparent': !scrolled
-                       }"
-                       class="block ps-3 pe-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out">
+                        }"
+                        class="block ps-3 pe-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out">
                         Panel de Anunciante
                     </a>
                 @endif

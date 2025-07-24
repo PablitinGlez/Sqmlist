@@ -1,7 +1,3 @@
-{{--
-    Este componente Livewire muestra ubicaciones destacadas con pestañas
-    para filtrar por categorías de ciudades/estados y tipo de operación (venta/renta).
---}}
 <section class="py-8 md:py-16 bg-white">
     <x-partials.container>
         <div class="text-left mb-8 md:mb-12 md:text-center">
@@ -13,7 +9,6 @@
             </p>
         </div>
 
-        <!-- Pestañas de Navegación -->
         <div class="flex flex-wrap justify-start md:justify-center gap-2 md:gap-4 mb-8 border-b">
             @foreach ($locationsData as $key => $data)
                 <button
@@ -26,11 +21,9 @@
             @endforeach
         </div>
 
-        <!-- Contenido de las Pestañas -->
         <div class="p-4 rounded-lg">
             @if (isset($locationsData[$activeTab]))
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {{-- Sección de Venta --}}
                     <div>
                         <h3 class="text-lg md:text-2xl font-bold text-gray-800 mb-4">Venta</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -40,7 +33,6 @@
                                     <ul class="space-y-1">
                                         @foreach ($propertyTypes as $fullText)
                                             @php
-                                                // Extraer el tipo de propiedad (Casas o Departamentos)
                                                 preg_match('/(Casas|Departamentos)/', $fullText, $matches);
                                                 $propertyType = $matches[1] ?? '';
                                             @endphp
@@ -57,7 +49,6 @@
                         </div>
                     </div>
 
-                    {{-- Sección de Renta --}}
                     <div>
                         <h3 class="text-lg md:text-2xl font-bold text-gray-800 mb-4">Renta</h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -67,7 +58,6 @@
                                     <ul class="space-y-1">
                                         @foreach ($propertyTypes as $fullText)
                                             @php
-                                                // Extraer el tipo de propiedad (Casas o Departamentos)
                                                 preg_match('/(Casas|Departamentos)/', $fullText, $matches);
                                                 $propertyType = $matches[1] ?? '';
                                             @endphp

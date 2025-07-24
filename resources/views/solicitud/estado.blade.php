@@ -1,19 +1,15 @@
-{{--
-    Esta vista muestra el estado actual de la solicitud de perfil de un usuario.
-    Se adapta dinámicamente para mostrar mensajes y acciones según si la solicitud está
-    pendiente, aprobada o rechazada. También detalla la información enviada en la solicitud.
---}}
+
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-3xl mx-auto mt-16 sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 lg:p-8">
                     @php
-                        // Asegúrate de que UserApplication::TYPE_OPTIONS esté definido en tu modelo App\Models\UserApplication
+                     
                         $requestedUserTypeLabel = \App\Models\UserApplication::TYPE_OPTIONS[$userApplication->requested_user_type] ?? 'un perfil';
                     @endphp
 
-                    {{-- Mensajes de estado de la solicitud --}}
+                  
                     @if($userApplication->status === 'pending')
                         <div class="text-center">
                             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100">
@@ -82,7 +78,7 @@
                         </div>
                     @endif
 
-                    {{-- Sección de detalles de la solicitud --}}
+            
                     <div class="mt-8 border-t border-gray-200 pt-6">
                         <h4 class="text-sm font-medium text-gray-900 mb-4">Detalles de la Solicitud</h4>
                         <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-4">
@@ -109,7 +105,7 @@
                                 <dd class="mt-1 text-sm text-gray-900">{{ $requestedUserTypeLabel }}</dd>
                             </div>
 
-                            @if($userApplication->years_experience !== null) {{-- Usar !== null para incluir 0 años --}}
+                            @if($userApplication->years_experience !== null) 
                                 <div class="flex flex-col sm:flex-row sm:items-baseline sm:space-x-2">
                                     <dt class="text-sm font-medium text-gray-500 flex-shrink-0">Años de experiencia:</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $userApplication->years_experience }} año{{ $userApplication->years_experience != 1 ? 's' : '' }}</dd>
@@ -180,14 +176,14 @@
                                             <div class="flex items-center">
                                                 <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                                 <span class="text-sm font-medium text-gray-700">
-                                                    {{-- Muestra una etiqueta más genérica si no es específicamente una "licencia" --}}
+                                                  
                                                     {{ ($userApplication->requested_user_type === 'agent' || $userApplication->requested_user_type === 'real_estate_company') ? 'Licencia/Documento Profesional' : 'Documento de respaldo' }}
                                                 </span>
                                             </div>
                                             <a href="{{ Storage::url($userApplication->license_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Ver / Descargar</a>
                                         </div>
                                     @else
-                                        {{-- Solo mostrar este mensaje si el tipo de usuario *requiere* una licencia pero no se subió --}}
+                                        
                                         @php
                                             $requiresLicense = in_array($userApplication->requested_user_type, ['agent', 'real_estate_company']);
                                         @endphp

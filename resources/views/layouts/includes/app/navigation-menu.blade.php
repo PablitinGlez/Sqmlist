@@ -1,14 +1,4 @@
-{{--
-|--------------------------------------------------------------------------
-| Navigation Menu Blade
-|--------------------------------------------------------------------------
-|
-| Este archivo Blade renderiza la barra de navegación principal de la aplicación.
-| Toda la lógica PHP para los enlaces y el botón dinámico ahora se gestiona
-| a través del View Composer 'NavigationComposer' para una mejor separación
-| de responsabilidades.
-|
---}}
+
 <nav x-data="{
     open: false,
     scrolled: false

@@ -1,12 +1,4 @@
-{{--
-|--------------------------------------------------------------------------
-| Desktop Authentication Buttons Blade
-|--------------------------------------------------------------------------
-|
-| Componente adaptado para usar correctamente los roles de Spatie Permission
-| con verificaciones mejoradas de roles y permisos.
-|
---}}
+
 <div class="hidden sm:flex sm:items-center space-x-2 lg:space-x-4">
     @if ($shouldShowButton)
         <a href="{{ $buttonRoute }}"
@@ -22,8 +14,7 @@
         </a>
     @endguest
 
-    @auth
-        {{-- Componente de notificaciones --}}
+    @
         @livewire('notifications-dropdown')
 
         <div class="ms-1 md:ms-3 relative">
@@ -79,7 +70,7 @@
                         </div>
                     </x-dropdown-link>
 
-                    <!-- Sección de Paneles -->
+                
                     @if (Auth::user()->hasRole('admin'))
                         <div class="border-t border-gray-200"></div>
                         <x-dropdown-link href="{{ route('filament.admin.pages.dashboard') }}">
@@ -107,7 +98,7 @@
                         </x-dropdown-link>
                     @endif
 
-                    <!-- Cerrar sesión -->
+                  
                     <div class="border-t border-gray-200"></div>
                     <form method="POST" action="{{ route('logout') }}" x-data>
                         @csrf

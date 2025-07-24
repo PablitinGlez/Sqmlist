@@ -1,4 +1,3 @@
-
 @php
     $footerSections = [
         [
@@ -35,19 +34,16 @@
 
 <footer class="bg-white border-t border-gray-200 mt-16">
     <div class="mx-auto w-full max-w-screen-xl px-4 py-8 lg:py-12 relative">
-        <!-- Contenido principal del footer -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <!-- Logo, descripción y redes sociales -->
             <div class="text-center lg:text-left">
                 <div class="flex items-center justify-center lg:justify-start mb-4">
-                      <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-16 h-auto mr-3">
+                    <img src="{{ asset('images/logo.png') }}" alt="Logo" class="w-16 h-auto mr-3">
                     <span class="text-xl font-semibold text-gray-900">SQMLIST</span>
                 </div>
                 <p class="text-gray-600 text-sm leading-relaxed mb-6 max-w-md mx-auto lg:mx-0">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.
                 </p>
                 
-                <!-- Redes sociales -->
                 <div class="flex space-x-4 justify-center lg:justify-start">
                     @foreach($socialLinks as $social)
                         <a href="{{ $social['url'] }}" 
@@ -59,12 +55,8 @@
                 </div>
             </div>
 
-            <!-- Línea divisoria vertical (solo visible en desktop) -->
             <div class="hidden lg:block absolute left-[43%] top-1 w-px h-56 bg-gray-200 transform -translate-x-1/2"></div>
 
-
-
-            <!-- Secciones de enlaces -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center lg:text-left">
                 @foreach($footerSections as $section)
                     <div>
@@ -86,10 +78,8 @@
             </div>
         </div>
 
-        <!-- Línea divisoria -->
         <hr class="my-8 border-gray-200">
 
-       
         <div class="text-center">
             <p class="text-gray-500 text-sm">
                 Copyright © {{ date('Y') }}. Logoipsum. All rights reserved.

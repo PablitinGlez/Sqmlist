@@ -1,8 +1,8 @@
 <div class="py-12">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden  sm:rounded-lg p-6 lg:p-8">
+        <div class="bg-white overflow-hidden sm:rounded-lg p-6 lg:p-8">
             <h1 class="text-2xl font-semibold text-gray-900 mb-6 text-center">
-               Mis Propiedades Favoritas
+                Mis Propiedades Favoritas
             </h1>
 
             @auth
@@ -26,7 +26,6 @@
                         </a>
                     </div>
                 @else
-                    {{-- Opcional: Barra de búsqueda si deseas filtrar favoritos --}}
                     <div class="mb-6">
                         <input
                             type="text"
@@ -47,7 +46,6 @@
                     </div>
                 @endif
             @else
-                {{-- Mensaje para usuarios no autenticados --}}
                 <div class="flex flex-col items-center justify-center py-12 px-4 text-center">
                     <i class="fas fa-lock text-gray-400 text-6xl mb-6"></i>
                     <p class="mt-6 text-xl font-semibold text-gray-700">
