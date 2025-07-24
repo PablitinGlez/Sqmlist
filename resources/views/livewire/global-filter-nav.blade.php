@@ -1,4 +1,4 @@
-<div class="flex flex-wrap items-center justify-start gap-3 p-3 rounded-lg mt-32 max-w-7xl mx-auto px-8">
+<div class="flex flex-wrap items-center justify-start gap-3 p-3 rounded-lg mt-16 max-w-7xl mx-auto px-8">
     <div class="relative w-full md:w-1/3 lg:w-1/4">
         <input
             type="text"
@@ -100,6 +100,7 @@
         </div>
     </div>
 
+    <!-- FILTRO DE PRECIOS CON VALIDACIÓN DE LONGITUD -->
     <div x-data="{ open: false }" @click.outside="open = false" class="relative w-full sm:w-auto">
         <button
             @click="open = !open"
@@ -111,57 +112,53 @@
 
         <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:enter-start="transform opacity-0 scale-95" x-transition:enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute z-10 mt-2 w-60 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-3" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" wire:cloak>
             <h5 class="text-sm font-semibold mb-2">Rango de Precio</h5>
-           <div class="flex items-center gap-2 mb-3">
-    <div class="relative w-1/2">
-        <input
-            type="number"
-            wire:model.lazy="minPrice"
-            wire:ignore.self
-            placeholder="MXN $ Mínimo"
-            class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
-            min="0"
-            x-data="{ value: @entangle('minPrice').defer }"
-            x-model="value"
-            @input.debounce.1000ms="$wire.set('minPrice', $event.target.value)"
-        >
-        @if($minPrice !== null)
-            <button
-                type="button"
-                wire:click="clearField('minPrice')"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        @endif
-    </div>
-    <span class="text-gray-500 text-xs">-</span>
-    <div class="relative w-1/2">
-        <input
-            type="number"
-            wire:model.lazy="maxPrice"
-            wire:ignore.self
-            placeholder="MXN $ Máximo"
-            class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
-            min="0"
-            x-data="{ value: @entangle('maxPrice').defer }"
-            x-model="value"
-            @input.debounce.1000ms="$wire.set('maxPrice', $event.target.value)"
-        >
-        @if($maxPrice !== null)
-            <button
-                type="button"
-                wire:click="clearField('maxPrice')"
-                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        @endif
-    </div>
-</div>
+            <div class="flex items-center gap-2 mb-3">
+                <div class="relative w-1/2">
+                    <input
+                        type="number"
+                        wire:model.blur="minPrice"
+                        placeholder="MXN $ Mínimo"
+                        class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
+                        min="0"
+                        maxlength="12"
+                        oninput="if(this.value.length > 12) this.value = this.value.slice(0, 12);"
+                    >
+                    @if($minPrice !== null)
+                        <button
+                            type="button"
+                            wire:click="clearField('minPrice')"
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    @endif
+                </div>
+                <span class="text-gray-500 text-xs">-</span>
+                <div class="relative w-1/2">
+                    <input
+                        type="number"
+                        wire:model.blur="maxPrice"
+                        placeholder="MXN $ Máximo"
+                        class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
+                        min="0"
+                        maxlength="12"
+                        oninput="if(this.value.length > 12) this.value = this.value.slice(0, 12);"
+                    >
+                    @if($maxPrice !== null)
+                        <button
+                            type="button"
+                            wire:click="clearField('maxPrice')"
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    @endif
+                </div>
+            </div>
         </div>
     </div>
 
@@ -239,21 +236,20 @@
                     $hasSuperficieConstruida = $filteredFeatures->contains('slug', 'tamano_construccion_m2');
                 @endphp
                 @if ($hasSuperficieConstruida || !$selectedPropertyTypeSlug)
+                   
                     <div class="mb-3">
                         <label class="block text-xs font-semibold text-gray-700 mb-1">Superficie Construida</label>
                         <div class="flex items-center gap-1.5">
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.lazy="minSuperficieConstruida"
-                                    wire:ignore.self
+                                    wire:model.blur="minSuperficieConstruida"
                                     placeholder="Desde"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
                                     step="1"
-                                    x-data="{ value: @entangle('minSuperficieConstruida').defer }"
-                                    x-model="value"
-                                    @input.debounce.1000ms="$wire.set('minSuperficieConstruida', $event.target.value)"
+                                    maxlength="8"
+                                    oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                                 @if($minSuperficieConstruida !== null)
                                     <button
@@ -271,15 +267,13 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.lazy="maxSuperficieConstruida"
-                                    wire:ignore.self
+                                    wire:model.blur="maxSuperficieConstruida"
                                     placeholder="Hasta"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
                                     step="1"
-                                    x-data="{ value: @entangle('maxSuperficieConstruida').defer }"
-                                    x-model="value"
-                                    @input.debounce.1000ms="$wire.set('maxSuperficieConstruida', $event.target.value)"
+                                    maxlength="8"
+                                    oninput="if(this.value.length > 8) this.value = this.value.slice(0, 8);"
                                 >
                                 @if($maxSuperficieConstruida !== null)
                                     <button
@@ -302,21 +296,20 @@
                     $hasSuperficieTerreno = $filteredFeatures->contains('slug', 'tamano_terreno_m2');
                 @endphp
                 @if ($hasSuperficieTerreno || !$selectedPropertyTypeSlug)
+               
                     <div class="mb-3">
                         <label class="block text-xs font-semibold text-gray-700 mb-1">Superficie de Terreno</label>
                         <div class="flex items-center gap-1.5">
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.lazy="minSuperficieTerreno"
-                                    wire:ignore.self
+                                    wire:model.blur="minSuperficieTerreno"
                                     placeholder="Desde"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
                                     step="1"
-                                    x-data="{ value: @entangle('minSuperficieTerreno').defer }"
-                                    x-model="value"
-                                    @input.debounce.1000ms="$wire.set('minSuperficieTerreno', $event.target.value)"
+                                    maxlength="10"
+                                    oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);"
                                 >
                                 @if($minSuperficieTerreno !== null)
                                     <button
@@ -334,15 +327,13 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.lazy="maxSuperficieTerreno"
-                                    wire:ignore.self
+                                    wire:model.blur="maxSuperficieTerreno"
                                     placeholder="Hasta"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
                                     step="1"
-                                    x-data="{ value: @entangle('maxSuperficieTerreno').defer }"
-                                    x-model="value"
-                                    @input.debounce.1000ms="$wire.set('maxSuperficieTerreno', $event.target.value)"
+                                    maxlength="10"
+                                    oninput="if(this.value.length > 10) this.value = this.value.slice(0, 10);"
                                 >
                                 @if($maxSuperficieTerreno !== null)
                                     <button

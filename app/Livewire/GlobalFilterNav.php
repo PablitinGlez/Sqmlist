@@ -192,8 +192,8 @@ class GlobalFilterNav extends Component
 
         if ($slug && $slug !== '') {
             $trimmedSlug = strtolower(trim($slug));
-            $propertyType = $this->propertyTypes->first(fn($type) => strtolower(trim($type->slug)) === $trimmedSlug);
-
+            $propertyType = $this->propertyTypes->first(fn ($type) => strtolower(trim($type->slug)) === $trimmedSlug);
+            
             if ($propertyType) {
                 $this->propertyTypeDisplayName = $propertyType->name;
             } else {
@@ -307,29 +307,37 @@ class GlobalFilterNav extends Component
         return $numericValue;
     }
 
-    public function clearField(string $field): void
-    {
-        switch ($field) {
-            case 'minSuperficieConstruida':
-                $this->minSuperficieConstruida = null;
-                break;
-            case 'maxSuperficieConstruida':
-                $this->maxSuperficieConstruida = null;
-                break;
-            case 'minSuperficieTerreno':
-                $this->minSuperficieTerreno = null;
-                break;
-            case 'maxSuperficieTerreno':
-                $this->maxSuperficieTerreno = null;
-                break;
-            case 'locationSearch':
-                $this->locationSearch = '';
-                $this->locationSuggestions = [];
-                $this->showLocationSuggestions = false;
-                break;
-        }
-        $this->emitFilters();
+  public function clearField(string $field): void
+{
+    switch ($field) {
+        case 'minPrice':
+            $this->minPrice = null;
+            $this->updatePriceDisplay();
+            break;
+        case 'maxPrice':
+            $this->maxPrice = null;
+            $this->updatePriceDisplay();
+            break;
+        case 'minSuperficieConstruida':
+            $this->minSuperficieConstruida = null;
+            break;
+        case 'maxSuperficieConstruida':
+            $this->maxSuperficieConstruida = null;
+            break;
+        case 'minSuperficieTerreno':
+            $this->minSuperficieTerreno = null;
+            break;
+        case 'maxSuperficieTerreno':
+            $this->maxSuperficieTerreno = null;
+            break;
+        case 'locationSearch':
+            $this->locationSearch = '';
+            $this->locationSuggestions = [];
+            $this->showLocationSuggestions = false;
+            break;
     }
+    $this->emitFilters();
+}
 
     private function initializeFeatureOptions(): void
     {
@@ -391,7 +399,7 @@ class GlobalFilterNav extends Component
                 return $pivot ? $pivot->order_for_type : 999;
             });
         }
-
+        
         foreach ($featuresToConsider as $feature) {
             if (isset($oldFilters[$feature->slug])) {
                 $this->filters[$feature->slug] = $oldFilters[$feature->slug];
@@ -408,7 +416,7 @@ class GlobalFilterNav extends Component
             } elseif ($feature->slug === 'num_estacionamientos' && !isset($oldFilters[$feature->slug])) {
                 $this->filters[$feature->slug] = 'Todos';
             }
-
+            
             if ($feature->featureSection && $feature->featureSection->slug === 'amenidades') {
                 $this->amenityFeatures->push($feature);
             }
@@ -428,41 +436,30 @@ class GlobalFilterNav extends Component
             $operationTypeToEmit = 'rent';
         }
 
+        // Preparar features limpias
+        $cleanedFeatures = [];
+        foreach ($this->filters as $featureSlug => $featureValue) {
+            if (is_bool($featureValue)) {
+                $cleanedFeatures[$featureSlug] = $featureValue;
+            } elseif ($featureValue !== null && $featureValue !== '' && $featureValue !== 'Todos') {
+                $cleanedFeatures[$featureSlug] = $featureValue;
+            }
+        }
+
         $allFilters = [
-            'locationSearch' => $this->locationSearch,
+            'locationSearch' => $this->locationSearch ?: '',
             'operation_type' => $operationTypeToEmit,
-            'property_type_slug' => $this->selectedPropertyTypeSlug,
+            'property_type_slug' => $this->selectedPropertyTypeSlug ?: null,
             'minPrice' => $this->minPrice,
             'maxPrice' => $this->maxPrice,
-            'features' => $this->filters,
+            'features' => $cleanedFeatures,
             'minSuperficieConstruida' => $this->minSuperficieConstruida,
             'maxSuperficieConstruida' => $this->maxSuperficieConstruida,
             'minSuperficieTerreno' => $this->minSuperficieTerreno,
             'maxSuperficieTerreno' => $this->maxSuperficieTerreno,
         ];
 
-        $cleanedFilters = [];
-        foreach ($allFilters as $key => $value) {
-            if ($key === 'features') {
-                $cleanedFeatures = [];
-                foreach ($value as $featureSlug => $featureValue) {
-                    if (is_bool($featureValue)) {
-                        $cleanedFeatures[$featureSlug] = $featureValue;
-                    } elseif ($featureValue !== null && $featureValue !== '' && $featureValue !== 'Todos') {
-                        $cleanedFeatures[$featureSlug] = $featureValue;
-                    }
-                }
-                if (!empty($cleanedFeatures)) {
-                    $cleanedFilters[$key] = $cleanedFeatures;
-                }
-            } elseif ($key === 'locationSearch') {
-                $cleanedFilters[$key] = $value;
-            } elseif ($value !== null && $value !== '' && (!is_array($value) || !empty($value))) {
-                $cleanedFilters[$key] = $value;
-            }
-        }
-
-        $this->dispatch('globalFiltersUpdated', $cleanedFilters);
+        $this->dispatch('globalFiltersUpdated', $allFilters);
     }
 
     public function render()

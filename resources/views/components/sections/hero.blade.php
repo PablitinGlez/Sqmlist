@@ -48,25 +48,27 @@
         <div class="absolute inset-0 bg-black/30"></div>
     </div>
 
-    <div id="hero-content" class="relative z-10 w-full opacity-0 transition-opacity duration-500">
-        <x-partials.container>
-            <div class="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-start md:text-center sm:text-center shadow-2xl">
-                <div class="relative max-w-2xl mx-auto">
-                    <h1 id="hero-title"
-                    class="text-xl sm:text md:text-2xl lg:text-2xl font-semibold text-white mb-8 leading-tight"
-                    data-original-text="Conecta con tu nuevo hogar en solo unos clics">
-                    Conecta con tu nuevo hogar en solo unos clics
-                    </h1>
-                </div>
 
-                @livewire('hero-search', [
-                    'initialLocationSearch' => request('ubicacion'),
-                    'initialPropertyType' => request('tipo'),
-                    'initialOperationType' => request('operacion')
-                ])
+<div id="hero-content" class="relative z-10 w-full opacity-0">
+    <x-partials.container>
+        <div class="backdrop-blur-sm bg-white/5 border border-white/10 rounded-2xl p-8 md:p-12 max-w-4xl mx-auto text-start md:text-center sm:text-center shadow-2xl">
+            <div class="relative max-w-2xl mx-auto">
+                <h1 id="hero-title"
+                class="text-xl sm:text md:text-2xl lg:text-2xl font-semibold text-white mb-8 leading-tight"
+                data-original-text="Conecta con tu nuevo hogar en solo unos clics"
+                style="opacity: 0;">
+                Conecta con tu nuevo hogar en solo unos clics
+                </h1>
             </div>
-        </x-partials.container>
-    </div>
+
+            @livewire('hero-search', [
+                'initialLocationSearch' => request('ubicacion'),
+                'initialPropertyType' => request('tipo'),
+                'initialOperationType' => request('operacion')
+            ])
+        </div>
+    </x-partials.container>
+</div>
 
     <div id="scroll-icon" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10 opacity-0 transition-opacity duration-500">
         <div class="animate-bounce">
@@ -116,3 +118,27 @@
         hideHeroSkeleton();
     });
 </script>
+
+
+<style>
+    
+.typing-cursor::after {
+    content: '|';
+    color: white;
+    font-weight: normal;
+    animation: cursor-blink 1s infinite;
+    margin-left: 2px;
+}
+
+@keyframes cursor-blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0;
+    }
+}
+
+
+
+</style>

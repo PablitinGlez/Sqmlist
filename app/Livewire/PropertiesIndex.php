@@ -53,16 +53,45 @@ class PropertiesIndex extends Component
     {
         $this->isLoading = true;
 
-        $this->locationSearch = $filters['locationSearch'] ?? $this->locationSearch;
-        $this->operationType = $filters['operation_type'] ?? $this->operationType;
-        $this->propertyTypeSlug = $filters['property_type_slug'] ?? $this->propertyTypeSlug;
-        $this->minPrice = $filters['minPrice'] ?? $this->minPrice;
-        $this->maxPrice = $filters['maxPrice'] ?? $this->maxPrice;
-        $this->features = $filters['features'] ?? $this->features;
-        $this->minSuperficieConstruida = $filters['minSuperficieConstruida'] ?? $this->minSuperficieConstruida;
-        $this->maxSuperficieConstruida = $filters['maxSuperficieConstruida'] ?? $this->maxSuperficieConstruida;
-        $this->minSuperficieTerreno = $filters['minSuperficieTerreno'] ?? $this->minSuperficieTerreno;
-        $this->maxSuperficieTerreno = $filters['maxSuperficieTerreno'] ?? $this->maxSuperficieTerreno;
+        $this->locationSearch = array_key_exists('locationSearch', $filters)
+            ? $filters['locationSearch']
+            : $this->locationSearch;
+
+        $this->operationType = array_key_exists('operation_type', $filters)
+            ? $filters['operation_type']
+            : $this->operationType;
+
+        $this->propertyTypeSlug = array_key_exists('property_type_slug', $filters)
+            ? $filters['property_type_slug']
+            : $this->propertyTypeSlug;
+
+        $this->minPrice = array_key_exists('minPrice', $filters)
+            ? $filters['minPrice']
+            : $this->minPrice;
+
+        $this->maxPrice = array_key_exists('maxPrice', $filters)
+            ? $filters['maxPrice']
+            : $this->maxPrice;
+
+        $this->features = array_key_exists('features', $filters)
+            ? $filters['features']
+            : $this->features;
+
+        $this->minSuperficieConstruida = array_key_exists('minSuperficieConstruida', $filters)
+            ? $filters['minSuperficieConstruida']
+            : $this->minSuperficieConstruida;
+
+        $this->maxSuperficieConstruida = array_key_exists('maxSuperficieConstruida', $filters)
+            ? $filters['maxSuperficieConstruida']
+            : $this->maxSuperficieConstruida;
+
+        $this->minSuperficieTerreno = array_key_exists('minSuperficieTerreno', $filters)
+            ? $filters['minSuperficieTerreno']
+            : $this->minSuperficieTerreno;
+
+        $this->maxSuperficieTerreno = array_key_exists('maxSuperficieTerreno', $filters)
+            ? $filters['maxSuperficieTerreno']
+            : $this->maxSuperficieTerreno;
 
         $this->loadProperties();
     }
