@@ -116,7 +116,7 @@
                 <div class="relative w-1/2">
                     <input
                         type="number"
-                        wire:model.blur="minPrice"
+                        wire:model.live.debounce.1000ms="minPrice"
                         placeholder="MXN $ Mínimo"
                         class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                         min="0"
@@ -139,7 +139,7 @@
                 <div class="relative w-1/2">
                     <input
                         type="number"
-                        wire:model.blur="maxPrice"
+                        wire:model.live.debounce.1000ms="maxPrice"
                         placeholder="MXN $ Máximo"
                         class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                         min="0"
@@ -243,7 +243,7 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.blur="minSuperficieConstruida"
+                                    wire:model.live.debounce.1000ms="minSuperficieConstruida"
                                     placeholder="Desde"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
@@ -267,7 +267,7 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.blur="maxSuperficieConstruida"
+                                    wire:model.live.debounce.1000ms="maxSuperficieConstruida"
                                     placeholder="Hasta"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
@@ -303,7 +303,7 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.blur="minSuperficieTerreno"
+                                    wire:model.live.debounce.1000ms="minSuperficieTerreno"
                                     placeholder="Desde"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
@@ -327,7 +327,7 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.blur="maxSuperficieTerreno"
+                                    wire:model.live.debounce.1000ms="maxSuperficieTerreno"
                                     placeholder="Hasta"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
