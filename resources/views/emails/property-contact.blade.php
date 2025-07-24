@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuevo Mensaje de Contacto para tu Propiedad</title>
     <style>
-        /* Estilos básicos para compatibilidad con correos */
+        
         body {
             font-family: Arial, sans-serif;
             line-height: 1.6;
@@ -24,7 +24,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background-color: #0056b3; /* Color primario de tu marca */
+            background-color: #0056b3; 
             color: #ffffff;
             padding: 20px;
             text-align: center;
@@ -36,7 +36,7 @@
         }
         .button {
             display: inline-block;
-            background-color: #007bff; /* Color del botón */
+            background-color: #007bff; 
             color: #ffffff;
             padding: 10px 20px;
             text-decoration: none;

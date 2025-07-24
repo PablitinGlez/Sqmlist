@@ -1,8 +1,6 @@
-{{-- resources/views/components/timeline-section.blade.php --}}
 <section class="timeline-section bg-gray-50 py-20 min-h-screen flex items-center">
     <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto">
-            <!-- Título de la sección -->
             <div class="text-center mb-16">
                 <h2 class="text-4xl font-bold text-gray-800 mb-4">
                     Pasos para Convertirse en Agente
@@ -12,17 +10,12 @@
                 </p>
             </div>
             
-            <!-- Línea de tiempo -->
             <div class="relative">
-                <!-- Línea principal (estática) -->
                 <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gray-300 h-full timeline-line-bg"></div>
                 
-                <!-- Línea de progreso (animada) -->
                 <div class="absolute left-1/2 transform -translate-x-1/2 w-1 bg-blue-500 timeline-line"></div>
                 
-                <!-- Elementos de la línea de tiempo -->
                 <div class="space-y-16">
-                    <!-- Paso 1 -->
                     <div class="timeline-item relative flex items-center">
                         <div class="w-1/2 pr-8 text-right">
                             <div class="bg-white p-6 rounded-lg shadow-md">
@@ -36,7 +29,6 @@
                         <div class="w-1/2 pl-8"></div>
                     </div>
                     
-                    <!-- Paso 2 -->
                     <div class="timeline-item relative flex items-center">
                         <div class="w-1/2 pr-8"></div>
                         <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
@@ -50,7 +42,6 @@
                         </div>
                     </div>
                     
-                    <!-- Paso 3 -->
                     <div class="timeline-item relative flex items-center">
                         <div class="w-1/2 pr-8 text-right">
                             <div class="bg-white p-6 rounded-lg shadow-md">
@@ -64,7 +55,6 @@
                         <div class="w-1/2 pl-8"></div>
                     </div>
                     
-                    <!-- Paso 4 -->
                     <div class="timeline-item relative flex items-center">
                         <div class="w-1/2 pr-8"></div>
                         <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
@@ -78,7 +68,6 @@
                         </div>
                     </div>
                     
-                    <!-- Paso 5 -->
                     <div class="timeline-item relative flex items-center">
                         <div class="w-1/2 pr-8 text-right">
                             <div class="bg-white p-6 rounded-lg shadow-md">
@@ -111,7 +100,6 @@
     z-index: 3;
 }
 
-/* Responsive para dispositivos móviles */
 @media (max-width: 768px) {
     .timeline-item {
         flex-direction: column;

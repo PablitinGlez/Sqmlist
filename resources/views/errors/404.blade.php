@@ -1,7 +1,4 @@
-{{--
-    Esta vista muestra una página de error 404 personalizada,
-    ofreciendo opciones de navegación para que el usuario regrese al sitio.
---}}
+
 <x-app-layout>
     <div class="min-h-screen flex items-center justify-center py-16">
         <div class="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,13 +22,10 @@
                         En Inmobiliaria no encontramos esta página, pero sí tu próximo hogar.
                     </p>
 
-                    {{-- La barra de búsqueda ha sido eliminada de aquí --}}
-                    {{-- <div class="mb-8 max-w-lg mx-auto lg:mx-0">
-                        @livewire('hero-search')
-                    </div> --}}
+                  
 
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                        {{-- Enlaces directos a la página de propiedades con filtro de operación --}}
+                     
                         <a href="{{ route('properties.index', ['operacion' => 'sale']) }}" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center" 
                             wire:navigate>
                             <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-2">
@@ -48,7 +42,7 @@
                             <span class="text-sm text-gray-700">En Renta</span>
                         </a>
 
-                        {{-- Estos enlaces puedes ajustarlos según necesites, por ahora son placeholders --}}
+                     
                         <a href="{{ route('properties.index') }}" class="bg-white p-4 rounded-lg shadow-sm border hover:shadow-md transition-shadow text-center flex flex-col items-center" wire:navigate>
                             <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-2">
                                 <i class="fa-solid fa-fire w-5 h-5 text-purple-600"></i>

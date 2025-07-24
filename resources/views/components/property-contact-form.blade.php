@@ -1,9 +1,7 @@
-{{-- Vista optimizada para modal --}}
 <div>
     <h3 class="text-xl font-bold text-gray-800 mb-2 text-center">Contacta con el Anunciante</h3>
     <p class="text-gray-600 mb-6 text-center text-sm">Envía tus datos</p>
 
-    {{-- Mostrar mensajes de éxito o error de Livewire --}}
     @if (session()->has('success'))
         <div class="mb-4 font-medium text-sm text-green-600 bg-green-50 p-3 rounded-md">
             {{ session('success') }}
@@ -16,15 +14,12 @@
         </div>
     @endif
 
-    {{-- Mostrar errores de validación de Livewire --}}
     @error('name') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
     @error('email') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
     @error('phone') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
     @error('message') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
 
-    {{-- Formulario de Contacto --}}
     <form wire:submit.prevent="submitForm" class="space-y-4">
-        {{-- Campos de Nombre y Teléfono en la misma fila --}}
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
                 <input
@@ -47,7 +42,6 @@
             </div>
         </div>
 
-        {{-- Campo de Correo Electrónico --}}
         <div>
             <input
                 id="email"
@@ -59,7 +53,6 @@
             />
         </div>
 
-        {{-- Campo de Mensaje --}}
         <div>
             <textarea
                 id="message"
@@ -71,7 +64,6 @@
             ></textarea>
         </div>
 
-        {{-- Botón de Enviar Mensaje / Mostrar Teléfono --}}
         <div class="flex justify-center mt-6">
             <button
                 type="submit"
@@ -98,7 +90,6 @@
         </div>
     </form>
 
-    {{-- Botón WhatsApp (siempre visible y funcional) --}}
     @if($propertyWhatsappNumber)
         <div class="mt-4">
             <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $propertyWhatsappNumber) }}?text=Hola,%20me%20interesa%20la%20propiedad:%20{{ urlencode($property->title ?? 'esta propiedad') }}%20-%20{{ urlencode(route('properties.show', $property->slug ?? '#')) }}"
