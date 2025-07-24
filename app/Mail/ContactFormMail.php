@@ -10,10 +10,6 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-/**
- * Envía un correo electrónico al administrador con los detalles de un nuevo mensaje de contacto
- * recibido a través del formulario de la aplicación. Se envía de forma asíncrona.
- */
 class ContactFormMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;

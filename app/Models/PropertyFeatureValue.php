@@ -11,62 +11,31 @@ class PropertyFeatureValue extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'property_id',
         'feature_id',
         'value',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
 
-    // --- Relaciones ---
-
-    /**
-     * Un valor de característica pertenece a una propiedad.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class);
     }
 
-    /**
-     * Un valor de característica pertenece a una definición de característica.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function feature(): BelongsTo
     {
         return $this->belongsTo(Feature::class);
     }
 
-    // --- Accessors ---
-
-    /**
-     * Obtiene el valor casteado según el tipo de dato definido en la característica.
-     * Esto es crucial para trabajar con los valores dinámicos en Filament.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute
-     */
     protected function castedValue(): Attribute
     {
         return Attribute::make(
             get: function ($value, $attributes) {
-                // Asegurarse de que la relación 'feature' esté cargada
                 if (!isset($this->feature)) {
                     $this->load('feature');
                 }
@@ -87,16 +56,12 @@ class PropertyFeatureValue extends Model
                         return is_numeric($rawValue) ? (float) $rawValue : null;
 
                     case 'boolean':
-                        // ✅ CORREGIDO: Manejo simple para checkboxes booleanos
                         if ($inputType === 'checkbox') {
-                            // Convertir directamente a boolean
-                            // Los valores pueden ser: 1, '1', true, 'true', 0, '0', false, 'false', null
                             if (is_null($rawValue) || $rawValue === '' || $rawValue === '0' || $rawValue === 0 || $rawValue === false) {
                                 return false;
                             }
                             return (bool) $rawValue;
                         }
-                        // Para otros input_types booleanos
                         return (bool) $rawValue;
 
                     case 'array':

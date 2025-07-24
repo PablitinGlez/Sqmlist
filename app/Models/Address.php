@@ -10,19 +10,13 @@ class Address extends Model
 {
     use HasFactory;
 
-    /**
-     * Los atributos que son asignables masivamente.
-     * 'additional_references' ha sido eliminado.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'property_id',
         'street',
         'outdoor_number',
         'interior_number',
-        'no_external_number', // ¡Añade este!
-        'no_interior_number', // ¡Añade este!
+        'no_external_number',
+        'no_interior_number',
         'postal_code',
         'state_name',
         'municipality_name',
@@ -33,89 +27,58 @@ class Address extends Model
         'google_address_components',
     ];
 
-    /**
-     * Los atributos que deben ser casteados.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'latitude' => 'decimal:7',
         'longitude' => 'decimal:7',
         'google_address_components' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
-        'no_external_number' => 'boolean', // ¡Añade este!
-        'no_interior_number' => 'boolean',  // ¡Añade este!
+        'no_external_number' => 'boolean',
+        'no_interior_number' => 'boolean',
     ];
 
-    /**
-     * The "booted" method of the model.
-     * Este método se ejecuta una vez cuando el modelo es cargado.
-     * Aquí registramos los "observadores" de eventos.
-     */
     protected static function boot()
     {
         parent::boot();
 
-        // Cuando una dirección es CREADA o ACTUALIZADA,
-        // le decimos a la propiedad asociada que regenere su slug.
         static::saved(function (Address $address) {
-            // Asegurarse de que la propiedad existe y que la relación está cargada
-            // antes de intentar regenerar el slug.
             if ($address->property) {
-                $address->property->regenerateSlug(); // <-- Llamará al nuevo método en Property
+                $address->property->regenerateSlug();
             }
         });
     }
 
-    // --- Relaciones ---
-
-    /**
-     * Una dirección pertenece a una propiedad.
-     * (Relación uno a uno)
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
     public function property(): BelongsTo
     {
         return $this->belongsTo(Property::class);
     }
 
-    // --- Accessors / Mutators ---
-
-    /**
-     * Obtiene la dirección completa formateada.
-     *
-     * @return string
-     */
     public function getFullAddressAttribute(): string
     {
         $addressParts = [];
 
-        // Añadir calle y números
         if ($this->street) {
             $streetPart = $this->street;
             if ($this->outdoor_number && !$this->no_external_number) {
                 $streetPart .= " #{$this->outdoor_number}";
             } elseif ($this->no_external_number) {
-                $streetPart .= " S/N"; // Si no hay número exterior y se marca como "sin número"
+                $streetPart .= " S/N";
             }
             if ($this->interior_number && !$this->no_interior_number) {
                 $streetPart .= ", Int. {$this->interior_number}";
             } elseif ($this->no_interior_number) {
-                $streetPart .= ", Int. S/N"; // Si no hay número interior y se marca como "sin número"
+                $streetPart .= ", Int. S/N";
             }
             $addressParts[] = $streetPart;
         }
 
-        // Añadir colonia, código postal, municipio y estado
         if ($this->neighborhood_name) {
             $neighborhoodPart = "Col. {$this->neighborhood_name}";
             if ($this->postal_code) {
                 $neighborhoodPart .= " C.P. {$this->postal_code}";
             }
             $addressParts[] = $neighborhoodPart;
-        } elseif ($this->postal_code) { // Si no hay colonia pero sí CP
+        } elseif ($this->postal_code) {
             $addressParts[] = "C.P. {$this->postal_code}";
         }
 
@@ -126,7 +89,6 @@ class Address extends Model
             $addressParts[] = $this->state_name;
         }
 
-        // Filtrar partes vacías y unirlas con comas
         return implode(', ', array_filter($addressParts));
     }
 }

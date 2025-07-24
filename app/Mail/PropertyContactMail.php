@@ -20,9 +20,6 @@ class PropertyContactMail extends Mailable
     public $userMessage;
     public $property;
 
-    /**
-     * Create a new message instance.
-     */
     public function __construct(string $name, string $email, ?string $phone, string $userMessage, Property $property)
     {
         $this->name = $name;
@@ -32,9 +29,6 @@ class PropertyContactMail extends Mailable
         $this->property = $property;
     }
 
-    /**
-     * Get the message envelope.
-     */
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -45,13 +39,9 @@ class PropertyContactMail extends Mailable
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
     public function content(): Content
     {
         return new Content(
-            // ¡CAMBIO AQUÍ! Usamos 'view' en lugar de 'markdown'
             view: 'emails.property-contact',
             with: [
                 'propertyName' => $this->property->title,
@@ -64,11 +54,6 @@ class PropertyContactMail extends Mailable
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
     public function attachments(): array
     {
         return [];

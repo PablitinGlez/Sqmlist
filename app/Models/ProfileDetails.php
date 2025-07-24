@@ -12,7 +12,7 @@ class ProfileDetails extends Model
 
     protected $fillable = [
         'user_id',
-        'user_application_id', 
+        'user_application_id',
         'phone_number',
         'whatsapp_number',
         'contact_email',
@@ -26,9 +26,6 @@ class ProfileDetails extends Model
         'approved_at',
     ];
 
-    /**
-     * Estados disponibles
-     */
     public const STATUS_ACTIVE = 'active';
     public const STATUS_INACTIVE = 'inactive';
     public const STATUS_PENDING = 'pending';
@@ -39,9 +36,6 @@ class ProfileDetails extends Model
         self::STATUS_PENDING => 'Pendiente',
     ];
 
-    /**
-     * Relaciones
-     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -52,17 +46,11 @@ class ProfileDetails extends Model
         return $this->belongsTo(UserApplication::class, 'user_application_id');
     }
 
-    /**
-     * Accesor para el estado legible
-     */
     public function getStatusHumanReadableAttribute(): string
     {
         return self::STATUS_OPTIONS[$this->status] ?? 'Desconocido';
     }
 
-    /**
-     * Accesor para obtener el tipo de perfil (basado en rol Spatie)
-     */
     public function getBusinessTypeAttribute(): ?string
     {
         if (!$this->user) return null;
@@ -75,9 +63,6 @@ class ProfileDetails extends Model
         };
     }
 
-    /**
-     * Scopes
-     */
     public function scopeActive($query)
     {
         return $query->where('status', self::STATUS_ACTIVE);
@@ -88,9 +73,6 @@ class ProfileDetails extends Model
         return $query->where('status', self::STATUS_INACTIVE);
     }
 
-    /**
-     * Métodos de negocio
-     */
     public function activate(): void
     {
         $this->update([

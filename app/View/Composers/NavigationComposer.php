@@ -5,14 +5,13 @@ namespace App\View\Composers;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserApplication;
-use App\Models\State; // Importamos el modelo State
-use App\Models\PropertyType; // Importamos el modelo PropertyType
+use App\Models\State;
+use App\Models\PropertyType;
 
 class NavigationComposer
 {
     public function compose(View $view): void
     {
-        // Cargar los estados más populares (limitamos a 8)
         $popularStates = State::whereIn('name', [
             'Ciudad de México',
             'Edo. de México',
@@ -24,7 +23,6 @@ class NavigationComposer
             'Jalisco'
         ])->orderBy('name')->get();
 
-        // Cargar los tipos de propiedad más populares (limitamos a 8)
         $popularPropertyTypes = PropertyType::whereIn('name', [
             'Casa',
             'Departamento',
@@ -36,7 +34,6 @@ class NavigationComposer
             'Edificio'
         ])->orderBy('name')->get();
 
-        // Opciones estáticas para recámaras
         $bedroomOptions = [
             ['value' => '1', 'label' => '1 recámara'],
             ['value' => '2', 'label' => '2 recámaras'],
@@ -46,7 +43,6 @@ class NavigationComposer
         ];
 
         $navigationLinks = [
-            // --- Dropdown para "En Venta" ---
             [
                 'name' => 'En venta',
                 'route' => route('properties.index', ['operacion' => 'sale']),
@@ -59,7 +55,6 @@ class NavigationComposer
                     'bedrooms' => $bedroomOptions
                 ]
             ],
-            // --- Dropdown para "En Renta" ---
             [
                 'name' => 'En renta',
                 'route' => route('properties.index', ['operacion' => 'rent']),
@@ -86,7 +81,6 @@ class NavigationComposer
             ],
         ];
 
-        // Lógica del botón de publicación (se mantiene igual)
         $buttonConfig = $this->getButtonConfig();
 
         $view->with([

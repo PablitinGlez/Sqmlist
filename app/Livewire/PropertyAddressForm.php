@@ -9,37 +9,30 @@ use Livewire\Attributes\On;
 
 class PropertyAddressForm extends Component
 {
-    // Input principal de búsqueda
     public ?string $searchAddress = '';
 
-    // Campos de dirección detallados
     public ?string $street = null;
     public ?string $outdoor_number = null;
     public ?bool $no_external_number = false;
     public ?string $interior_number = null;
     public ?string $postal_code = null;
 
-    // Nombres directos (como strings)
     public ?string $state_name = null;
     public ?string $municipality_name = null;
     public ?string $neighborhood_name = null;
 
-    // Coordenadas y datos de Google
     public ?float $latitude = null;
     public ?float $longitude = null;
     public ?string $google_place_id = null;
     public ?array $google_address_components = null;
 
-    // Configuración - Make this public so it's accessible in the view
     public ?string $googleMapsApiKey = null;
 
-    // Sugerencias de autocompletado
     public array $suggestions = [];
     public bool $showSuggestions = false;
 
-    // Estado del formulario
     public bool $showDetailedFields = false;
-    public string $addressLevel = 'none'; // none, state, municipality, neighborhood, street
+    public string $addressLevel = 'none';
 
     public function mount(array $initialData = []): void
     {
@@ -134,23 +127,18 @@ class PropertyAddressForm extends Component
 
     private function processPlaceData(array $place): void
     {
-        // Resetear campos
         $this->resetAddressFields();
 
-        // Asignar coordenadas y datos de Google
         $this->latitude = $place['geometry']['location']['lat'] ?? null;
         $this->longitude = $place['geometry']['location']['lng'] ?? null;
         $this->google_place_id = $place['place_id'] ?? null;
         $this->google_address_components = $place['address_components'] ?? [];
 
-        // Procesar componentes de dirección
         $this->processAddressComponents($place['address_components'] ?? []);
 
-        // Determinar nivel de dirección y mostrar campos
         $this->determineAddressLevel();
         $this->showDetailedFields = true;
 
-        // Formatear el campo de búsqueda principal
         $this->formatSearchAddress();
 
         $this->emitAddressUpdate();
@@ -162,33 +150,21 @@ class PropertyAddressForm extends Component
             $types = $component['types'];
             $longName = $component['long_name'];
 
-            // Número de calle
             if (in_array('street_number', $types)) {
                 $this->outdoor_number = $longName;
-            }
-            // Nombre de calle
-            elseif (in_array('route', $types)) {
+            } elseif (in_array('route', $types)) {
                 $this->street = $longName;
-            }
-            // Código postal
-            elseif (in_array('postal_code', $types)) {
+            } elseif (in_array('postal_code', $types)) {
                 $this->postal_code = $longName;
-            }
-            // Estado
-            elseif (in_array('administrative_area_level_1', $types)) {
+            } elseif (in_array('administrative_area_level_1', $types)) {
                 $this->state_name = $longName;
-            }
-            // Municipio/Ciudad
-            elseif (in_array('locality', $types) || in_array('administrative_area_level_2', $types)) {
+            } elseif (in_array('locality', $types) || in_array('administrative_area_level_2', $types)) {
                 $this->municipality_name = $longName;
-            }
-            // Colonia/Barrio
-            elseif (in_array('sublocality_level_1', $types) || in_array('sublocality', $types) || in_array('neighborhood', $types)) {
+            } elseif (in_array('sublocality_level_1', $types) || in_array('sublocality', $types) || in_array('neighborhood', $types)) {
                 $this->neighborhood_name = $longName;
             }
         }
 
-        // Si no hay número exterior, marcar como sin número
         if (empty($this->outdoor_number)) {
             $this->no_external_number = true;
         }
@@ -252,7 +228,6 @@ class PropertyAddressForm extends Component
         $this->showSuggestions = false;
     }
 
-    // Métodos para actualizar campos individuales
     public function updatedStreet(): void
     {
         $this->emitAddressUpdate();
@@ -311,7 +286,6 @@ class PropertyAddressForm extends Component
 
     public function render()
     {
-        // Remove the array parameter - Livewire will automatically make public properties available
         return view('livewire.property-address-form');
     }
 }

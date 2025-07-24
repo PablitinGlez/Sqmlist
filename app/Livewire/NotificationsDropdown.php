@@ -6,10 +6,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Notifications\DatabaseNotification;
 
-/**
- * Gestiona el menú desplegable de notificaciones del usuario,
- * mostrando notificaciones leídas y no leídas, y permitiendo su gestión.
- */
+
 class NotificationsDropdown extends Component
 {
     public $unreadNotifications;

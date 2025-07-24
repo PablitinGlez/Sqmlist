@@ -10,10 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-/**
- * Envía un correo electrónico de confirmación al usuario que ha enviado un mensaje de contacto,
- * asegurando que se realice de forma asíncrona mediante la cola.
- */
+
 class ContactConfirmationMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;

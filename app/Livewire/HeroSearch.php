@@ -9,7 +9,7 @@ use App\Models\Municipality;
 use App\Models\Colonia;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Url;
-use Illuminate\Support\Facades\Log; // Importar la fachada Log
+use Illuminate\Support\Facades\Log;
 
 class HeroSearch extends Component
 {
@@ -25,7 +25,7 @@ class HeroSearch extends Component
     {
         $this->locationSearch = $initialLocationSearch ?? '';
         $this->selectedPropertyType = $initialPropertyType ?? null;
-        $this->operationType = $initialOperationType ?? 'sale'; // 'sale' será el valor por defecto
+        $this->operationType = $initialOperationType ?? 'sale';
 
         $popularSlugs = [
             'casa',
@@ -36,8 +36,8 @@ class HeroSearch extends Component
             'bodega-industrial',
         ];
         $this->propertyTypes = PropertyType::whereIn('slug', $popularSlugs)
-                                           ->orderByRaw("FIELD(slug, '" . implode("','", $popularSlugs) . "')")
-                                           ->get();
+            ->orderByRaw("FIELD(slug, '" . implode("','", $popularSlugs) . "')")
+            ->get();
     }
 
     public function updatedLocationSearch(): void
@@ -58,9 +58,9 @@ class HeroSearch extends Component
         $suggestions = collect();
 
         $colonias = Colonia::where('name', 'like', '%' . $searchTerm . '%')
-                           ->with('municipality.state')
-                           ->limit(5)
-                           ->get();
+            ->with('municipality.state')
+            ->limit(5)
+            ->get();
         foreach ($colonias as $colonia) {
             $fullAddress = [];
             if ($colonia->name) $fullAddress[] = $colonia->name;
@@ -71,9 +71,9 @@ class HeroSearch extends Component
         }
 
         $municipalities = Municipality::where('name', 'like', '%' . $searchTerm . '%')
-                                     ->with('state')
-                                     ->limit(5 - $suggestions->count())
-                                     ->get();
+            ->with('state')
+            ->limit(5 - $suggestions->count())
+            ->get();
         foreach ($municipalities as $municipality) {
             $fullAddress = [];
             if ($municipality->name) $fullAddress[] = $municipality->name;
@@ -82,8 +82,8 @@ class HeroSearch extends Component
         }
 
         $states = State::where('name', 'like', '%' . $searchTerm . '%')
-                       ->limit(5 - $suggestions->count())
-                       ->get();
+            ->limit(5 - $suggestions->count())
+            ->get();
         foreach ($states as $state) {
             $suggestions->push($state->name);
         }
@@ -104,21 +104,14 @@ class HeroSearch extends Component
         $this->operationType = $type;
     }
 
-    /**
-     * Redirige a la página de propiedades con los filtros aplicados.
-     * Se llama cuando se envía el formulario.
-     */
     public function searchProperties(): void
     {
-        // --- INICIO DE DEPURACIÓN ---
         Log::info('HeroSearch: searchProperties called.', [
             'operationType' => $this->operationType,
             'selectedPropertyType' => $this->selectedPropertyType,
             'locationSearch' => $this->locationSearch,
         ]);
-        // --- FIN DE DEPURACIÓN ---
 
-        // Validar que los tres campos obligatorios estén completos
         if (empty($this->operationType)) {
             $this->dispatch('notify', ['message' => 'Por favor, selecciona un tipo de operación (En Venta o En Renta).', 'type' => 'error']);
             Log::warning('HeroSearch: Validation failed - operationType is empty.');
@@ -137,7 +130,6 @@ class HeroSearch extends Component
             return;
         }
 
-        // Si todos los campos están completos, construir los parámetros y redirigir
         $params = [
             'operacion' => $this->operationType,
             'tipo' => $this->selectedPropertyType,

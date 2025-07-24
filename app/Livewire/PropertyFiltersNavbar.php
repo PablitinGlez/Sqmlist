@@ -6,31 +6,25 @@ use Livewire\Component;
 
 class PropertyFiltersNavbar extends Component
 {
-    // Variables para la barra de búsqueda (paso anterior)
     public $searchQuery = '';
 
-    // Variables para el dropdown de Tipo de Operación
     public $operationTypes = [
-        'sale' => false, // Venta
-        'rent' => false  // Renta
+        'sale' => false,
+        'rent' => false
     ];
-    public $selectedOperationLabel = 'Tipo de Operación'; // Título del dropdown
+    public $selectedOperationLabel = 'Tipo de Operación';
 
-    // Método para actualizar las selecciones
     public function updateOperationType($type)
     {
-        // Forzar al menos una selección
         if (!$this->operationTypes['sale'] && !$this->operationTypes['rent']) {
-            $this->operationTypes[$type] = true; // Activar la primera selección
+            $this->operationTypes[$type] = true;
         } else {
-            $this->operationTypes[$type] = !$this->operationTypes[$type]; // Toggle
+            $this->operationTypes[$type] = !$this->operationTypes[$type];
         }
 
-        // Actualizar el título del dropdown
         $this->updateOperationLabel();
     }
 
-    // Método para definir el título del dropdown
     private function updateOperationLabel()
     {
         if ($this->operationTypes['sale'] && $this->operationTypes['rent']) {
@@ -40,7 +34,7 @@ class PropertyFiltersNavbar extends Component
         } elseif ($this->operationTypes['rent']) {
             $this->selectedOperationLabel = 'Renta';
         } else {
-            $this->selectedOperationLabel = 'Tipo de Operación'; // Caso por defecto
+            $this->selectedOperationLabel = 'Tipo de Operación';
         }
     }
 

@@ -10,9 +10,6 @@ use Illuminate\Support\Str;
 
 class PropertyTypeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $residencialCategory = Category::where('name', 'Residencial')->first();
@@ -24,40 +21,37 @@ class PropertyTypeSeeder extends Seeder
             return;
         }
 
-        $propertyTypesData = [ // Renombrado a $propertyTypesData para evitar confusión con la variable de arriba
-            // Tipos para categoría Residencial
+        $propertyTypesData = [
             [
                 'name' => 'Departamento',
                 'description' => 'Unidad de vivienda en un edificio de apartamentos.',
                 'category_id' => $residencialCategory->id,
-                'order' => 10, // <-- AÑADIDO
+                'order' => 10,
             ],
             [
                 'name' => 'Casa',
                 'description' => 'Vivienda unifamiliar independiente.',
                 'category_id' => $residencialCategory->id,
-                'order' => 20, // <-- AÑADIDO
+                'order' => 20,
             ],
             [
                 'name' => 'Terreno habitacional',
                 'description' => 'Terreno apto para la construcción de viviendas.',
                 'category_id' => $residencialCategory->id,
-                'order' => 30, // <-- AÑADIDO
+                'order' => 30,
             ],
             [
                 'name' => 'Casa en condominio',
                 'description' => 'Vivienda dentro de un conjunto residencial con áreas comunes.',
                 'category_id' => $residencialCategory->id,
-                'order' => 40, // <-- AÑADIDO
+                'order' => 40,
             ],
             [
                 'name' => 'Rancho residencial',
                 'description' => 'Propiedad extensa con características rurales y comodidades residenciales.',
                 'category_id' => $residencialCategory->id,
-                'order' => 50, // <-- AÑADIDO
+                'order' => 50,
             ],
-            // ... (continúa con tus otros tipos de propiedad para Comercial e Industrial)
-            // Asegúrate de añadir 'order' a *todos* los tipos
             [
                 'name' => 'Oficina',
                 'description' => 'Espacio destinado para actividades de oficina.',
@@ -110,13 +104,13 @@ class PropertyTypeSeeder extends Seeder
 
         foreach ($propertyTypesData as $typeData) {
             PropertyType::firstOrCreate(
-                ['slug' => Str::slug($typeData['name'])], // Busca por slug para evitar duplicados
+                ['slug' => Str::slug($typeData['name'])],
                 [
                     'name' => $typeData['name'],
                     'description' => $typeData['description'],
                     'category_id' => $typeData['category_id'],
-                    'is_active' => true, // Puedes establecer un valor predeterminado si no lo tienes en tus datos
-                    'order' => $typeData['order'] ?? null, // Asegúrate de asignar el orden, si no existe, será nulo
+                    'is_active' => true,
+                    'order' => $typeData['order'] ?? null,
                 ]
             );
         }

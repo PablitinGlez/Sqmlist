@@ -14,7 +14,7 @@ class PropertiesIndex extends Component
     #[Url(as: 'ubicacion', except: '')]
     public ?string $locationSearch = '';
 
-    #[Url(as: 'operacion', except: '')] // Cambiado de 'except: null' a 'except: '' '
+    #[Url(as: 'operacion', except: '')]
     public ?string $operationType = null;
 
     #[Url(as: 'tipo', except: '')]
@@ -42,7 +42,7 @@ class PropertiesIndex extends Component
     public ?float $maxSuperficieTerreno = null;
 
     public Collection $properties;
-    public bool $isLoading = true; // Nueva propiedad para manejar el estado de carga
+    public bool $isLoading = true;
 
     public function mount(): void
     {
@@ -53,9 +53,8 @@ class PropertiesIndex extends Component
     public function updateFilters(array $filters): void
     {
         Log::debug('PropertiesIndex: updateFilters llamado. Filtros recibidos:', $filters);
-        // Activar loading antes de actualizar filtros
         $this->isLoading = true;
-        
+
         if (isset($filters['locationSearch'])) {
             $this->locationSearch = $filters['locationSearch'];
         }
@@ -103,17 +102,12 @@ class PropertiesIndex extends Component
         $this->loadProperties();
     }
 
-    /**
-     * Carga las propiedades de la base de datos aplicando todos los filtros activos.
-     * Esta es la lógica central de búsqueda.
-     */
     public function loadProperties(): void
     {
         Log::debug('PropertiesIndex: Iniciando loadProperties.');
         $this->isLoading = true;
         Log::debug('PropertiesIndex: isLoading = true.');
 
-        // LOG: Mostrar los filtros que se usarán para la consulta
         Log::debug('PropertiesIndex: Filtros actuales para la consulta:', [
             'locationSearch' => $this->locationSearch,
             'operationType' => $this->operationType,
@@ -129,30 +123,25 @@ class PropertiesIndex extends Component
 
         $query = Property::query()->published();
 
-        // Aplicar filtro de ubicación
         if (!empty($this->locationSearch)) {
             $searchTerm = '%' . $this->locationSearch . '%';
             $query->whereHas('address', function ($q) use ($searchTerm) {
                 $q->where('street', 'like', $searchTerm)
-                  ->orWhere('neighborhood_name', 'like', $searchTerm)
-                  ->orWhere('municipality_name', 'like', $searchTerm)
-                  ->orWhere('state_name', 'like', $searchTerm)
-                  ->orWhere('postal_code', 'like', $searchTerm);
+                    ->orWhere('neighborhood_name', 'like', $searchTerm)
+                    ->orWhere('municipality_name', 'like', $searchTerm)
+                    ->orWhere('state_name', 'like', $searchTerm)
+                    ->orWhere('postal_code', 'like', $searchTerm);
             });
             Log::debug('PropertiesIndex: Filtro de ubicación aplicado.', ['searchTerm' => $this->locationSearch]);
         }
 
-        // Aplicar filtro de tipo de operación
         if ($this->operationType === 'sale' || $this->operationType === 'rent') {
             $query->where('operation_type', $this->operationType);
             Log::debug('PropertiesIndex: Filtro de operación aplicado.', ['operationType' => $this->operationType]);
         } elseif ($this->operationType === 'all' || is_null($this->operationType)) {
-            // Cuando es 'all' o null, no se añade el filtro de operation_type
             Log::debug('PropertiesIndex: Filtro de operación NO aplicado (mostrando Venta y Renta).', ['operationType' => $this->operationType]);
         }
 
-
-        // Aplicar filtro de tipo de propiedad
         if ($this->propertyTypeSlug) {
             $query->whereHas('propertyType', function ($q) {
                 $q->where('slug', $this->propertyTypeSlug);
@@ -160,7 +149,6 @@ class PropertiesIndex extends Component
             Log::debug('PropertiesIndex: Filtro de tipo de propiedad aplicado.', ['propertyTypeSlug' => $this->propertyTypeSlug]);
         }
 
-        // Aplicar filtro de rango de precios
         if ($this->minPrice !== null) {
             $query->where('price', '>=', $this->minPrice);
             Log::debug('PropertiesIndex: Filtro de precio mínimo aplicado.', ['minPrice' => $this->minPrice]);
@@ -170,7 +158,6 @@ class PropertiesIndex extends Component
             Log::debug('PropertiesIndex: Filtro de precio máximo aplicado.', ['maxPrice' => $this->maxPrice]);
         }
 
-        // Aplicar filtros de características dinámicas
         foreach ($this->features as $featureSlug => $featureValue) {
             if ($featureValue !== null && $featureValue !== '' && $featureValue !== 'Todos') {
                 $query->whereHas('featureValues.feature', function ($q) use ($featureSlug, $featureValue) {
@@ -191,49 +178,45 @@ class PropertiesIndex extends Component
             }
         }
 
-        // Aplicar filtros de superficie construida
         if ($this->minSuperficieConstruida !== null) {
             $query->whereHas('featureValues.feature', function ($q) {
                 $q->where('slug', 'tamano_construccion_m2')
-                  ->whereRaw('CAST(value AS DECIMAL(10,2)) >= ?', [$this->minSuperficieConstruida]);
+                    ->whereRaw('CAST(value AS DECIMAL(10,2)) >= ?', [$this->minSuperficieConstruida]);
             });
             Log::debug('PropertiesIndex: Filtro de superficie construida mínima aplicado.', ['minSuperficieConstruida' => $this->minSuperficieConstruida]);
         }
         if ($this->maxSuperficieConstruida !== null) {
             $query->whereHas('featureValues.feature', function ($q) {
                 $q->where('slug', 'tamano_construccion_m2')
-                  ->whereRaw('CAST(value AS DECIMAL(10,2)) <= ?', [$this->maxSuperficieConstruida]);
+                    ->whereRaw('CAST(value AS DECIMAL(10,2)) <= ?', [$this->maxSuperficieConstruida]);
             });
             Log::debug('PropertiesIndex: Filtro de superficie construida máxima aplicado.', ['maxSuperficieConstruida' => $this->maxSuperficieConstruida]);
         }
 
-        // Aplicar filtros de superficie de terreno
         if ($this->minSuperficieTerreno !== null) {
             $query->whereHas('featureValues.feature', function ($q) {
                 $q->where('slug', 'tamano_terreno_m2')
-                  ->whereRaw('CAST(value AS DECIMAL(10,2)) >= ?', [$this->minSuperficieTerreno]);
+                    ->whereRaw('CAST(value AS DECIMAL(10,2)) >= ?', [$this->minSuperficieTerreno]);
             });
             Log::debug('PropertiesIndex: Filtro de superficie terreno mínima aplicado.', ['minSuperficieTerreno' => $this->minSuperficieTerreno]);
         }
         if ($this->maxSuperficieTerreno !== null) {
             $query->whereHas('featureValues.feature', function ($q) {
                 $q->where('slug', 'tamano_terreno_m2')
-                  ->whereRaw('CAST(value AS DECIMAL(10,2)) <= ?', [$this->maxSuperficieTerreno]);
+                    ->whereRaw('CAST(value AS DECIMAL(10,2)) <= ?', [$this->maxSuperficieTerreno]);
             });
             Log::debug('PropertiesIndex: Filtro de superficie terreno máxima aplicado.', ['maxSuperficieTerreno' => $this->maxSuperficieTerreno]);
         }
 
         $this->properties = $query->with([
-            'images' => fn ($q) => $q->orderBy('order', 'asc'),
+            'images' => fn($q) => $q->orderBy('order', 'asc'),
             'propertyType',
             'address',
             'featureValues.feature'
         ])->get();
 
-        // LOG: Mostrar el número de propiedades obtenidas
         Log::debug('PropertiesIndex: Propiedades obtenidas.', ['count' => $this->properties->count()]);
 
-        // LOG: Mostrar el tipo de operación de las primeras 5 propiedades (si las hay)
         if ($this->properties->isNotEmpty()) {
             $sampleOperations = $this->properties->take(5)->pluck('operation_type')->toArray();
             Log::debug('PropertiesIndex: Tipos de operación de muestra (primeras 5 propiedades):', $sampleOperations);

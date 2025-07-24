@@ -20,7 +20,6 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
     use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable, HasRoles;
 
-    // --- Constantes para el estado del usuario ---
     public const STATUS_ACTIVE = 'active';
     public const STATUS_INACTIVE = 'inactive';
 
@@ -37,7 +36,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         'external_id',
         'external_auth',
         'email_verified_at',
-        'status', // ¡NUEVO! Añadir la columna 'status' aquí
+        'status',
     ];
 
     protected $hidden = [
@@ -61,8 +60,6 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // Por ahora, solo nos aseguramos de que el usuario tenga el rol 'admin' para el panel 'admin'.
-        // La lógica para deshabilitar el acceso a usuarios inactivos se añadirá en un paso posterior.
         if ($panel->getId() === 'admin') {
             return $this->hasRole('admin');
         }
@@ -70,7 +67,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         if ($panel->getId() === 'advertiser') {
             return $this->hasAnyRole(['owner', 'agent', 'real_estate_company']);
         }
-        
+
         return false;
     }
 
@@ -175,38 +172,23 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         };
     }
 
-    // --- NUEVAS RELACIONES PARA EL ANUNCIANTE ---
-
-    /**
-     * Un usuario puede tener muchas propiedades.
-     * Esta relación es clave para obtener las propiedades de un anunciante.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function properties(): HasMany
     {
         return $this->hasMany(Property::class);
     }
 
-    /**
-     * Un usuario puede tener muchos mensajes de contacto, a través de sus propiedades.
-     * Esta relación es perfecta para el panel del anunciante.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
-     */
     public function propertyContacts(): HasManyThrough
     {
         return $this->hasManyThrough(
-            PropertyContact::class, // El modelo final que queremos obtener
-            Property::class,        // El modelo intermedio (a través del cual llegamos a PropertyContact)
-            'user_id',              // La clave foránea en la tabla `properties` que apunta a `users`
-            'property_id',          // La clave foránea en la tabla `property_contacts` que apunta a `properties`
-            'id',                   // La clave local en la tabla `users` (id del usuario)
-            'id'                    // La clave local en la tabla `properties` (id de la propiedad)
+            PropertyContact::class,
+            Property::class,
+            'user_id',
+            'property_id',
+            'id',
+            'id'
         );
     }
 
-    // --- Métodos auxiliares para el estado del usuario ---
     public function isActive(): bool
     {
         return $this->status === self::STATUS_ACTIVE;
@@ -222,9 +204,6 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         return $this->belongsToMany(Property::class, 'user_favorite_properties', 'user_id', 'property_id')->withTimestamps();
     }
 
-    /**
-     * Verifica si el usuario ha marcado una propiedad específica como favorita.
-     */
     public function hasFavorited(Property $property): bool
     {
         return $this->favoriteProperties()->where('property_id', $property->id)->exists();

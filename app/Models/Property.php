@@ -16,7 +16,6 @@ class Property extends Model
 {
     use HasFactory, SoftDeletes, Notifiable, HasSlug;
 
-    // --- Constantes de Estado de Propiedad ---
     public const STATUS_DRAFT = 'draft';
     public const STATUS_PENDING_REVIEW = 'pending_review';
     public const STATUS_PUBLISHED = 'published';
@@ -25,11 +24,6 @@ class Property extends Model
     public const STATUS_SOLD = 'sold';
     public const STATUS_RENTED = 'rented';
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'user_id',
         'property_type_id',
@@ -49,11 +43,6 @@ class Property extends Model
         'contact_email',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'price' => 'decimal:2',
         'draft_expires_at' => 'datetime',
@@ -64,16 +53,10 @@ class Property extends Model
         'updated_at' => 'datetime',
     ];
 
-    /**
-     * Get the options for generating the slug.
-     * Este método es requerido por el trait HasSlug de Spatie.
-     */
     public function getSlugOptions(): SlugOptions
     {
-        // Asegurarse de que la relación 'address' esté cargada si no lo está.
         $this->loadMissing('address', 'propertyType');
 
-        // Traducir el tipo de operación a español para el slug
         $operationName = match ($this->operation_type) {
             'sale' => 'venta',
             'rent' => 'renta',
@@ -81,10 +64,8 @@ class Property extends Model
             default => 'operacion'
         };
 
-        // Obtener el nombre del tipo de propiedad
         $propertyTypeName = $this->propertyType->name ?? 'propiedad';
 
-        // Recolectar las partes de la dirección
         $addressParts = [];
         if ($this->address) {
             if (!empty($this->address->neighborhood_name)) {
@@ -98,7 +79,6 @@ class Property extends Model
             }
         }
 
-        // Combinar todas las partes para formar la cadena base del slug
         $slugComponents = array_filter([
             $propertyTypeName,
             'en',
@@ -107,7 +87,6 @@ class Property extends Model
             ...$addressParts
         ]);
 
-        // Unir todas las partes con guiones
         $fullSlugString = implode('-', $slugComponents);
 
         return SlugOptions::create()
@@ -116,29 +95,18 @@ class Property extends Model
             ->doNotGenerateSlugsOnUpdate(false);
     }
 
-    /**
-     * Forzar la regeneración del slug de la propiedad.
-     * Este método es llamado desde el modelo Address cuando la dirección es guardada/actualizada.
-     */
     public function regenerateSlug(): void
     {
-        // Cargar las relaciones necesarias
         $this->loadMissing('address', 'propertyType');
 
-        // Generar nuevo slug y guardarlo
         $this->slug = $this->generateSlug();
         $this->save();
     }
 
-    /**
-     * Método auxiliar para generar el slug manualmente
-     */
     private function generateSlug(): string
     {
-        // Asegurar que las relaciones estén cargadas
         $this->loadMissing('address', 'propertyType');
 
-        // Traducir el tipo de operación a español para el slug
         $operationName = match ($this->operation_type) {
             'sale' => 'venta',
             'rent' => 'renta',
@@ -146,10 +114,8 @@ class Property extends Model
             default => 'operacion'
         };
 
-        // Obtener el nombre del tipo de propiedad
         $propertyTypeName = $this->propertyType->name ?? 'propiedad';
 
-        // Recolectar las partes de la dirección
         $addressParts = [];
         if ($this->address) {
             if (!empty($this->address->neighborhood_name)) {
@@ -163,7 +129,6 @@ class Property extends Model
             }
         }
 
-        // Combinar todas las partes
         $slugComponents = array_filter([
             $propertyTypeName,
             'en',
@@ -172,13 +137,10 @@ class Property extends Model
             ...$addressParts
         ]);
 
-        // Crear el slug base
         $baseSlug = implode('-', $slugComponents);
 
-        // Convertir a slug válido (minúsculas, sin acentos, solo guiones y letras)
         $slug = \Illuminate\Support\Str::slug($baseSlug);
 
-        // Asegurar que sea único
         $originalSlug = $slug;
         $counter = 1;
 
@@ -189,8 +151,6 @@ class Property extends Model
 
         return $slug;
     }
-
-    // --- Relaciones ---
 
     public function user(): BelongsTo
     {
@@ -222,8 +182,6 @@ class Property extends Model
         return $this->hasMany(PropertyFeatureValue::class);
     }
 
-    // --- Scopes ---
-
     public function scopePublished($query)
     {
         return $query->where('status', 'published');
@@ -250,8 +208,6 @@ class Property extends Model
                 ->orWhere('postal_code', 'like', "%{$search}%"));
     }
 
-    // --- Métodos auxiliares ---
-
     public function getFeatureValue(string $featureSlug)
     {
         if (!$this->relationLoaded('featureValues')) {
@@ -274,7 +230,7 @@ class Property extends Model
         $this->images()->delete();
         foreach ($imagePaths as $index => $path) {
             $this->images()->create([
-                'path' => $path,
+                'path' => $patha,
                 'order' => $index + 1,
                 'is_featured' => $index === 0,
             ]);
@@ -285,9 +241,4 @@ class Property extends Model
     {
         return $this->belongsToMany(User::class, 'user_favorite_properties', 'property_id', 'user_id')->withTimestamps();
     }
-
-
-    
-
-    
 }

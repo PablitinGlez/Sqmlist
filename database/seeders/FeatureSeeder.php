@@ -4,22 +4,17 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Feature; // Importa el modelo Feature
-use App\Models\FeatureSection; // Importa el modelo FeatureSection para obtener IDs
+use App\Models\Feature;
+use App\Models\FeatureSection;
 
 class FeatureSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Obtener IDs de las secciones (asumiendo que FeatureSectionSeeder ya corrió)
         $caracteristicasGeneralesId = FeatureSection::where('slug', 'caracteristicas_generales')->firstOrFail()->id;
         $amenidadesId = FeatureSection::where('slug', 'amenidades')->firstOrFail()->id;
         $serviciosId = FeatureSection::where('slug', 'servicios')->firstOrFail()->id;
 
-        // --- Características Generales (Asignadas a la sección 'caracteristicas_generales') ---
         Feature::firstOrCreate(
             ['slug' => 'num_recamaras'],
             [
@@ -32,7 +27,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 10,
-                'icon' => 'fas fa-bed', // ✅ Icono para Recámaras
+                'icon' => 'fas fa-bed',
             ]
         );
 
@@ -48,7 +43,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 20,
-                'icon' => 'fas fa-bath', // ✅ Icono para Baños
+                'icon' => 'fas fa-bath',
             ]
         );
 
@@ -64,7 +59,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 30,
-                'icon' => 'fas fa-toilet', // ✅ Icono para Medios Baños
+                'icon' => 'fas fa-toilet',
             ]
         );
 
@@ -80,7 +75,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 40,
-                'icon' => 'fas fa-layer-group', // ✅ Icono para Niveles
+                'icon' => 'fas fa-layer-group',
             ]
         );
 
@@ -96,7 +91,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 50,
-                'icon' => 'fas fa-car', // ✅ Icono para Estacionamientos
+                'icon' => 'fas fa-car',
             ]
         );
 
@@ -118,7 +113,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 60,
-                'icon' => 'fas fa-building', // ✅ Icono para Antigüedad
+                'icon' => 'fas fa-building',
             ]
         );
 
@@ -133,7 +128,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 70,
-                'icon' => 'fas fa-landmark', // ✅ Icono para Uso de Suelo
+                'icon' => 'fas fa-landmark',
             ]
         );
 
@@ -149,7 +144,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 80,
-                'icon' => 'fas fa-ruler-combined', // ✅ Icono para Tamaño de Terreno
+                'icon' => 'fas fa-ruler-combined',
             ]
         );
 
@@ -165,7 +160,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 90,
-                'icon' => 'fas fa-ruler-combined', // ✅ Icono para Tamaño de Construcción
+                'icon' => 'fas fa-ruler-combined',
             ]
         );
 
@@ -181,7 +176,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 100,
-                'icon' => 'fas fa-tree', // ✅ Icono para Tamaño de Jardín
+                'icon' => 'fas fa-tree',
             ]
         );
 
@@ -197,7 +192,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 110,
-                'icon' => 'fas fa-arrows-alt-h', // ✅ Icono para Ancho
+                'icon' => 'fas fa-arrows-alt-h',
             ]
         );
 
@@ -213,7 +208,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 120,
-                'icon' => 'fas fa-arrows-alt-v', // ✅ Icono para Alto
+                'icon' => 'fas fa-arrows-alt-v',
             ]
         );
 
@@ -229,7 +224,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 130,
-                'icon' => 'fas fa-cube', // ✅ Icono para Profundidad
+                'icon' => 'fas fa-cube',
             ]
         );
 
@@ -245,7 +240,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 140,
-                'icon' => 'fas fa-warehouse', // ✅ Icono para Tamaño de Bodega
+                'icon' => 'fas fa-warehouse',
             ]
         );
 
@@ -260,7 +255,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 150,
-                'icon' => 'fas fa-truck-loading', // ✅ Icono para Andenes
+                'icon' => 'fas fa-truck-loading',
             ]
         );
 
@@ -275,7 +270,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 160,
-                'icon' => 'fas fa-truck-ramp-box', // ✅ Icono para Área de Maniobras
+                'icon' => 'fas fa-truck-ramp-box',
             ]
         );
 
@@ -291,7 +286,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 170,
-                'icon' => 'fas fa-bolt', // ✅ Icono para Tipo de Electricidad
+                'icon' => 'fas fa-bolt',
             ]
         );
 
@@ -307,7 +302,7 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 180,
-                'icon' => 'fas fa-roof', // ✅ Icono para Tipo de Techo
+                'icon' => 'fas fa-roof',
             ]
         );
 
@@ -322,12 +317,10 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => false,
                 'is_required' => false,
                 'order' => 190,
-                'icon' => 'fas fa-road', // ✅ Icono para Vías de Comunicación
+                'icon' => 'fas fa-road',
             ]
         );
 
-        // --- Servicios (Asignadas a la NUEVA sección 'servicios') ---
-        // Mueve las características de servicios a la nueva sección 'servicios'
         Feature::firstOrCreate(
             ['slug' => 'has_cuarto_servicio'],
             [
@@ -339,12 +332,10 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 10,
-                'icon' => 'fas fa-broom', // ✅ Icono para Cuarto de Servicio
+                'icon' => 'fas fa-broom',
             ]
         );
 
-        // Puedes añadir más características de Amenidades y Servicios aquí con sus respectivos iconos.
-        // Ejemplo para amenidades:
         Feature::firstOrCreate(
             ['slug' => 'has_alberca'],
             [
@@ -356,16 +347,14 @@ class FeatureSeeder extends Seeder
                 'is_filterable' => true,
                 'is_required' => false,
                 'order' => 10,
-                'icon' => 'fas fa-swimming-pool', // ✅ Icono para Alberca
+                'icon' => 'fas fa-swimming-pool',
             ]
         );
-    
-// --- Amenidades (Asignadas a la NUEVA sección 'amenidades') ---
-// Mueve las características de amenidades a la nueva sección 'amenidades'
-Feature::firstOrCreate(
+
+        Feature::firstOrCreate(
             ['slug' => 'has_alberca'],
             [
-                'feature_section_id' => $amenidadesId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $amenidadesId,
                 'name' => 'Alberca',
                 'description' => '¿Cuenta con alberca?',
                 'input_type' => 'checkbox',
@@ -378,7 +367,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'is_amueblado'],
             [
-                'feature_section_id' => $amenidadesId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $amenidadesId,
                 'name' => 'Amueblado',
                 'description' => '¿La propiedad se entrega amueblada?',
                 'input_type' => 'checkbox',
@@ -391,20 +380,20 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_jardines'],
             [
-                'feature_section_id' => $amenidadesId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $amenidadesId,
                 'name' => 'Jardines',
                 'description' => '¿Cuenta con jardines o áreas verdes?',
                 'input_type' => 'checkbox',
                 'data_type' => 'boolean',
                 'is_filterable' => true,
                 'is_required' => false,
-                'order' => 50, // Ajusta el orden si es necesario
+                'order' => 50,
             ]
         );
         Feature::firstOrCreate(
             ['slug' => 'permite_mascotas'],
             [
-                'feature_section_id' => $amenidadesId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $amenidadesId,
                 'name' => 'Mascotas',
                 'description' => '¿Se permiten mascotas?',
                 'input_type' => 'checkbox',
@@ -417,7 +406,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_sotano'],
             [
-                'feature_section_id' => $amenidadesId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $amenidadesId,
                 'name' => 'Sótano',
                 'description' => '¿Tiene sótano?',
                 'input_type' => 'checkbox',
@@ -430,7 +419,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_terraza'],
             [
-                'feature_section_id' => $amenidadesId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $amenidadesId,
                 'name' => 'Terraza',
                 'description' => '¿Cuenta con terraza?',
                 'input_type' => 'checkbox',
@@ -443,7 +432,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_zona_privada'],
             [
-                'feature_section_id' => $amenidadesId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $amenidadesId,
                 'name' => 'Zona Privada',
                 'description' => '¿Es parte de una zona o fraccionamiento privado?',
                 'input_type' => 'checkbox',
@@ -456,7 +445,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_chimenea'],
             [
-                'feature_section_id' => $amenidadesId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $amenidadesId,
                 'name' => 'Chimenea',
                 'description' => '¿Cuenta con chimenea?',
                 'input_type' => 'checkbox',
@@ -467,13 +456,10 @@ Feature::firstOrCreate(
             ]
         );
 
-
-        // --- Servicios (Asignadas a la NUEVA sección 'servicios') ---
-        // Mueve las características de servicios a la nueva sección 'servicios'
         Feature::firstOrCreate(
             ['slug' => 'has_cuarto_servicio'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Cuarto de Servicio',
                 'description' => '¿Tiene cuarto de servicio?',
                 'input_type' => 'checkbox',
@@ -486,7 +472,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_gimnasio'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Gimnasio',
                 'description' => '¿Cuenta con gimnasio?',
                 'input_type' => 'checkbox',
@@ -499,7 +485,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_aire_acondicionado'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Aire Acondicionado',
                 'description' => '¿Cuenta con aire acondicionado?',
                 'input_type' => 'checkbox',
@@ -512,7 +498,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_calefaccion'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Calefacción',
                 'description' => '¿Cuenta con calefacción?',
                 'input_type' => 'checkbox',
@@ -525,7 +511,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_cisterna'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Cisterna',
                 'description' => '¿Cuenta con cisterna?',
                 'input_type' => 'checkbox',
@@ -538,7 +524,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_gas_natural'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Gas Natural',
                 'description' => '¿Cuenta con instalación de gas natural?',
                 'input_type' => 'checkbox',
@@ -551,7 +537,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_lavanderia'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Lavandería',
                 'description' => '¿Tiene área de lavandería?',
                 'input_type' => 'checkbox',
@@ -564,7 +550,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_seguridad_privada'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Seguridad Privada',
                 'description' => '¿Cuenta con seguridad privada?',
                 'input_type' => 'checkbox',
@@ -577,7 +563,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'has_telefonia'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Telefonía',
                 'description' => '¿Dispone de conexión telefónica?',
                 'input_type' => 'checkbox',
@@ -590,7 +576,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'circuito_cerrado_tv'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Circuito Cerrado de TV',
                 'description' => '¿Cuenta con sistema de CCTV?',
                 'input_type' => 'checkbox',
@@ -603,7 +589,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'fibra_optica'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Fibra Óptica',
                 'description' => '¿Dispone de conexión de fibra óptica?',
                 'input_type' => 'checkbox',
@@ -616,7 +602,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'planta_emergencia'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Planta de Emergencia',
                 'description' => '¿Cuenta con planta de emergencia eléctrica?',
                 'input_type' => 'checkbox',
@@ -629,7 +615,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'sistema_contra_incendio'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Sistema Contra Incendio',
                 'description' => '¿Dispone de sistema contra incendio (rociadores, detectores)?',
                 'input_type' => 'checkbox',
@@ -642,7 +628,7 @@ Feature::firstOrCreate(
         Feature::firstOrCreate(
             ['slug' => 'vigilancia'],
             [
-                'feature_section_id' => $serviciosId, // ¡ASIGNADO A LA NUEVA SECCIÓN!
+                'feature_section_id' => $serviciosId,
                 'name' => 'Vigilancia',
                 'description' => '¿Cuenta con servicio de vigilancia?',
                 'input_type' => 'checkbox',
@@ -652,7 +638,5 @@ Feature::firstOrCreate(
                 'order' => 140,
             ]
         );
-
     }
 }
-    

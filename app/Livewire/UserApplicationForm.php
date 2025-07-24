@@ -204,7 +204,7 @@ class UserApplicationForm extends Component
                 ? $this->licenseFile->store($userFolder, 'public')
                 : null;
 
-            //se crea la soli de el perfil de usuario  -----
+        
             UserApplication::create([
                 'user_id' => $user->id,
                 'requested_user_type' => $this->userType,

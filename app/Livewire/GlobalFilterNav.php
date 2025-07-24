@@ -16,62 +16,37 @@ use Illuminate\Support\Facades\Log;
 
 class GlobalFilterNav extends Component
 {
-    // --- Propiedad para el filtro de Ubicación ---
     public ?string $locationSearch = '';
     public array $locationSuggestions = [];
     public bool $showLocationSuggestions = false;
 
-    // --- Propiedades para el filtro de Tipo de Operación ---
     public bool $isForSale = false;
     public bool $isForRent = false;
     public string $operationDisplay = 'Tipo de Operación';
 
-    // --- Propiedades para el filtro de Tipo de Propiedad ---
     public Collection $propertyTypes;
     public ?string $selectedPropertyTypeSlug = null;
     public string $propertyTypeDisplayName = 'Tipo de Propiedad';
 
-    // --- Propiedades para el filtro de Rango de Precios ---
     public ?float $minPrice = null;
     public ?float $maxPrice = null;
     public string $priceDisplay = 'Rango de Precio';
 
-    // --- Propiedades para el menú de "Más Filtros" (Características dinámicas) ---
     public Collection $filteredFeatures;
     public array $filters = [];
 
-    // Agrupaciones específicas para la vista de filtros detallados
     public Collection $recamarasOptions;
     public Collection $banosOptions;
     public Collection $estacionamientosOptions;
     public Collection $amenityFeatures;
 
-    // Propiedades para los rangos de superficie (construida y de terreno)
     public ?float $minSuperficieConstruida = null;
     public ?float $maxSuperficieConstruida = null;
     public ?float $minSuperficieTerreno = null;
     public ?float $maxSuperficieTerreno = null;
 
-    // Cache para todas las características filtrables cargadas una sola vez
     public ?Collection $allFeaturesCache = null;
 
-
-    /**
-     * Se ejecuta una vez al inicio del componente.
-     * Carga todos los tipos de propiedad y características por defecto para el menú de filtros.
-     * Recibe los filtros iniciales del componente padre (PropertiesIndex).
-     *
-     * @param string|null $locationSearch
-     * @param string|null $operationType (Este es el string 'sale', 'rent', o null)
-     * @param string|null $propertyTypeSlug
-     * @param float|null $minPrice
-     * @param float|null $maxPrice
-     * @param array $features (Corresponde al array 'filters' en la vista)
-     * @param float|null $minSuperficieConstruida
-     * @param float|null $maxSuperficieConstruida
-     * @param float|null $minSuperficieTerreno
-     * @param float|null $maxSuperficieTerreno
-     */
     public function mount(
         ?string $locationSearch = '',
         ?string $operationType = null,
@@ -97,9 +72,7 @@ class GlobalFilterNav extends Component
             'maxSuperficieTerreno' => $maxSuperficieTerreno,
         ]);
 
-        // Asignar los valores recibidos como props a las propiedades internas del componente
         $this->locationSearch = $locationSearch;
-        // Si operationType es null o 'all', ambos checkboxes están marcados.
         $this->isForSale = ($operationType === 'sale' || $operationType === null || $operationType === 'all');
         $this->isForRent = ($operationType === 'rent' || $operationType === null || $operationType === 'all');
 
@@ -113,34 +86,25 @@ class GlobalFilterNav extends Component
         $this->minSuperficieTerreno = $minSuperficieTerreno;
         $this->maxSuperficieTerreno = $maxSuperficieTerreno;
 
-        // Cargar tipos de propiedad ANTES de intentar usar propertyTypeDisplayName
         $this->propertyTypes = PropertyType::orderBy('order')->get();
 
-        // Cargar TODAS las características filtrables con sus secciones y tipos de propiedad asociados
         $this->allFeaturesCache = Feature::where('is_filterable', true)
             ->with('featureSection', 'propertyTypes')
             ->orderBy('order')
             ->get() ?? collect();
         Log::info('GlobalFilterNav: allFeaturesCache loaded.', ['count' => $this->allFeaturesCache->count()]);
 
-        // Inicializar filteredFeatures como una colección vacía, se llenará en loadDynamicFeatures
         $this->filteredFeatures = collect();
 
-        // Cargar características dinámicas basadas en el tipo de propiedad inicial
         $this->loadDynamicFeatures($this->selectedPropertyTypeSlug);
 
-        // Actualizar textos de visualización DESPUÉS de que todas las propiedades necesarias estén cargadas
         $this->updateOperationDisplay();
-        $this->updatePropertyTypeDisplay($this->selectedPropertyTypeSlug); // Pasa el slug explícitamente
+        $this->updatePropertyTypeDisplay($this->selectedPropertyTypeSlug);
         $this->updatePriceDisplay();
 
         Log::info('GlobalFilterNav: mount finished.');
     }
 
-    /**
-     * Método que se ejecuta automáticamente cuando la propiedad $locationSearch cambia.
-     * También genera las sugerencias de ubicación.
-     */
     public function updatedLocationSearch(): void
     {
         Log::info('GlobalFilterNav: updatedLocationSearch called.', ['locationSearch' => $this->locationSearch]);
@@ -148,9 +112,6 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Genera sugerencias de ubicación basadas en el input del usuario.
-     */
     private function generateLocationSuggestions(): void
     {
         $this->locationSuggestions = [];
@@ -199,11 +160,6 @@ class GlobalFilterNav extends Component
         Log::info('GlobalFilterNav: Generated location suggestions.', ['suggestions' => $this->locationSuggestions]);
     }
 
-    /**
-     * Establece el valor de la búsqueda de ubicación desde una sugerencia.
-     *
-     * @param string $suggestion La sugerencia seleccionada.
-     */
     public function selectLocationSuggestion(string $suggestion): void
     {
         $this->locationSearch = $suggestion;
@@ -212,10 +168,6 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Se ejecuta cuando el checkbox 'Venta' cambia.
-     * Asegura que al menos un checkbox esté siempre marcado.
-     */
     public function updatedIsForSale(): void
     {
         Log::info('GlobalFilterNav: updatedIsForSale called.', ['isForSale' => $this->isForSale]);
@@ -226,10 +178,6 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Se ejecuta cuando el checkbox 'Renta' cambia.
-     * Asegura que al menos un checkbox esté siempre marcado.
-     */
     public function updatedIsForRent(): void
     {
         Log::info('GlobalFilterNav: updatedIsForRent called.', ['isForRent' => $this->isForRent]);
@@ -240,9 +188,6 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Actualiza el texto mostrado en el botón del dropdown de tipo de operación.
-     */
     private function updateOperationDisplay(): void
     {
         if ($this->isForSale && $this->isForRent) {
@@ -257,10 +202,6 @@ class GlobalFilterNav extends Component
         Log::info('GlobalFilterNav: operationDisplay updated.', ['display' => $this->operationDisplay]);
     }
 
-    /**
-     * Lógica para el cambio de Tipo de Propiedad.
-     * Actualiza el nombre a mostrar y emite los filtros.
-     */
     public function updatedSelectedPropertyTypeSlug(?string $slug = null): void
     {
         Log::info('GlobalFilterNav: updatedSelectedPropertyTypeSlug called.', ['slug' => $slug]);
@@ -269,26 +210,19 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Actualiza el texto mostrado en el botón del dropdown de tipo de propiedad.
-     *
-     * @param string|null $slug El slug del tipo de propiedad a buscar.
-     */
     private function updatePropertyTypeDisplay(?string $slug = null): void
     {
-        // Asegurarse de que $this->propertyTypes ya esté cargado.
         if (!isset($this->propertyTypes) || $this->propertyTypes->isEmpty()) {
             $this->propertyTypes = PropertyType::orderBy('order')->get();
             Log::info('updatePropertyTypeDisplay: Re-loaded propertyTypes as it was empty or not set.');
         }
 
         if ($slug && $slug !== '') {
-            // Usar una comparación insensible a mayúsculas/minúsculas y recortar espacios
             $trimmedSlug = strtolower(trim($slug));
             $propertyType = $this->propertyTypes->first(function ($type) use ($trimmedSlug) {
                 return strtolower(trim($type->slug)) === $trimmedSlug;
             });
-            
+
             if ($propertyType) {
                 $this->propertyTypeDisplayName = $propertyType->name;
                 Log::info('updatePropertyTypeDisplay: Found property type.', ['name' => $propertyType->name]);
@@ -303,9 +237,6 @@ class GlobalFilterNav extends Component
         Log::info('GlobalFilterNav: propertyTypeDisplayName updated.', ['display' => $this->propertyTypeDisplayName]);
     }
 
-    /**
-     * Monitorea los cambios en el precio mínimo y emite los filtros.
-     */
     public function updatedMinPrice(): void
     {
         Log::info('GlobalFilterNav: updatedMinPrice called.', ['minPrice' => $this->minPrice]);
@@ -313,9 +244,6 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Monitorea los cambios en el precio máximo y emite los filtros.
-     */
     public function updatedMaxPrice(): void
     {
         Log::info('GlobalFilterNav: updatedMaxPrice called.', ['maxPrice' => $this->maxPrice]);
@@ -323,7 +251,6 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-  
     private function updatePriceDisplay(): void
     {
         $min = $this->minPrice;
@@ -340,7 +267,6 @@ class GlobalFilterNav extends Component
         }
         Log::info('GlobalFilterNav: priceDisplay updated.', ['display' => $this->priceDisplay]);
     }
-
 
     public function setRecamaras($value): void
     {
@@ -369,7 +295,6 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-  
     public function updatedMinSuperficieConstruida($value): void
     {
         $this->minSuperficieConstruida = $this->cleanNumericValue($value);
@@ -394,7 +319,6 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-   
     private function cleanNumericValue($value): ?float
     {
         if ($value === null || $value === '') {
@@ -423,7 +347,6 @@ class GlobalFilterNav extends Component
         return $numericValue;
     }
 
-  
     public function clearField(string $field): void
     {
         switch ($field) {
@@ -440,7 +363,7 @@ class GlobalFilterNav extends Component
                 $this->maxSuperficieTerreno = null;
                 break;
             case 'locationSearch':
-                $this->locationSearch = ''; 
+                $this->locationSearch = '';
                 $this->locationSuggestions = [];
                 $this->showLocationSuggestions = false;
                 break;
@@ -472,7 +395,6 @@ class GlobalFilterNav extends Component
 
         foreach ($generalAndAmenityFeatures as $feature) {
             if (isset($this->filters[$feature->slug])) {
-                // Keep the value from initialFilters
             } elseif ($feature->input_type === 'boolean') {
                 $this->filters[$feature->slug] = false;
             } else {
@@ -522,7 +444,6 @@ class GlobalFilterNav extends Component
         Log::info('GlobalFilterNav: initializeDefaultFilters finished.', ['filters' => $this->filters]);
     }
 
-
     private function loadDynamicFeatures(?string $propertyTypeSlug = null): void
     {
         Log::info('GlobalFilterNav: loadDynamicFeatures called.', ['propertyTypeSlug' => $propertyTypeSlug]);
@@ -539,7 +460,6 @@ class GlobalFilterNav extends Component
         $this->maxSuperficieConstruida = null;
         $this->minSuperficieTerreno = null;
         $this->maxSuperficieTerreno = null;
-
 
         if (is_null($propertyTypeSlug) || $propertyTypeSlug === '') {
             $this->initializeDefaultFilters();
@@ -620,13 +540,11 @@ class GlobalFilterNav extends Component
         Log::info('GlobalFilterNav: loadDynamicFeatures finished.', ['filteredFeaturesCount' => $this->filteredFeatures->count(), 'filters' => $this->filters]);
     }
 
-   
     protected function emitFilters(): void
     {
         $operationTypeToEmit = null;
 
         if ($this->isForSale && $this->isForRent) {
-          
             $operationTypeToEmit = 'all';
         } elseif ($this->isForSale) {
             $operationTypeToEmit = 'sale';
@@ -635,7 +553,7 @@ class GlobalFilterNav extends Component
         }
 
         $allFilters = [
-            'locationSearch' => $this->locationSearch, 
+            'locationSearch' => $this->locationSearch,
             'operation_type' => $operationTypeToEmit,
             'property_type_slug' => $this->selectedPropertyTypeSlug,
             'minPrice' => $this->minPrice,
@@ -666,7 +584,7 @@ class GlobalFilterNav extends Component
                     $cleanedFilters[$key] = $value;
                 }
             } elseif ($key === 'locationSearch') {
-                $cleanedFilters[$key] = $value; 
+                $cleanedFilters[$key] = $value;
             } elseif ($value !== null && $value !== '' && (!is_array($value) || !empty($value))) {
                 $cleanedFilters[$key] = $value;
             }
@@ -678,11 +596,9 @@ class GlobalFilterNav extends Component
 
     public function applyFilters()
     {
-    
         $this->dispatch('filtersUpdated', $this->getFilters());
     }
 
- 
     public function render()
     {
         Log::debug('GlobalFilterNav: render called. Current filters state:', ['filters' => $this->filters]);
