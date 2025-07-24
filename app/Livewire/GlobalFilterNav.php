@@ -3,16 +3,12 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Livewire\Attributes\Url;
-use Livewire\Attributes\On;
 use App\Models\PropertyType;
 use App\Models\Feature;
-use App\Models\FeatureSection;
 use App\Models\State;
 use App\Models\Municipality;
 use App\Models\Colonia;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class GlobalFilterNav extends Component
 {
@@ -59,19 +55,6 @@ class GlobalFilterNav extends Component
         ?float $minSuperficieTerreno = null,
         ?float $maxSuperficieTerreno = null
     ): void {
-        Log::info('GlobalFilterNav: mount called with direct props.', [
-            'locationSearch' => $locationSearch,
-            'operationType' => $operationType,
-            'propertyTypeSlug' => $propertyTypeSlug,
-            'minPrice' => $minPrice,
-            'maxPrice' => $maxPrice,
-            'features' => $features,
-            'minSuperficieConstruida' => $minSuperficieConstruida,
-            'maxSuperficieConstruida' => $maxSuperficieConstruida,
-            'minSuperficieTerreno' => $minSuperficieTerreno,
-            'maxSuperficieTerreno' => $maxSuperficieTerreno,
-        ]);
-
         $this->locationSearch = $locationSearch;
         $this->isForSale = ($operationType === 'sale' || $operationType === null || $operationType === 'all');
         $this->isForRent = ($operationType === 'rent' || $operationType === null || $operationType === 'all');
@@ -92,7 +75,6 @@ class GlobalFilterNav extends Component
             ->with('featureSection', 'propertyTypes')
             ->orderBy('order')
             ->get() ?? collect();
-        Log::info('GlobalFilterNav: allFeaturesCache loaded.', ['count' => $this->allFeaturesCache->count()]);
 
         $this->filteredFeatures = collect();
 
@@ -101,13 +83,10 @@ class GlobalFilterNav extends Component
         $this->updateOperationDisplay();
         $this->updatePropertyTypeDisplay($this->selectedPropertyTypeSlug);
         $this->updatePriceDisplay();
-
-        Log::info('GlobalFilterNav: mount finished.');
     }
 
     public function updatedLocationSearch(): void
     {
-        Log::info('GlobalFilterNav: updatedLocationSearch called.', ['locationSearch' => $this->locationSearch]);
         $this->generateLocationSuggestions();
         $this->emitFilters();
     }
@@ -157,7 +136,6 @@ class GlobalFilterNav extends Component
 
         $this->locationSuggestions = $suggestions->unique()->take(10)->toArray();
         $this->showLocationSuggestions = !empty($this->locationSuggestions);
-        Log::info('GlobalFilterNav: Generated location suggestions.', ['suggestions' => $this->locationSuggestions]);
     }
 
     public function selectLocationSuggestion(string $suggestion): void
@@ -170,7 +148,6 @@ class GlobalFilterNav extends Component
 
     public function updatedIsForSale(): void
     {
-        Log::info('GlobalFilterNav: updatedIsForSale called.', ['isForSale' => $this->isForSale]);
         if (!$this->isForSale && !$this->isForRent) {
             $this->isForRent = true;
         }
@@ -180,7 +157,6 @@ class GlobalFilterNav extends Component
 
     public function updatedIsForRent(): void
     {
-        Log::info('GlobalFilterNav: updatedIsForRent called.', ['isForRent' => $this->isForRent]);
         if (!$this->isForRent && !$this->isForSale) {
             $this->isForSale = true;
         }
@@ -199,12 +175,10 @@ class GlobalFilterNav extends Component
         } else {
             $this->operationDisplay = 'Tipo de Operación';
         }
-        Log::info('GlobalFilterNav: operationDisplay updated.', ['display' => $this->operationDisplay]);
     }
 
     public function updatedSelectedPropertyTypeSlug(?string $slug = null): void
     {
-        Log::info('GlobalFilterNav: updatedSelectedPropertyTypeSlug called.', ['slug' => $slug]);
         $this->updatePropertyTypeDisplay($slug);
         $this->loadDynamicFeatures($slug);
         $this->emitFilters();
@@ -214,39 +188,36 @@ class GlobalFilterNav extends Component
     {
         if (!isset($this->propertyTypes) || $this->propertyTypes->isEmpty()) {
             $this->propertyTypes = PropertyType::orderBy('order')->get();
-            Log::info('updatePropertyTypeDisplay: Re-loaded propertyTypes as it was empty or not set.');
         }
 
         if ($slug && $slug !== '') {
             $trimmedSlug = strtolower(trim($slug));
-            $propertyType = $this->propertyTypes->first(function ($type) use ($trimmedSlug) {
-                return strtolower(trim($type->slug)) === $trimmedSlug;
-            });
+            $propertyType = $this->propertyTypes->first(fn($type) => strtolower(trim($type->slug)) === $trimmedSlug);
 
             if ($propertyType) {
                 $this->propertyTypeDisplayName = $propertyType->name;
-                Log::info('updatePropertyTypeDisplay: Found property type.', ['name' => $propertyType->name]);
             } else {
                 $this->propertyTypeDisplayName = 'Tipo de Propiedad';
-                Log::warning('updatePropertyTypeDisplay: Property type not found for slug.', ['slug' => $slug, 'normalized_slug' => $trimmedSlug, 'available_slugs' => $this->propertyTypes->pluck('slug')->toArray()]);
             }
         } else {
             $this->propertyTypeDisplayName = 'Tipo de Propiedad';
-            Log::info('updatePropertyTypeDisplay: Slug is null or empty, setting to default display name.');
         }
-        Log::info('GlobalFilterNav: propertyTypeDisplayName updated.', ['display' => $this->propertyTypeDisplayName]);
     }
 
     public function updatedMinPrice(): void
     {
-        Log::info('GlobalFilterNav: updatedMinPrice called.', ['minPrice' => $this->minPrice]);
+        if ($this->minPrice !== null && $this->maxPrice !== null && $this->minPrice > $this->maxPrice) {
+            $this->maxPrice = $this->minPrice;
+        }
         $this->updatePriceDisplay();
         $this->emitFilters();
     }
 
     public function updatedMaxPrice(): void
     {
-        Log::info('GlobalFilterNav: updatedMaxPrice called.', ['maxPrice' => $this->maxPrice]);
+        if ($this->maxPrice !== null && $this->minPrice !== null && $this->maxPrice < $this->minPrice) {
+            $this->minPrice = $this->maxPrice;
+        }
         $this->updatePriceDisplay();
         $this->emitFilters();
     }
@@ -265,57 +236,64 @@ class GlobalFilterNav extends Component
         } else {
             $this->priceDisplay = 'Rango de Precio';
         }
-        Log::info('GlobalFilterNav: priceDisplay updated.', ['display' => $this->priceDisplay]);
     }
 
     public function setRecamaras($value): void
     {
-        Log::info('GlobalFilterNav: setRecamaras called.', ['value' => $value]);
         $this->filters['num_recamaras'] = $value;
         $this->emitFilters();
     }
 
     public function setBanos($value): void
     {
-        Log::info('GlobalFilterNav: setBanos called.', ['value' => $value]);
         $this->filters['num_banos'] = $value;
         $this->emitFilters();
     }
 
     public function setEstacionamientos($value): void
     {
-        Log::info('GlobalFilterNav: setEstacionamientos called.', ['value' => $value]);
         $this->filters['num_estacionamientos'] = $value;
         $this->emitFilters();
     }
 
     public function updatedFilters(): void
     {
-        Log::info('GlobalFilterNav: updatedFilters called.', ['filters' => $this->filters]);
         $this->emitFilters();
     }
 
     public function updatedMinSuperficieConstruida($value): void
     {
         $this->minSuperficieConstruida = $this->cleanNumericValue($value);
+        if ($this->minSuperficieConstruida !== null && $this->maxSuperficieConstruida !== null && $this->minSuperficieConstruida > $this->maxSuperficieConstruida) {
+            $this->maxSuperficieConstruida = $this->minSuperficieConstruida;
+        }
         $this->emitFilters();
     }
 
     public function updatedMaxSuperficieConstruida($value): void
     {
         $this->maxSuperficieConstruida = $this->cleanNumericValue($value);
+        if ($this->maxSuperficieConstruida !== null && $this->minSuperficieConstruida !== null && $this->maxSuperficieConstruida < $this->minSuperficieConstruida) {
+            $this->minSuperficieConstruida = $this->maxSuperficieConstruida;
+        }
         $this->emitFilters();
     }
 
     public function updatedMinSuperficieTerreno($value): void
     {
         $this->minSuperficieTerreno = $this->cleanNumericValue($value);
+        if ($this->minSuperficieTerreno !== null && $this->maxSuperficieTerreno !== null && $this->minSuperficieTerreno > $this->maxSuperficieTerreno) {
+            $this->maxSuperficieTerreno = $this->minSuperficieTerreno;
+        }
         $this->emitFilters();
     }
 
     public function updatedMaxSuperficieTerreno($value): void
     {
         $this->maxSuperficieTerreno = $this->cleanNumericValue($value);
+        if ($this->maxSuperficieTerreno !== null && $this->minSuperficieTerreno !== null && $this->maxSuperficieTerreno < $this->minSuperficieTerreno) {
+            $this->minSuperficieTerreno = $this->maxSuperficieTerreno;
+        }
         $this->emitFilters();
     }
 
@@ -371,125 +349,63 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    private function initializeDefaultFilters(): void
+    private function initializeFeatureOptions(): void
     {
-        Log::info('GlobalFilterNav: initializeDefaultFilters called.');
-        $this->filters = [];
-        $this->recamarasOptions = collect();
-        $this->banosOptions = collect();
-        $this->estacionamientosOptions = collect();
-        $this->amenityFeatures = collect();
-        $this->filteredFeatures = collect();
-
-        if ($this->allFeaturesCache === null) {
-            $this->allFeaturesCache = Feature::where('is_filterable', true)
-                ->with('featureSection', 'propertyTypes')
-                ->orderBy('order')
-                ->get() ?? collect();
-            Log::warning('GlobalFilterNav: allFeaturesCache was null in initializeDefaultFilters, re-loaded.');
-        }
-
-        $generalAndAmenityFeatures = $this->allFeaturesCache->filter(function ($feature) {
-            return $feature->featureSection && in_array($feature->featureSection->slug, ['caracteristicas_generales', 'amenidades']);
-        })->sortBy('order');
-
-        foreach ($generalAndAmenityFeatures as $feature) {
-            if (isset($this->filters[$feature->slug])) {
-            } elseif ($feature->input_type === 'boolean') {
-                $this->filters[$feature->slug] = false;
-            } else {
-                $this->filters[$feature->slug] = null;
-            }
-
-            if ($feature->featureSection && $feature->featureSection->slug === 'caracteristicas_generales') {
-                if ($feature->slug === 'num_recamaras') {
-                    $this->recamarasOptions = collect([
-                        (object)['value' => 'Todos', 'label' => 'Todos'],
-                        (object)['value' => 1, 'label' => '1'],
-                        (object)['value' => 2, 'label' => '2'],
-                        (object)['value' => 3, 'label' => '3'],
-                        (object)['value' => 4, 'label' => '4+'],
-                    ]);
-                    if (!isset($this->filters[$feature->slug])) {
-                        $this->filters[$feature->slug] = 'Todos';
-                    }
-                } elseif ($feature->slug === 'num_banos') {
-                    $this->banosOptions = collect([
-                        (object)['value' => 'Todos', 'label' => 'Todos'],
-                        (object)['value' => 1, 'label' => '1'],
-                        (object)['value' => 2, 'label' => '2'],
-                        (object)['value' => 3, 'label' => '3'],
-                        (object)['value' => 4, 'label' => '4+'],
-                    ]);
-                    if (!isset($this->filters[$feature->slug])) {
-                        $this->filters[$feature->slug] = 'Todos';
-                    }
-                } elseif ($feature->slug === 'num_estacionamientos') {
-                    $this->estacionamientosOptions = collect([
-                        (object)['value' => 'Todos', 'label' => 'Todos'],
-                        (object)['value' => 1, 'label' => '1'],
-                        (object)['value' => 2, 'label' => '2'],
-                        (object)['value' => 3, 'label' => '3'],
-                        (object)['value' => 4, 'label' => '4+'],
-                    ]);
-                    if (!isset($this->filters[$feature->slug])) {
-                        $this->filters[$feature->slug] = 'Todos';
-                    }
-                }
-            } elseif ($feature->featureSection && $feature->featureSection->slug === 'amenidades') {
-                $this->amenityFeatures->push($feature);
-            }
-        }
-
-        Log::info('GlobalFilterNav: initializeDefaultFilters finished.', ['filters' => $this->filters]);
+        $this->recamarasOptions = collect([
+            (object)['value' => 'Todos', 'label' => 'Todos'],
+            (object)['value' => 1, 'label' => '1'],
+            (object)['value' => 2, 'label' => '2'],
+            (object)['value' => 3, 'label' => '3'],
+            (object)['value' => 4, 'label' => '4+'],
+        ]);
+        $this->banosOptions = collect([
+            (object)['value' => 'Todos', 'label' => 'Todos'],
+            (object)['value' => 1, 'label' => '1'],
+            (object)['value' => 2, 'label' => '2'],
+            (object)['value' => 3, 'label' => '3'],
+            (object)['value' => 4, 'label' => '4+'],
+        ]);
+        $this->estacionamientosOptions = collect([
+            (object)['value' => 'Todos', 'label' => 'Todos'],
+            (object)['value' => 1, 'label' => '1'],
+            (object)['value' => 2, 'label' => '2'],
+            (object)['value' => 3, 'label' => '3'],
+            (object)['value' => 4, 'label' => '4+'],
+        ]);
     }
 
     private function loadDynamicFeatures(?string $propertyTypeSlug = null): void
     {
-        Log::info('GlobalFilterNav: loadDynamicFeatures called.', ['propertyTypeSlug' => $propertyTypeSlug]);
         $oldFilters = $this->filters;
         $this->filters = [];
 
-        $this->recamarasOptions = collect();
-        $this->banosOptions = collect();
-        $this->estacionamientosOptions = collect();
+        $this->initializeFeatureOptions();
         $this->amenityFeatures = collect();
         $this->filteredFeatures = collect();
-
-        $this->minSuperficieConstruida = null;
-        $this->maxSuperficieConstruida = null;
-        $this->minSuperficieTerreno = null;
-        $this->maxSuperficieTerreno = null;
-
-        if (is_null($propertyTypeSlug) || $propertyTypeSlug === '') {
-            $this->initializeDefaultFilters();
-            Log::info('GlobalFilterNav: loadDynamicFeatures reverted to default filters.');
-            foreach ($oldFilters as $key => $value) {
-                if (in_array($key, ['num_recamaras', 'num_banos', 'num_estacionamientos', 'has_alberca', 'is_amueblado', 'has_jardines', 'permite_mascotas', 'has_sotano', 'has_terraza', 'has_zona_privada', 'has_chimenea', 'has_cuarto_servicio', 'has_gimnasio', 'has_aire_acondicionado', 'has_calefaccion', 'has_cisterna', 'has_gas_natural', 'has_lavanderia', 'has_seguridad_privada', 'has_telefonia', 'circuito_cerrado_tv', 'fibra_optica', 'planta_emergencia', 'sistema_contra_incendio', 'vigilancia'])) {
-                    $this->filters[$key] = $value;
-                }
-            }
-            return;
-        }
 
         if ($this->allFeaturesCache === null) {
             $this->allFeaturesCache = Feature::where('is_filterable', true)
                 ->with('featureSection', 'propertyTypes')
                 ->orderBy('order')
                 ->get() ?? collect();
-            Log::warning('GlobalFilterNav: allFeaturesCache was null in loadDynamicFeatures, re-loaded.');
         }
 
-        $this->filteredFeatures = $this->allFeaturesCache->filter(function ($feature) use ($propertyTypeSlug) {
-            $isAssociatedWithType = $feature->propertyTypes->contains('slug', $propertyTypeSlug);
-            $isGeneralOrAmenity = $feature->featureSection && in_array($feature->featureSection->slug, ['caracteristicas_generales', 'amenidades']);
-            return $isAssociatedWithType && $isGeneralOrAmenity;
-        })->sortBy(function ($feature) use ($propertyTypeSlug) {
-            $pivot = $feature->propertyTypes->firstWhere('slug', $propertyTypeSlug)?->pivot;
-            return $pivot ? $pivot->order_for_type : 999;
-        });
+        if (is_null($propertyTypeSlug) || $propertyTypeSlug === '') {
+            $featuresToConsider = $this->allFeaturesCache->filter(function ($feature) {
+                return $feature->featureSection && in_array($feature->featureSection->slug, ['caracteristicas_generales', 'amenidades']);
+            })->sortBy('order');
+        } else {
+            $featuresToConsider = $this->allFeaturesCache->filter(function ($feature) use ($propertyTypeSlug) {
+                $isAssociatedWithType = $feature->propertyTypes->contains('slug', $propertyTypeSlug);
+                $isGeneralOrAmenity = $feature->featureSection && in_array($feature->featureSection->slug, ['caracteristicas_generales', 'amenidades']);
+                return $isAssociatedWithType && $isGeneralOrAmenity;
+            })->sortBy(function ($feature) use ($propertyTypeSlug) {
+                $pivot = $feature->propertyTypes->firstWhere('slug', $propertyTypeSlug)?->pivot;
+                return $pivot ? $pivot->order_for_type : 999;
+            });
+        }
 
-        foreach ($this->filteredFeatures as $feature) {
+        foreach ($featuresToConsider as $feature) {
             if (isset($oldFilters[$feature->slug])) {
                 $this->filters[$feature->slug] = $oldFilters[$feature->slug];
             } elseif ($feature->input_type === 'boolean') {
@@ -498,46 +414,19 @@ class GlobalFilterNav extends Component
                 $this->filters[$feature->slug] = null;
             }
 
-            if ($feature->featureSection && $feature->featureSection->slug === 'caracteristicas_generales') {
-                if ($feature->slug === 'num_recamaras') {
-                    $this->recamarasOptions = collect([
-                        (object)['value' => 'Todos', 'label' => 'Todos'],
-                        (object)['value' => 1, 'label' => '1'],
-                        (object)['value' => 2, 'label' => '2'],
-                        (object)['value' => 3, 'label' => '3'],
-                        (object)['value' => 4, 'label' => '4+'],
-                    ]);
-                    if (!isset($oldFilters[$feature->slug])) {
-                        $this->filters[$feature->slug] = 'Todos';
-                    }
-                } elseif ($feature->slug === 'num_banos') {
-                    $this->banosOptions = collect([
-                        (object)['value' => 'Todos', 'label' => 'Todos'],
-                        (object)['value' => 1, 'label' => '1'],
-                        (object)['value' => 2, 'label' => '2'],
-                        (object)['value' => 3, 'label' => '3'],
-                        (object)['value' => 4, 'label' => '4+'],
-                    ]);
-                    if (!isset($oldFilters[$feature->slug])) {
-                        $this->filters[$feature->slug] = 'Todos';
-                    }
-                } elseif ($feature->slug === 'num_estacionamientos') {
-                    $this->estacionamientosOptions = collect([
-                        (object)['value' => 'Todos', 'label' => 'Todos'],
-                        (object)['value' => 1, 'label' => '1'],
-                        (object)['value' => 2, 'label' => '2'],
-                        (object)['value' => 3, 'label' => '3'],
-                        (object)['value' => 4, 'label' => '4+'],
-                    ]);
-                    if (!isset($oldFilters[$feature->slug])) {
-                        $this->filters[$feature->slug] = 'Todos';
-                    }
-                }
-            } elseif ($feature->featureSection && $feature->featureSection->slug === 'amenidades') {
+            if ($feature->slug === 'num_recamaras' && !isset($oldFilters[$feature->slug])) {
+                $this->filters[$feature->slug] = 'Todos';
+            } elseif ($feature->slug === 'num_banos' && !isset($oldFilters[$feature->slug])) {
+                $this->filters[$feature->slug] = 'Todos';
+            } elseif ($feature->slug === 'num_estacionamientos' && !isset($oldFilters[$feature->slug])) {
+                $this->filters[$feature->slug] = 'Todos';
+            }
+
+            if ($feature->featureSection && $feature->featureSection->slug === 'amenidades') {
                 $this->amenityFeatures->push($feature);
             }
         }
-        Log::info('GlobalFilterNav: loadDynamicFeatures finished.', ['filteredFeaturesCount' => $this->filteredFeatures->count(), 'filters' => $this->filters]);
+        $this->filteredFeatures = $featuresToConsider;
     }
 
     protected function emitFilters(): void
@@ -579,29 +468,18 @@ class GlobalFilterNav extends Component
                 if (!empty($cleanedFeatures)) {
                     $cleanedFilters[$key] = $cleanedFeatures;
                 }
-            } elseif (in_array($key, ['minPrice', 'maxPrice', 'minSuperficieConstruida', 'maxSuperficieConstruida', 'minSuperficieTerreno', 'maxSuperficieTerreno'])) {
-                if ($value !== null) {
-                    $cleanedFilters[$key] = $value;
-                }
             } elseif ($key === 'locationSearch') {
                 $cleanedFilters[$key] = $value;
-            } elseif ($value !== null && $value !== '' && (!is_array($value) || !empty($value))) {
+            } elseif ($value !== null && $value !== '') {
                 $cleanedFilters[$key] = $value;
             }
         }
 
-        Log::info('GlobalFilterNav: globalFiltersUpdated dispatched.', ['filters' => $cleanedFilters]);
         $this->dispatch('globalFiltersUpdated', $cleanedFilters);
-    }
-
-    public function applyFilters()
-    {
-        $this->dispatch('filtersUpdated', $this->getFilters());
     }
 
     public function render()
     {
-        Log::debug('GlobalFilterNav: render called. Current filters state:', ['filters' => $this->filters]);
         return view('livewire.global-filter-nav');
     }
 }

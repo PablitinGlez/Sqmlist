@@ -7,7 +7,6 @@ use Livewire\Attributes\Url;
 use Livewire\Attributes\On;
 use App\Models\Property;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 
 class PropertiesIndex extends Component
 {
@@ -52,74 +51,25 @@ class PropertiesIndex extends Component
     #[On('globalFiltersUpdated')]
     public function updateFilters(array $filters): void
     {
-        Log::debug('PropertiesIndex: updateFilters llamado. Filtros recibidos:', $filters);
         $this->isLoading = true;
 
-        if (isset($filters['locationSearch'])) {
-            $this->locationSearch = $filters['locationSearch'];
-        }
-        if (array_key_exists('operation_type', $filters)) {
-            $this->operationType = $filters['operation_type'];
-        }
-        if (isset($filters['property_type_slug'])) {
-            $this->propertyTypeSlug = $filters['property_type_slug'];
-        }
-        if (isset($filters['minPrice'])) {
-            $this->minPrice = $filters['minPrice'];
-        }
-        if (isset($filters['maxPrice'])) {
-            $this->maxPrice = $filters['maxPrice'];
-        }
-        if (isset($filters['features'])) {
-            $this->features = $filters['features'];
-        }
-        if (isset($filters['minSuperficieConstruida'])) {
-            $this->minSuperficieConstruida = $filters['minSuperficieConstruida'];
-        }
-        if (isset($filters['maxSuperficieConstruida'])) {
-            $this->maxSuperficieConstruida = $filters['maxSuperficieConstruida'];
-        }
-        if (isset($filters['minSuperficieTerreno'])) {
-            $this->minSuperficieTerreno = $filters['minSuperficieTerreno'];
-        }
-        if (isset($filters['maxSuperficieTerreno'])) {
-            $this->maxSuperficieTerreno = $filters['maxSuperficieTerreno'];
-        }
-
-        Log::debug('PropertiesIndex: updateFilters - Propiedades internas actualizadas.', [
-            'locationSearch' => $this->locationSearch,
-            'operationType' => $this->operationType,
-            'propertyTypeSlug' => $this->propertyTypeSlug,
-            'minPrice' => $this->minPrice,
-            'maxPrice' => $this->maxPrice,
-            'features' => $this->features,
-            'minSuperficieConstruida' => $this->minSuperficieConstruida,
-            'maxSuperficieConstruida' => $this->maxSuperficieConstruida,
-            'minSuperficieTerreno' => $this->minSuperficieTerreno,
-            'maxSuperficieTerreno' => $this->maxSuperficieTerreno,
-        ]);
+        $this->locationSearch = $filters['locationSearch'] ?? $this->locationSearch;
+        $this->operationType = $filters['operation_type'] ?? $this->operationType;
+        $this->propertyTypeSlug = $filters['property_type_slug'] ?? $this->propertyTypeSlug;
+        $this->minPrice = $filters['minPrice'] ?? $this->minPrice;
+        $this->maxPrice = $filters['maxPrice'] ?? $this->maxPrice;
+        $this->features = $filters['features'] ?? $this->features;
+        $this->minSuperficieConstruida = $filters['minSuperficieConstruida'] ?? $this->minSuperficieConstruida;
+        $this->maxSuperficieConstruida = $filters['maxSuperficieConstruida'] ?? $this->maxSuperficieConstruida;
+        $this->minSuperficieTerreno = $filters['minSuperficieTerreno'] ?? $this->minSuperficieTerreno;
+        $this->maxSuperficieTerreno = $filters['maxSuperficieTerreno'] ?? $this->maxSuperficieTerreno;
 
         $this->loadProperties();
     }
 
     public function loadProperties(): void
     {
-        Log::debug('PropertiesIndex: Iniciando loadProperties.');
         $this->isLoading = true;
-        Log::debug('PropertiesIndex: isLoading = true.');
-
-        Log::debug('PropertiesIndex: Filtros actuales para la consulta:', [
-            'locationSearch' => $this->locationSearch,
-            'operationType' => $this->operationType,
-            'propertyTypeSlug' => $this->propertyTypeSlug,
-            'minPrice' => $this->minPrice,
-            'maxPrice' => $this->maxPrice,
-            'features' => $this->features,
-            'minSuperficieConstruida' => $this->minSuperficieConstruida,
-            'maxSuperficieConstruida' => $this->maxSuperficieConstruida,
-            'minSuperficieTerreno' => $this->minSuperficieTerreno,
-            'maxSuperficieTerreno' => $this->maxSuperficieTerreno,
-        ]);
 
         $query = Property::query()->published();
 
@@ -132,41 +82,35 @@ class PropertiesIndex extends Component
                     ->orWhere('state_name', 'like', $searchTerm)
                     ->orWhere('postal_code', 'like', $searchTerm);
             });
-            Log::debug('PropertiesIndex: Filtro de ubicación aplicado.', ['searchTerm' => $this->locationSearch]);
         }
 
         if ($this->operationType === 'sale' || $this->operationType === 'rent') {
             $query->where('operation_type', $this->operationType);
-            Log::debug('PropertiesIndex: Filtro de operación aplicado.', ['operationType' => $this->operationType]);
-        } elseif ($this->operationType === 'all' || is_null($this->operationType)) {
-            Log::debug('PropertiesIndex: Filtro de operación NO aplicado (mostrando Venta y Renta).', ['operationType' => $this->operationType]);
         }
 
         if ($this->propertyTypeSlug) {
             $query->whereHas('propertyType', function ($q) {
                 $q->where('slug', $this->propertyTypeSlug);
             });
-            Log::debug('PropertiesIndex: Filtro de tipo de propiedad aplicado.', ['propertyTypeSlug' => $this->propertyTypeSlug]);
         }
 
         if ($this->minPrice !== null) {
             $query->where('price', '>=', $this->minPrice);
-            Log::debug('PropertiesIndex: Filtro de precio mínimo aplicado.', ['minPrice' => $this->minPrice]);
         }
         if ($this->maxPrice !== null) {
             $query->where('price', '<=', $this->maxPrice);
-            Log::debug('PropertiesIndex: Filtro de precio máximo aplicado.', ['maxPrice' => $this->maxPrice]);
         }
 
         foreach ($this->features as $featureSlug => $featureValue) {
             if ($featureValue !== null && $featureValue !== '' && $featureValue !== 'Todos') {
                 $query->whereHas('featureValues.feature', function ($q) use ($featureSlug, $featureValue) {
                     $q->where('slug', $featureSlug);
+
                     if (in_array($featureSlug, ['num_recamaras', 'num_banos', 'num_estacionamientos'])) {
-                        if ($featureValue === '4+') {
-                            $q->where('value', '>=', 4);
+                        if ($featureValue == 4) {
+                            $q->whereRaw('CAST(value AS UNSIGNED) >= ?', [4]);
                         } else {
-                            $q->where('value', (string) $featureValue);
+                            $q->whereRaw('CAST(value AS UNSIGNED) = ?', [(int) $featureValue]);
                         }
                     } elseif (is_bool($featureValue)) {
                         $q->where('value', (string) (int) $featureValue);
@@ -174,7 +118,6 @@ class PropertiesIndex extends Component
                         $q->where('value', (string) $featureValue);
                     }
                 });
-                Log::debug('PropertiesIndex: Filtro de característica dinámica aplicado.', ['featureSlug' => $featureSlug, 'featureValue' => $featureValue]);
             }
         }
 
@@ -183,14 +126,12 @@ class PropertiesIndex extends Component
                 $q->where('slug', 'tamano_construccion_m2')
                     ->whereRaw('CAST(value AS DECIMAL(10,2)) >= ?', [$this->minSuperficieConstruida]);
             });
-            Log::debug('PropertiesIndex: Filtro de superficie construida mínima aplicado.', ['minSuperficieConstruida' => $this->minSuperficieConstruida]);
         }
         if ($this->maxSuperficieConstruida !== null) {
             $query->whereHas('featureValues.feature', function ($q) {
                 $q->where('slug', 'tamano_construccion_m2')
                     ->whereRaw('CAST(value AS DECIMAL(10,2)) <= ?', [$this->maxSuperficieConstruida]);
             });
-            Log::debug('PropertiesIndex: Filtro de superficie construida máxima aplicado.', ['maxSuperficieConstruida' => $this->maxSuperficieConstruida]);
         }
 
         if ($this->minSuperficieTerreno !== null) {
@@ -198,14 +139,12 @@ class PropertiesIndex extends Component
                 $q->where('slug', 'tamano_terreno_m2')
                     ->whereRaw('CAST(value AS DECIMAL(10,2)) >= ?', [$this->minSuperficieTerreno]);
             });
-            Log::debug('PropertiesIndex: Filtro de superficie terreno mínima aplicado.', ['minSuperficieTerreno' => $this->minSuperficieTerreno]);
         }
         if ($this->maxSuperficieTerreno !== null) {
             $query->whereHas('featureValues.feature', function ($q) {
                 $q->where('slug', 'tamano_terreno_m2')
                     ->whereRaw('CAST(value AS DECIMAL(10,2)) <= ?', [$this->maxSuperficieTerreno]);
             });
-            Log::debug('PropertiesIndex: Filtro de superficie terreno máxima aplicado.', ['maxSuperficieTerreno' => $this->maxSuperficieTerreno]);
         }
 
         $this->properties = $query->with([
@@ -215,17 +154,7 @@ class PropertiesIndex extends Component
             'featureValues.feature'
         ])->get();
 
-        Log::debug('PropertiesIndex: Propiedades obtenidas.', ['count' => $this->properties->count()]);
-
-        if ($this->properties->isNotEmpty()) {
-            $sampleOperations = $this->properties->take(5)->pluck('operation_type')->toArray();
-            Log::debug('PropertiesIndex: Tipos de operación de muestra (primeras 5 propiedades):', $sampleOperations);
-        } else {
-            Log::debug('PropertiesIndex: No se obtuvieron propiedades.');
-        }
-
         $this->isLoading = false;
-        Log::debug('PropertiesIndex: isLoading = false. loadProperties finalizado.');
     }
 
     public function render()

@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use App\Models\Property;
 use Illuminate\Support\Collection;
 
 class ShowProperties extends Component
