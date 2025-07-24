@@ -115,10 +115,14 @@
     <div class="relative w-1/2">
         <input
             type="number"
-            wire:model.live.debounce.500ms="minPrice"
+            wire:model.lazy="minPrice"
+            wire:ignore.self
             placeholder="MXN $ Mínimo"
             class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
             min="0"
+            x-data="{ value: @entangle('minPrice').defer }"
+            x-model="value"
+            @input.debounce.1000ms="$wire.set('minPrice', $event.target.value)"
         >
         @if($minPrice !== null)
             <button
@@ -136,10 +140,14 @@
     <div class="relative w-1/2">
         <input
             type="number"
-            wire:model.live.debounce.500ms="maxPrice"
+            wire:model.lazy="maxPrice"
+            wire:ignore.self
             placeholder="MXN $ Máximo"
             class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
             min="0"
+            x-data="{ value: @entangle('maxPrice').defer }"
+            x-model="value"
+            @input.debounce.1000ms="$wire.set('maxPrice', $event.target.value)"
         >
         @if($maxPrice !== null)
             <button
@@ -237,11 +245,15 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.live.debounce.800ms="minSuperficieConstruida"
+                                    wire:model.lazy="minSuperficieConstruida"
+                                    wire:ignore.self
                                     placeholder="Desde"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
                                     step="1"
+                                    x-data="{ value: @entangle('minSuperficieConstruida').defer }"
+                                    x-model="value"
+                                    @input.debounce.1000ms="$wire.set('minSuperficieConstruida', $event.target.value)"
                                 >
                                 @if($minSuperficieConstruida !== null)
                                     <button
@@ -259,11 +271,15 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.live.debounce.800ms="maxSuperficieConstruida"
+                                    wire:model.lazy="maxSuperficieConstruida"
+                                    wire:ignore.self
                                     placeholder="Hasta"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
                                     step="1"
+                                    x-data="{ value: @entangle('maxSuperficieConstruida').defer }"
+                                    x-model="value"
+                                    @input.debounce.1000ms="$wire.set('maxSuperficieConstruida', $event.target.value)"
                                 >
                                 @if($maxSuperficieConstruida !== null)
                                     <button
@@ -292,11 +308,15 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.live.debounce.800ms="minSuperficieTerreno"
+                                    wire:model.lazy="minSuperficieTerreno"
+                                    wire:ignore.self
                                     placeholder="Desde"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
                                     step="1"
+                                    x-data="{ value: @entangle('minSuperficieTerreno').defer }"
+                                    x-model="value"
+                                    @input.debounce.1000ms="$wire.set('minSuperficieTerreno', $event.target.value)"
                                 >
                                 @if($minSuperficieTerreno !== null)
                                     <button
@@ -314,11 +334,15 @@
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
-                                    wire:model.live.debounce.800ms="maxSuperficieTerreno"
+                                    wire:model.lazy="maxSuperficieTerreno"
+                                    wire:ignore.self
                                     placeholder="Hasta"
                                     class="w-full px-2 py-1.5 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 text-xs"
                                     min="0"
                                     step="1"
+                                    x-data="{ value: @entangle('maxSuperficieTerreno').defer }"
+                                    x-model="value"
+                                    @input.debounce.1000ms="$wire.set('maxSuperficieTerreno', $event.target.value)"
                                 >
                                 @if($maxSuperficieTerreno !== null)
                                     <button
