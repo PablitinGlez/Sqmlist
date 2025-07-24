@@ -6,7 +6,7 @@ use App\Models\Property;
 use App\Models\PropertyContact;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log; // Importar la fachada Log
+use Illuminate\Support\Facades\Log; 
 
 class ContactPropertyForm extends Component
 {

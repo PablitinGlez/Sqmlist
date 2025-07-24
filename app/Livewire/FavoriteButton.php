@@ -5,7 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Property;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\On; // Importa el atributo On
+use Livewire\Attributes\On; 
 
 class FavoriteButton extends Component
 {
@@ -46,8 +46,7 @@ class FavoriteButton extends Component
             ]);
         }
         
-        // --- ¡NUEVO! Despacha un evento global después de la acción ---
-        // Esto notificará a otros componentes Livewire que la lista de favoritos ha cambiado.
+      
         $this->dispatch('favorite-updated'); 
     }
 

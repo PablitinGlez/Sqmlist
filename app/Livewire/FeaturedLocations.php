@@ -6,12 +6,9 @@ use Livewire\Component;
 
 class FeaturedLocations extends Component
 {
-    // Propiedad pública para la pestaña activa
     public string $activeTab = 'ciudades-principales';
 
-    // Datos de las ubicaciones destacadas
-    // Se definen aquí para que el componente Livewire los maneje
-    // y la vista pueda renderizarlos dinámicamente.
+   
     public array $locationsData = [
         'ciudades-principales' => [
             'name' => 'Ciudades Principales',
@@ -136,24 +133,23 @@ class FeaturedLocations extends Component
     }
 
     /**
-     * Genera la URL para un enlace de propiedad.
+     * 
      *
-     * @param string $location La ubicación (ciudad, estado, etc.).
-     * @param string $propertyType El tipo de propiedad ('Casas' o 'Departamentos').
-     * @param string $operationType El tipo de operación ('venta' o 'renta').
-     * @return string La URL generada.
+     * @param string 
+     * @param string
+     * @param string 
+     * @return string 
      */
     public function generateUrl(string $location, string $propertyType, string $operationType): string
     {
-        // Limpia la ubicación para usarla en la URL (ej. "Ciudad de México" -> "ciudad-de-mexico")
+       
         $locationSlug = \Illuminate\Support\Str::slug($location);
         $propertyTypeSlug = \Illuminate\Support\Str::slug($propertyType);
 
-        // Asumiendo que tu ruta de propiedades acepta filtros de ubicación y tipo de operación/propiedad
-        // Ejemplo: /propiedades?ubicacion=ciudad-de-mexico&tipo=casas&operacion=venta
+       
         return route('properties.index', [
-            'ubicacion' => $location, // Envía el nombre completo para el filtro
-            'tipo' => str_contains($propertyType, 'Casas') ? 'casa' : 'departamento', // Ajusta a 'casa' o 'departamento'
+            'ubicacion' => $location,
+            'tipo' => str_contains($propertyType, 'Casas') ? 'casa' : 'departamento', 
             'operacion' => $operationType
         ]);
     }

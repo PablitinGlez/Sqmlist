@@ -7,10 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Middleware RedirectGuestFromAdmin
- * Controla el acceso completo a las rutas de administración
- */
+
 class RedirectGuestFromAdmin
 {
     public function handle(Request $request, Closure $next): Response

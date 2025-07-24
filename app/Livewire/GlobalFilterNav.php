@@ -323,9 +323,7 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Actualiza el texto mostrado en el botón del dropdown de rango de precios.
-     */
+  
     private function updatePriceDisplay(): void
     {
         $min = $this->minPrice;
@@ -343,9 +341,7 @@ class GlobalFilterNav extends Component
         Log::info('GlobalFilterNav: priceDisplay updated.', ['display' => $this->priceDisplay]);
     }
 
-    // --- Métodos para los filtros adicionales (Recámaras, Baños, Estacionamientos, Superficie, Amenidades) ---
 
-    // Métodos específicos para actualizar filtros de cantidad
     public function setRecamaras($value): void
     {
         Log::info('GlobalFilterNav: setRecamaras called.', ['value' => $value]);
@@ -367,17 +363,13 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Se ejecuta cuando cualquier valor dentro del array 'filters' cambia.
-     * Esto incluye los checkboxes de amenidades.
-     */
     public function updatedFilters(): void
     {
         Log::info('GlobalFilterNav: updatedFilters called.', ['filters' => $this->filters]);
         $this->emitFilters();
     }
 
-    // Métodos para manejar los campos de superficie, ahora directamente vinculados
+  
     public function updatedMinSuperficieConstruida($value): void
     {
         $this->minSuperficieConstruida = $this->cleanNumericValue($value);
@@ -402,10 +394,7 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Método para limpiar y validar valores numéricos.
-     * Retorna null si el valor es inválido o vacío.
-     */
+   
     private function cleanNumericValue($value): ?float
     {
         if ($value === null || $value === '') {
@@ -434,9 +423,7 @@ class GlobalFilterNav extends Component
         return $numericValue;
     }
 
-    /**
-     * Método para limpiar campos específicos (usado por los botones "x" en la vista).
-     */
+  
     public function clearField(string $field): void
     {
         switch ($field) {
@@ -453,7 +440,7 @@ class GlobalFilterNav extends Component
                 $this->maxSuperficieTerreno = null;
                 break;
             case 'locationSearch':
-                $this->locationSearch = ''; // Asegurar que se establece a cadena vacía
+                $this->locationSearch = ''; 
                 $this->locationSuggestions = [];
                 $this->showLocationSuggestions = false;
                 break;
@@ -461,11 +448,6 @@ class GlobalFilterNav extends Component
         $this->emitFilters();
     }
 
-    /**
-     * Initializes default filters for the "Filtros" dropdown
-     * when no property type is selected or at component initialization.
-     * Loads common general characteristics and all filterable amenities.
-     */
     private function initializeDefaultFilters(): void
     {
         Log::info('GlobalFilterNav: initializeDefaultFilters called.');
@@ -540,11 +522,7 @@ class GlobalFilterNav extends Component
         Log::info('GlobalFilterNav: initializeDefaultFilters finished.', ['filters' => $this->filters]);
     }
 
-    /**
-     * Loads dynamic characteristics (general and amenities)
-     * based on the selected property type, using the cache.
-     * Excludes the 'servicios' section as requested.
-     */
+
     private function loadDynamicFeatures(?string $propertyTypeSlug = null): void
     {
         Log::info('GlobalFilterNav: loadDynamicFeatures called.', ['propertyTypeSlug' => $propertyTypeSlug]);
@@ -642,17 +620,13 @@ class GlobalFilterNav extends Component
         Log::info('GlobalFilterNav: loadDynamicFeatures finished.', ['filteredFeaturesCount' => $this->filteredFeatures->count(), 'filters' => $this->filters]);
     }
 
-    /**
-     * Helper method to emit all current filters.
-     * Now includes location search, operation type, property type,
-     * prices, and dynamic characteristics.
-     */
+   
     protected function emitFilters(): void
     {
         $operationTypeToEmit = null;
 
         if ($this->isForSale && $this->isForRent) {
-            // Emitir 'all' cuando ambos están seleccionados
+          
             $operationTypeToEmit = 'all';
         } elseif ($this->isForSale) {
             $operationTypeToEmit = 'sale';
@@ -661,7 +635,7 @@ class GlobalFilterNav extends Component
         }
 
         $allFilters = [
-            'locationSearch' => $this->locationSearch, // Siempre incluir, incluso si es cadena vacía
+            'locationSearch' => $this->locationSearch, 
             'operation_type' => $operationTypeToEmit,
             'property_type_slug' => $this->selectedPropertyTypeSlug,
             'minPrice' => $this->minPrice,
@@ -691,8 +665,8 @@ class GlobalFilterNav extends Component
                 if ($value !== null) {
                     $cleanedFilters[$key] = $value;
                 }
-            } elseif ($key === 'locationSearch') { // Manejar locationSearch explícitamente
-                $cleanedFilters[$key] = $value; // Siempre se incluye, incluso si es ''
+            } elseif ($key === 'locationSearch') {
+                $cleanedFilters[$key] = $value; 
             } elseif ($value !== null && $value !== '' && (!is_array($value) || !empty($value))) {
                 $cleanedFilters[$key] = $value;
             }
@@ -704,13 +678,11 @@ class GlobalFilterNav extends Component
 
     public function applyFilters()
     {
-        // Emitir evento para mostrar skeleton
+    
         $this->dispatch('filtersUpdated', $this->getFilters());
     }
 
-    /**
-     * The render method is responsible for drawing the component.
-     */
+ 
     public function render()
     {
         Log::debug('GlobalFilterNav: render called. Current filters state:', ['filters' => $this->filters]);
