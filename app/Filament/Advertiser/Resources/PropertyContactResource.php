@@ -21,7 +21,7 @@ class PropertyContactResource extends Resource
     protected static ?string $model = PropertyContact::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
-    protected static ?string $navigationGroup = 'Mensajes';
+ 
     protected static ?string $navigationLabel = 'Contactos de Propiedades';
     protected static ?int $navigationSort = 1;
 
