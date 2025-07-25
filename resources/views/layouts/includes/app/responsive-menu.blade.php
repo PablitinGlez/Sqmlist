@@ -31,7 +31,7 @@
                                 <div x-data="{ categoryOpen: false }" class="relative">
                                     <button @click="categoryOpen = !categoryOpen"
                                             class="flex items-center justify-between w-full ps-6 pe-4 py-2 text-base font-medium focus:outline-none transition duration-150 ease-in-out
-                                                   text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-b border-gray-100 last:border-b-0">
+                                                text-gray-700 hover:bg-gray-100 hover:text-gray-900 border-b border-gray-100 last:border-b-0">
                                         <span>
                                             @if($categoryName === 'states') Estados
                                             @elseif($categoryName === 'property_types') Tipo de propiedad
@@ -58,13 +58,15 @@
                                         @foreach($options as $option)
                                             <a href="{{ route('properties.index', [
                                                 'operacion' => $item['operacion'],
+                                                
                                                 'ubicacion' => $categoryName === 'states' ? $option->name : null,
                                                 'tipo' => $categoryName === 'property_types' ? \Illuminate\Support\Str::slug($option->name) : null,
-                                                'recamaras' => $categoryName === 'bedrooms' ? $option['value'] : null,
+                                                'caracteristicas' => $categoryName === 'bedrooms' ? ['num_recamaras' => $option['value']] : null,
                                             ]) }}"
-                                               class="block text-xs text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors duration-150"
-                                               wire:navigate
-                                               @click="mainDropdownOpen = false; open = false">
+                                                class="block text-xs text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors duration-150"
+                                                wire:navigate
+                                                @click="mainDropdownOpen = false; open = false">
+                                               
                                                 {{ $categoryName === 'bedrooms' ? $option['label'] : $option->name }}
                                             </a>
                                         @endforeach
@@ -149,7 +151,7 @@
                 </a>
 
                 @if($hasAdvertiserRole)
-                    <a href="/dashboard" 
+                    <a href="/dashboard"
                         :class="{
                             'text-black hover:text-gray-800 hover:bg-gray-100 border-gray-300': scrolled,
                             'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-transparent': !scrolled
