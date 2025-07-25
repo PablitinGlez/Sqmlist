@@ -1,327 +1,251 @@
-<section id="steps-to-advertiser" class="relative bg-gradient-to-br bg-transparent overflow-hidden">
 
-    <div class="sticky-container relative w-full">
+<section class="max-w-4xl mx-auto">
+    <!-- Título Principal -->
+    <div class="text-center mb-8">
+        <h2 class="text-lg md:text-2xl font-bold text-gray-900 mb-2">
+            Conviértete en <span class="text-blue-600">Anunciante</span>
+        </h2>
+        <p class="text-sm text-gray-600 max-w-xl mx-auto">
+            Sigue estos pasos y comienza a publicar tus propiedades hoy mismo
+        </p>
+    </div>
 
-        <div class="sticky top-0 flex items-center justify-center bg-gradient-to-br py-4 md:py-8 lg:py-12">
-            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-
-                <div class="text-center mb-4 md:mb-8 lg:mb-12">
-                    <h2 class="text-xl md:text-2xl lg:text-5xl font-semibold text-gray-900 mb-2 md:mb-3 lg:mb-4">
-                        Convierte en <span class="text-blue-600">Anunciante</span>
-                    </h2>
-                    <p class="text-sm md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
-                        Sigue estos pasos y comienza a publicar tus propiedades hoy mismo
-                    </p>
+    <div>
+        <!-- Paso 1: Regístrate y Verifica -->
+        <div class="flex flex-row">
+            <div class="hidden md:flex flex-col items-center">
+                <div class="w-20 py-3 border border-blue-300 rounded-xl mr-3 uppercase flex flex-col items-center justify-center bg-blue-50">
+                    <div class="text-lg font-black text-blue-600">Paso 1</div>
+                    <div class="text-blue-600 text-xs font-semibold">Registro</div>
                 </div>
-
-                <div class="mb-4 md:mb-8 lg:mb-12">
-                    <div class="flex justify-center mb-3 md:mb-6">
-                        <div class="w-full max-w-4xl">
-                            <ol id="progress-steps" class="flex items-center w-full">
-                                <li class="flex w-full items-center step-item" data-step="1">
-                                    <span class="step-circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-gray-200 rounded-full lg:h-12 lg:w-12 shrink-0 transition-all duration-500">
-                                        <i class="fas fa-user-plus text-gray-400 text-xs md:text-xs lg:text-base step-icon"></i>
-                                    </span>
-                                    <div class="step-line w-full h-0.5 md:h-1 bg-gray-200 mx-1 md:mx-2 lg:mx-3 transition-all duration-500"></div>
-                                </li>
-
-                                <li class="flex w-full items-center step-item" data-step="2">
-                                    <span class="step-circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-gray-200 rounded-full lg:h-12 lg:w-12 shrink-0 transition-all duration-500">
-                                        <i class="fas fa-file-alt text-gray-400 text-xs md:text-xs lg:text-base step-icon"></i>
-                                    </span>
-                                    <div class="step-line w-full h-0.5 md:h-1 bg-gray-200 mx-1 md:mx-2 lg:mx-3 transition-all duration-500"></div>
-                                </li>
-
-                                <li class="flex w-full items-center step-item" data-step="3">
-                                    <span class="step-circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-gray-200 rounded-full lg:h-12 lg:w-12 shrink-0 transition-all duration-500">
-                                        <i class="fas fa-clock text-gray-400 text-xs md:text-xs lg:text-base step-icon"></i>
-                                    </span>
-                                    <div class="step-line w-full h-0.5 md:h-1 bg-gray-200 mx-1 md:mx-2 lg:mx-3 transition-all duration-500"></div>
-                                </li>
-
-                                <li class="flex items-center step-item" data-step="4">
-                                    <span class="step-circle flex items-center justify-center w-6 h-6 md:w-8 md:h-8 bg-gray-200 rounded-full lg:h-12 lg:w-12 shrink-0 transition-all duration-500">
-                                        <i class="fas fa-rocket text-gray-400 text-xs md:text-xs lg:text-base step-icon"></i>
-                                    </span>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
+                <div class="h-full border-l-4 border-transparent">
+                    <div class="border-l-2 mr-3 h-full border-blue-300 border-dashed"></div>
                 </div>
-
-                <div class="step-content-container relative mt-8 min-h-[280px] sm:min-h-[320px] md:h-64 lg:h-80 overflow-hidden">
-
-                    <div class="step-content absolute inset-0 opacity-0 invisible transform translate-y-10 pointer-events-none" data-step="1">
-                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full">
-                            <div class="text-left px-2 md:px-0">
-                                <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">Regístrate y Verifica</h3>
-                                <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
-                                    Crea tu cuenta gratuita y verifica tu email. Es rápido, seguro y solo toma unos minutos.
-                                </p>
-                                <ul class="text-left space-y-0.5 md:space-y-1 text-xs md:text-xs lg:text-sm text-gray-600">
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Registro completamente gratuito</li>
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Verificación por email</li>
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Proceso en menos de 5 minutos</li>
-                                </ul>
-                            </div>
-                            <div class="flex justify-start md:justify-center mt-2 md:mt-0">
-                                <div class="w-48 sm:w-56 md:w-64 lg:w-72 h-32 sm:h-36 md:h-44 lg:h-52 bg-white rounded-lg shadow-lg p-3 md:p-5 border-2 border-blue-100 flex flex-col justify-between">
-                                    <div class="space-y-2 md:space-y-3">
-                                        <div class="h-3 md:h-4 bg-blue-200 rounded animate-pulse w-3/4"></div>
-                                        <div class="h-3 md:h-4 bg-gray-200 rounded animate-pulse w-full"></div>
-                                        <div class="h-3 md:h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
-                                    </div>
-                                    <div class="h-5 md:h-7 bg-blue-500 rounded mt-auto"></div>
-                                </div>
-                            </div>
+            </div>
+            <div class="flex-auto border rounded-xl border-blue-300 bg-white shadow-sm">
+                <div class="flex md:flex-row flex-col items-center">
+                    <div class="flex-auto">
+                        <div class="md:hidden text-xs font-normal uppercase pt-3 pl-3 text-blue-500">
+                            <span class="font-black">Paso 1</span> - Registro
+                        </div>
+                        <div class="p-3 text-base md:text-lg text-gray-800 font-semibold">Regístrate y Verifica</div>
+                        <div class="px-3 pb-1 text-sm text-gray-600">
+                            Crea tu cuenta gratuita y verifica tu email. Es rápido, seguro y solo toma unos minutos.
+                        </div>
+                        <div class="px-3 pb-4">
+                            <ul class="space-y-1 text-xs text-gray-500">
+                                <li class="flex items-center">
+                                    <span class="text-blue-600 mr-1">•</span>
+                                    Registro completamente gratuito
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-blue-600 mr-1">•</span>
+                                    Verificación por email
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-blue-600 mr-1">•</span>
+                                    Proceso en menos de 5 minutos
+                                </li>
+                            </ul>
                         </div>
                     </div>
-
-                    <div class="step-content absolute inset-0 opacity-0 invisible transform translate-y-10 pointer-events-none" data-step="2">
-                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full">
-                            <div class="text-left px-2 md:px-0">
-                                <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">Envía tu Solicitud</h3>
-                                <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
-                                    Completa el formulario con tus datos y sube los documentos requeridos.
-                                </p>
-                                <ul class="text-left space-y-0.5 md:space-y-1 text-xs md:text-xs lg:text-sm text-gray-600">
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Formulario simple y rápido</li>
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Sube tu identificación oficial</li>
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Información de contacto segura</li>
-                                </ul>
-                            </div>
-                            <div class="flex justify-start md:justify-center mt-2 md:mt-0">
-                                <div class="w-48 sm:w-56 md:w-64 lg:w-72 h-32 sm:h-36 md:h-44 lg:h-52 bg-white rounded-lg shadow-lg p-3 md:p-5 border-2 border-green-100 flex flex-col">
-                                    <div class="space-y-1 md:space-y-2 mb-auto">
-                                        <div class="text-xs md:text-sm text-gray-600">Tipo de Perfil</div>
-                                        <div class="h-2 md:h-3 bg-green-200 rounded w-full"></div>
-                                        <div class="text-xs md:text-sm text-gray-600">Datos de Contacto</div>
-                                        <div class="h-2 md:h-3 bg-gray-200 rounded w-5/6"></div>
-                                        <div class="h-2 md:h-3 bg-gray-200 rounded w-2/3"></div>
-                                    </div>
-                                    <div class="text-xs md:text-sm text-gray-600 mt-2">Documentos</div>
-                                    <div class="h-6 md:h-8 bg-gray-100 rounded border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 text-xs md:text-sm">
-                                        Subir Archivo
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="step-content absolute inset-0 opacity-0 invisible transform translate-y-10 pointer-events-none" data-step="3">
-                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full">
-                            <div class="text-left px-2 md:px-0">
-                                <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">Espera la Aprobación</h3>
-                                <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
-                                    Nuestro equipo revisará tu solicitud. Te notificaremos por email una vez aprobada.
-                                </p>
-                                <ul class="text-left space-y-0.5 md:space-y-1 text-xs md:text-xs lg:text-sm text-gray-600">
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Revisión en 24-48 horas</li>
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Notificación por email</li>
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Soporte personalizado</li>
-                                </ul>
-                            </div>
-                            <div class="flex justify-start md:justify-center mt-2 md:mt-0">
-                                <div class="w-48 sm:w-56 md:w-64 lg:w-72 h-32 sm:h-36 md:h-44 lg:h-52 bg-white rounded-lg shadow-lg p-3 md:p-5 border-2 border-yellow-100 flex flex-col items-start justify-center">
-                                    <div class="w-10 md:w-14 h-10 md:h-14 border-2 md:border-4 border-yellow-500 border-t-transparent rounded-full animate-spin mb-2 md:mb-3"></div>
-                                    <p class="text-yellow-600 font-semibold text-xs md:text-sm">Revisando tu solicitud...</p>
-                                    <p class="text-xs md:text-sm text-gray-500 mt-1">Te notificaremos pronto</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="step-content absolute inset-0 opacity-0 invisible transform translate-y-10 pointer-events-none" data-step="4">
-                        <div class="grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8 items-start md:items-center h-full">
-                            <div class="text-left px-2 md:px-0">
-                                <h3 class="text-sm md:text-xl lg:text-2xl font-bold text-gray-900 mb-1 md:mb-2 lg:mb-3">¡Comienza a Publicar!</h3>
-                                <p class="text-xs md:text-sm lg:text-base text-gray-600 mb-2 md:mb-3 lg:mb-4 leading-relaxed">
-                                    Una vez aprobado, podrás crear y publicar tus propiedades inmediatamente.
-                                </p>
-                                <ul class="text-left space-y-0.5 md:space-y-1 text-xs md:text-xs lg:text-sm text-gray-600">
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Publicaciones ilimitadas</li>
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Panel de administración completo</li>
-                                    <li class="flex items-center"><i class="fas fa-check text-green-500 mr-1 md:mr-2 text-xs"></i>Métricas y estadísticas detalladas</li>
-                                </ul>
-                            </div>
-                            <div class="flex justify-start md:justify-center mt-2 md:mt-0">
-                                <div class="w-48 sm:w-56 md:w-64 lg:w-72 h-32 sm:h-36 md:h-44 lg:h-52 bg-white rounded-lg shadow-lg p-3 md:p-5 border-2 border-purple-100 flex flex-col">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <div class="text-xs md:text-sm font-semibold text-purple-600">Mis Propiedades</div>
-                                        <div class="w-5 md:w-7 h-5 md:h-7 bg-purple-500 rounded text-white text-xs md:text-sm flex items-center justify-center">+</div>
-                                    </div>
-                                    <div class="space-y-1 md:space-y-2 flex-grow">
-                                        <div class="h-7 md:h-9 bg-purple-50 rounded border border-purple-200 p-1 md:p-2 flex flex-col justify-center">
-                                            <div class="h-1 md:h-1.5 bg-purple-300 rounded mb-1 w-3/4"></div>
-                                            <div class="h-1 md:h-1.5 bg-gray-200 rounded w-1/2"></div>
-                                        </div>
-                                        <div class="h-7 md:h-9 bg-purple-50 rounded border border-purple-200 p-1 md:p-2 flex flex-col justify-center">
-                                            <div class="h-1 md:h-1.5 bg-purple-300 rounded mb-1 w-full"></div>
-                                            <div class="h-1 md:h-1.5 bg-gray-200 rounded w-2/3"></div>
-                                        </div>
-                                        <div class="h-7 md:h-9 bg-purple-50 rounded border border-purple-200 p-1 md:p-2 flex flex-col justify-center">
-                                            <div class="h-1 md:h-1.5 bg-purple-300 rounded mb-1 w-1/2"></div>
-                                            <div class="h-1 md:h-1.5 bg-gray-200 rounded w-full"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="md:w-20 w-full p-2">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <!-- Conector 1 -->
+        <div class="flex items-start flex-row">
+            <div class="border-t-2 border-r-2 border-transparent">
+                <div class="w-10 ml-10 h-10 border-l-2 border-blue-300 border-dashed border-b-2 rounded-bl-full"></div>
+            </div>
+            <div class="border-t-2 border-transparent flex-auto">
+                <div class="h-10 border-b-2 border-blue-300 border-dashed"></div>
+            </div>
+            <div class="w-10 mt-10 mr-10 h-10 border-r-2 border-blue-300 border-dashed border-t-2 rounded-tr-full"></div>
+        </div>
+
+        <!-- Paso 2: Envía tu Solicitud -->
+        <div class="flex flex-row-reverse">
+            <div class="hidden md:flex flex-col items-center">
+                <div class="w-20 py-3 border border-green-300 rounded-xl ml-3 uppercase flex flex-col items-center justify-center bg-green-50">
+                    <div class="text-lg font-black text-green-600">Paso 2</div>
+                    <div class="text-green-600 text-xs font-semibold">Solicitud</div>
+                </div>
+                <div class="h-full border-r-4 border-transparent">
+                    <div class="border-l-2 ml-3 h-full border-green-300 border-dashed"></div>
+                </div>
+            </div>
+            <div class="flex-auto border rounded-xl border-green-300 bg-white shadow-sm">
+                <div class="flex md:flex-row flex-col items-center">
+                    <div class="flex-auto">
+                        <div class="md:hidden text-xs font-normal uppercase pt-3 pl-3 text-green-500">
+                            <span class="font-black">Paso 2</span> - Solicitud
+                        </div>
+                        <div class="p-3 text-base md:text-lg text-gray-800 font-semibold">Envía tu Solicitud</div>
+                        <div class="px-3 pb-1 text-sm text-gray-600">
+                            Completa el formulario con tus datos y sube los documentos requeridos.
+                        </div>
+                        <div class="px-3 pb-4">
+                            <ul class="space-y-1 text-xs text-gray-500">
+                                <li class="flex items-center">
+                                    <span class="text-green-600 mr-1">•</span>
+                                    Formulario simple y rápido
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-green-600 mr-1">•</span>
+                                    Sube tu identificación oficial
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-green-600 mr-1">•</span>
+                                    Información de contacto segura
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="md:w-20 w-full p-2">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto">
+                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conector 2 -->
+        <div class="flex items-start flex-row-reverse">
+            <div class="border-t-2 border-l-2 border-transparent">
+                <div class="w-10 mr-10 h-10 border-r-2 border-green-300 border-dashed border-b-2 rounded-br-full"></div>
+            </div>
+            <div class="border-t-2 border-transparent flex-auto">
+                <div class="h-10 border-b-2 border-green-300 border-dashed"></div>
+            </div>
+            <div class="w-10 mt-10 ml-10 h-10 border-l-2 border-green-300 border-dashed border-t-2 rounded-tl-full"></div>
+        </div>
+
+        <!-- Paso 3: Espera la Aprobación -->
+        <div class="flex flex-row">
+            <div class="hidden md:flex flex-col items-center">
+                <div class="w-20 py-3 border border-yellow-300 rounded-xl mr-3 uppercase flex flex-col items-center justify-center bg-yellow-50">
+                    <div class="text-lg font-black text-yellow-600">Paso 3</div>
+                    <div class="text-yellow-600 text-xs font-semibold">Aprobación</div>
+                </div>
+                <div class="h-full border-l-4 border-transparent">
+                    <div class="border-l-2 mr-3 h-full border-yellow-300 border-dashed"></div>
+                </div>
+            </div>
+            <div class="flex-auto border rounded-xl border-yellow-300 bg-white shadow-sm">
+                <div class="flex md:flex-row flex-col items-center">
+                    <div class="flex-auto">
+                        <div class="md:hidden text-xs font-normal uppercase pt-3 pl-3 text-yellow-500">
+                            <span class="font-black">Paso 3</span> - Aprobación
+                        </div>
+                        <div class="p-3 text-base md:text-lg text-gray-800 font-semibold">Espera la Aprobación</div>
+                        <div class="px-3 pb-1 text-sm text-gray-600">
+                            Nuestro equipo revisará tu solicitud. Te notificaremos por email una vez aprobada.
+                        </div>
+                        <div class="px-3 pb-4">
+                            <ul class="space-y-1 text-xs text-gray-500">
+                                <li class="flex items-center">
+                                    <span class="text-yellow-600 mr-1">•</span>
+                                    Revisión en 24-48 horas
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-yellow-600 mr-1">•</span>
+                                    Notificación por email
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-yellow-600 mr-1">•</span>
+                                    Soporte personalizado
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="md:w-20 w-full p-2">
+                        <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mx-auto">
+                            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conector 3 -->
+        <div class="flex items-start flex-row">
+            <div class="border-t-2 border-r-2 border-transparent">
+                <div class="w-10 ml-10 h-10 border-l-2 border-yellow-300 border-dashed border-b-2 rounded-bl-full"></div>
+            </div>
+            <div class="border-t-2 border-transparent flex-auto">
+                <div class="h-10 border-b-2 border-yellow-300 border-dashed"></div>
+            </div>
+            <div class="w-10 mt-10 mr-10 h-10 border-r-2 border-yellow-300 border-dashed border-t-2 rounded-tr-full"></div>
+        </div>
+
+        <!-- Paso 4: ¡Comienza a Publicar! -->
+        <div class="flex flex-row-reverse">
+            <div class="hidden md:flex flex-col items-center">
+                <div class="w-20 py-3 border border-purple-300 rounded-xl ml-3 uppercase flex flex-col items-center justify-center bg-purple-50">
+                    <div class="text-lg font-black text-purple-600">Paso 4</div>
+                    <div class="text-purple-600 text-xs font-semibold">Publicar</div>
+                </div>
+            </div>
+            <div class="flex-auto border rounded-xl border-purple-300 bg-white shadow-sm">
+                <div class="flex md:flex-row flex-col items-center">
+                    <div class="flex-auto">
+                        <div class="md:hidden text-xs font-normal uppercase pt-3 pl-3 text-purple-500">
+                            <span class="font-black">Paso 4</span> - Publicar
+                        </div>
+                        <div class="p-3 text-base md:text-lg text-gray-800 font-semibold">¡Comienza a Publicar!</div>
+                        <div class="px-3 pb-1 text-sm text-gray-600">
+                            Una vez aprobado, podrás crear y publicar tus propiedades inmediatamente.
+                        </div>
+                        <div class="px-3 pb-4">
+                            <ul class="space-y-1 text-xs text-gray-500">
+                                <li class="flex items-center">
+                                    <span class="text-purple-600 mr-1">•</span>
+                                    Publicaciones ilimitadas
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-purple-600 mr-1">•</span>
+                                    Panel de administración completo
+                                </li>
+                                <li class="flex items-center">
+                                    <span class="text-purple-600 mr-1">•</span>
+                                    Métricas y estadísticas detalladas
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="md:w-20 w-full p-2">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="relative py-8 md:py-12 lg:py-16" style="background-color: #5db9ff;">
-        <div class="absolute inset-0" style="background-image: url('images/hexagon.svg'); background-size: cover; background-position: center; background-repeat: no-repeat; opacity: 0.2;"></div>
-
-        <div class="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 text-white">
-            <h2 class="text-lg md:text-2xl lg:text-3xl font-bold mb-2 md:mb-3">
-                ¡Comienza a anunciar hoy mismo!
-            </h2>
-            <p class="text-sm md:text-base lg:text-lg mb-4 md:mb-6 opacity-90 leading-relaxed">
-                Millones de usuarios están buscando su próxima propiedad.
-                <br class="hidden md:block">
-                ¡No esperes más para conectar con ellos!
-            </p>
-
-          <a href="/propiedades" class="inline-flex items-center px-4 md:px-6 lg:px-8 py-2 md:py-3 lg:py-4 border border-transparent text-xs md:text-sm lg:text-base font-bold rounded-lg shadow-lg text-indigo-600 bg-white hover:bg-gray-50 transition-all duration-300 transform hover:scale-105">
-    <i class="fas fa-rocket mr-1 md:mr-2 text-sm"></i>
-    Explorar Propiedades
-</a>
-        </div>
+    <!-- Botón CTA -->
+    <div class="text-center mt-8">
+        <a href="/propiedades" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 transform hover:scale-105 text-sm">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+            Explorar Propiedades
+        </a>
     </div>
 
 </section>
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
-        console.error('GSAP o ScrollTrigger no están disponibles');
-        return;
-    }
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    let currentActiveStep = 1;
-    const totalSteps = 4;
-    const isMobile = window.innerWidth < 768;
-
-    const allStepContents = document.querySelectorAll('.step-content');
-
-    let stepTransitionTL = gsap.timeline({ paused: true });
-
-    ScrollTrigger.create({
-        trigger: "#steps-to-advertiser",
-        start: isMobile ? "top top+=25%" : "top top+=15%",
-        end: isMobile ? "+=150%" : "+=180%",
-        scrub: 0.3,
-        pin: ".sticky-container",
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        pinSpacing: true,
-        onUpdate: self => {
-            const progress = self.progress;
-            updateStepsProgressSmooth(progress);
-        }
-    });
-
-    let activateStepTimeout;
-    const ACTIVATE_STEP_DELAY = 80;
-
-    function updateStepsProgressSmooth(progress) {
-        const stepSize = 1 / totalSteps;
-        const currentProgress = Math.min(progress, 0.999);
-        const newActiveStep = Math.min(Math.floor(currentProgress / stepSize) + 1, totalSteps);
-
-        if (newActiveStep !== currentActiveStep) {
-            currentActiveStep = newActiveStep;
-
-            clearTimeout(activateStepTimeout);
-            activateStepTimeout = setTimeout(() => {
-                activateStep(currentActiveStep);
-            }, ACTIVATE_STEP_DELAY);
-        }
-    }
-
-    function activateStep(stepNumber) {
-        if (stepTransitionTL.isActive()) {
-            stepTransitionTL.kill();
-        }
-        stepTransitionTL = gsap.timeline({ defaults: { duration: 0.4, ease: "power2.out" } });
-
-        for (let i = 1; i <= totalSteps; i++) {
-            const stepItem = document.querySelector(`[data-step="${i}"]`);
-            if (!stepItem) continue;
-
-            const circle = stepItem.querySelector('.step-circle');
-            const icon = stepItem.querySelector('.step-icon');
-            const line = stepItem.querySelector('.step-line');
-
-            if (i <= stepNumber) {
-                circle.classList.remove('bg-gray-200');
-                circle.classList.add('bg-blue-500');
-                icon.classList.remove('text-gray-400');
-                icon.classList.add('text-white');
-
-                if (line && i < totalSteps) {
-                    line.classList.remove('bg-gray-200');
-                    line.classList.add('bg-blue-500');
-                }
-            } else {
-                circle.classList.remove('bg-blue-500');
-                circle.classList.add('bg-gray-200');
-                icon.classList.remove('text-white');
-                icon.classList.add('text-gray-400');
-
-                if (line) {
-                    line.classList.remove('bg-blue-500');
-                    line.classList.add('bg-gray-200');
-                }
-            }
-        }
-
-        allStepContents.forEach((content) => {
-            if (parseInt(content.dataset.step) !== stepNumber) {
-                gsap.set(content, {
-                    opacity: 0,
-                    y: 30,
-                    pointerEvents: 'none',
-                    visibility: 'hidden',
-                    zIndex: 1,
-                });
-            }
-        });
-
-        const activeContent = document.querySelector(`.step-content[data-step="${stepNumber}"]`);
-        if (activeContent) {
-            stepTransitionTL.to(activeContent, {
-                opacity: 1,
-                y: 0,
-                pointerEvents: 'auto',
-                visibility: 'visible',
-                zIndex: 10,
-            }, 0);
-        }
-    }
-
-    activateStep(1);
-
-    ScrollTrigger.addEventListener("refresh", () => {
-        currentActiveStep = 1;
-        activateStep(1);
-    });
-
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            ScrollTrigger.refresh();
-        }, 250);
-    });
-});
-</script>
-@endpush

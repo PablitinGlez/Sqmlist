@@ -1,7 +1,7 @@
 <section class="py-8 md:py-16 bg-white">
     <x-partials.container>
         <div class="text-left mb-8 md:mb-12 md:text-center">
-            <h2 class="text-lg md:text-4xl font-bold text-gray-900 mb-2 md:mb-4">
+            <h2 class="text-lg md:text-2xl font-bold text-gray-900 mb-2 md:mb-4">
                 Conoce las soluciones inmobiliarias de SQMLIST
             </h2>
             <p class="text-sm md:text-lg text-gray-600 md:max-w-3xl md:mx-auto">

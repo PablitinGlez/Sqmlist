@@ -6,7 +6,7 @@
             class="max-w-7xl mx-auto"
         >
             <div class="text-left mb-8 md:mb-16 md:text-center px-4">
-                <h2 class="text-lg md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2 md:mb-4">
+                <h2 class="text-lg md:text-2xl lg:text-2xl font-bold text-gray-900 mb-2 md:mb-4">
                     Publica tu inmueble gratis y en simples pasos
                 </h2>
                 <p class="text-sm md:text-lg text-gray-600 md:max-w-2xl md:mx-auto">

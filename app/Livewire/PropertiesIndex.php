@@ -142,7 +142,8 @@ class PropertiesIndex extends Component
                             $q->whereRaw('CAST(value AS UNSIGNED) = ?', [(int) $featureValue]);
                         }
                     } elseif (is_bool($featureValue)) {
-                        $q->where('value', (string) (int) $featureValue);
+                        
+                        $q->where('value', '1');
                     } else {
                         $q->where('value', (string) $featureValue);
                     }

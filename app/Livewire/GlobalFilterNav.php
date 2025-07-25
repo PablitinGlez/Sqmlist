@@ -436,11 +436,16 @@ class GlobalFilterNav extends Component
             $operationTypeToEmit = 'rent';
         }
 
-        // Preparar features limpias
+
         $cleanedFeatures = [];
         foreach ($this->filters as $featureSlug => $featureValue) {
+            
             if (is_bool($featureValue)) {
-                $cleanedFeatures[$featureSlug] = $featureValue;
+              
+                if ($featureValue === true) {
+                    $cleanedFeatures[$featureSlug] = $featureValue;
+                }
+                
             } elseif ($featureValue !== null && $featureValue !== '' && $featureValue !== 'Todos') {
                 $cleanedFeatures[$featureSlug] = $featureValue;
             }
