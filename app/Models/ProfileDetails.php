@@ -19,6 +19,7 @@ class ProfileDetails extends Model
         'identification_type',
         'identification_path',
         'license_path',
+        'biography',
         'years_experience',
         'real_estate_company',
         'rfc',

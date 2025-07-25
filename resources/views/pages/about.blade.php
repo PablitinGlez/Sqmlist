@@ -1,53 +1,49 @@
-
 <x-app-layout>
 
     <section class="relative bg-gradient-to-r from-blue-600 to-blue-600 text-white mt-16 py-24">
         <div class="absolute inset-0 bg-black opacity-20"></div>
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 class="text-4xl md:text-6xl font-bold mb-6">
-                Tu Hogar Ideal Te Espera
+                Lorem Ipsum Dolor
             </h1>
             <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                Con más de 15 años de experiencia, somos líderes en el mercado inmobiliario,
-                conectando sueños con realidades.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam non tellus sed urna consectetur rhoncus.
+                Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.
             </p>
         </div>
     </section>
 
-   
     <div class="h-px bg-gray-200"></div>
 
-    
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900 mb-6">
-                        Nuestra Historia
+                        Lorem Ipsum
                     </h2>
                     <p class="text-lg text-gray-600 mb-4">
-                        Fundada en 2009, nuestra inmobiliaria nació con la visión de transformar
-                        la experiencia de compra y venta de propiedades. Lo que comenzó como un
-                        pequeño equipo de dos personas, hoy se ha convertido en una de las
-                        agencias más confiables de la región.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                        labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                        laboris nisi ut aliquip ex ea commodo consequat.
                     </p>
                     <p class="text-lg text-gray-600 mb-6">
-                        Hemos ayudado a más de 2,500 familias a encontrar su hogar perfecto,
-                        construyendo relaciones duraderas basadas en la confianza,
-                        transparencia y resultados excepcionales.
+                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                        pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
+                        mollit anim id est laborum.
                     </p>
                     <div class="flex items-center space-x-4">
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-blue-600">15+</div>
-                            <div class="text-sm text-gray-500">Años de experiencia</div>
+                            <div class="text-2xl font-bold text-blue-600">XXX+</div>
+                            <div class="text-sm text-gray-500">Lorem ipsum</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-blue-600">2,500+</div>
-                            <div class="text-sm text-gray-500">Familias satisfechas</div>
+                            <div class="text-2xl font-bold text-blue-600">YYY+</div>
+                            <div class="text-sm text-gray-500">Dolor sit amet</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-blue-600">98%</div>
-                            <div class="text-sm text-gray-500">Satisfacción cliente</div>
+                            <div class="text-2xl font-bold text-blue-600">ZZ%</div>
+                            <div class="text-sm text-gray-500">Consectetur</div>
                         </div>
                     </div>
                 </div>
@@ -62,7 +58,6 @@
 
     <div class="h-px bg-gray-200"></div>
 
-
     <section class="py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -70,47 +65,42 @@
                     Nuestros Principios
                 </h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Los valores que nos guían en cada transacción y relación con nuestros clientes.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi.
                 </p>
             </div>
 
             <div class="space-y-20">
-          
+
                 <div class="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
                     <div class="order-1 lg:order-1">
                         <h3 class="text-3xl font-bold text-gray-900 mb-6 mision-title">
                             Misión
                         </h3>
                         <p class="text-lg text-gray-600 mb-6">
-                            Brindamos a nuestros clientes una experiencia inmobiliaria personalizada, profesional,
-                            tecnológica y segura, ofreciendo soluciones integrales en la renta y venta de propiedades.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero.
+                            Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis
+                            sagittis ipsum. Praesent mauris.
                         </p>
                         <p class="text-lg text-gray-600">
-                            Nos comprometemos a facilitar el proceso de compra, venta y alquiler de propiedades,
-                            brindando un servicio que supere las expectativas de nuestros clientes en cada transacción.
+                            Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
+                            Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
                         </p>
                     </div>
                     <div class="order-2 lg:order-2 mt-8 lg:mt-0">
                         <div class="relative bg-gradient-to-br from-blue-100 to-blue-200 rounded-lg h-80 shadow-lg">
-                            <img
-                                src="{{ asset('images/image.png') }}"
-                                alt="Tachuela"
-                                class="absolute -top- -right-6 z-10 w-12 h-12 drop-shadow-md"
-                                style="transform: rotate(10deg);"
-                            >
 
-                            <img src="{{ asset('images/mision.jpg') }}" alt="Imagen de Misión" class="w-full h-full object-cover rounded-lg">
                         </div>
                     </div>
                 </div>
 
-           
+
                 <div class="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
                     <div class="order-2 lg:order-1">
-                        <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg h-80 flex items-center justify-center shadow-lg">
+                        <div
+                            class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg h-80 flex items-center justify-center shadow-lg">
                             <div class="text-center">
                                 <i class="fas fa-city text-6xl text-orange-600 mb-4"></i>
-                                <p class="text-orange-800 font-semibold">Oficina con Vista Panorámica</p>
+                                <p class="text-orange-800 font-semibold">Lorem Ipsum Dolor</p>
                             </div>
                         </div>
                     </div>
@@ -119,17 +109,16 @@
                             Visión
                         </h3>
                         <p class="text-lg text-gray-600 mb-6">
-                            Ser la inmobiliaria líder en la ciudad de Puebla con el objetivo de expandir nuestros servicios
-                            en las principales ciudades del país.
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum tristique quam, at
+                            aliquet lorem. Sed ut lorem in ipsum auctor dapibus.
                         </p>
                         <p class="text-lg text-gray-600">
-                            Aspiramos a ser reconocidos por nuestra innovación, integridad y compromiso con la satisfacción
-                            del cliente, estableciendo nuevos estándares en el mercado inmobiliario nacional.
+                            Nullam et erat eu ipsum consectetur tempus nec in justo. Maecenas nec tellus a lacus
+                            consectetur dapibus.
                         </p>
                     </div>
                 </div>
 
-                <!-- Valores - Texto izquierda, imagen derecha -->
                 <div class="lg:grid lg:grid-cols-2 lg:gap-12 items-center">
                     <div class="order-1 lg:order-1">
                         <h3 class="text-3xl font-bold text-gray-900 mb-6 valores-title">
@@ -137,48 +126,53 @@
                         </h3>
                         <div class="space-y-4">
                             <div class="flex items-start space-x-3">
-                                <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <div
+                                    class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                                     <i class="fas fa-check text-white text-xs"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-semibold text-gray-900">Transparencia</h4>
-                                    <p class="text-gray-600">Información clara y honesta en cada transacción.</p>
+                                    <h4 class="font-semibold text-gray-900">Lorem</h4>
+                                    <p class="text-gray-600">Lorem ipsum dolor sit amet.</p>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-3">
-                                <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <div
+                                    class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                                     <i class="fas fa-check text-white text-xs"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-semibold text-gray-900">Profesionalismo</h4>
-                                    <p class="text-gray-600">Excelencia y competencia en cada servicio.</p>
+                                    <h4 class="font-semibold text-gray-900">Ipsum</h4>
+                                    <p class="text-gray-600">Consectetur adipiscing elit.</p>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-3">
-                                <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <div
+                                    class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                                     <i class="fas fa-check text-white text-xs"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-semibold text-gray-900">Compromiso</h4>
-                                    <p class="text-gray-600">Dedicación total a los objetivos de nuestros clientes.</p>
+                                    <h4 class="font-semibold text-gray-900">Dolor</h4>
+                                    <p class="text-gray-600">Sed do eiusmod tempor.</p>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-3">
-                                <div class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                                <div
+                                    class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                                     <i class="fas fa-check text-white text-xs"></i>
                                 </div>
                                 <div>
-                                    <h4 class="font-semibold text-gray-900">Innovación</h4>
-                                    <p class="text-gray-600">Tecnología de vanguardia para mejores resultados.</p>
+                                    <h4 class="font-semibold text-gray-900">Sit Amet</h4>
+                                    <p class="text-gray-600">Incididunt ut labore et dolore.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="order-2 lg:order-2 mt-8 lg:mt-0">
-                        <div class="bg-gradient-to-br from-green-100 to-green-200 rounded-lg h-80 flex items-center justify-center shadow-lg">
+                        <div
+                            class="bg-gradient-to-br from-green-100 to-green-200 rounded-lg h-80 flex items-center justify-center shadow-lg">
                             <div class="text-center">
                                 <i class="fas fa-award text-6xl text-green-600 mb-4"></i>
-                                <p class="text-green-800 font-semibold">Certificaciones y Reconocimientos</p>
+                                <p class="text-green-800 font-semibold">Lorem Ipsum Dolor Sit</p>
                             </div>
                         </div>
                     </div>
@@ -190,7 +184,7 @@
 
     <div class="h-px bg-gray-200"></div>
 
-    
+
     <section class="py-16 bg-transparent">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
@@ -198,36 +192,36 @@
                     Nuestro Equipo
                 </h2>
                 <p class="text-lg text-gray-600 max-w-2xl mx-auto">
-                    Profesionales expertos comprometidos con tu éxito inmobiliario.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-               
+
                 <div class="text-center">
                     <div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                         <i class="fas fa-user text-4xl text-gray-400"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">María González</h3>
-                    <p class="text-blue-600 mb-2">Directora General</p>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">John Doe</h3>
+                    <p class="text-blue-600 mb-2">Lorem Ipsum</p>
                 </div>
 
-              
+
                 <div class="text-center">
                     <div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                         <i class="fas fa-user text-4xl text-gray-400"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Carlos Rodríguez</h3>
-                    <p class="text-blue-600 mb-2">Agente Senior</p>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Jane Smith</h3>
+                    <p class="text-blue-600 mb-2">Dolor Sit Amet</p>
                 </div>
 
-               
+
                 <div class="text-center">
                     <div class="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 flex items-center justify-center">
                         <i class="fas fa-user text-4xl text-gray-400"></i>
                     </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Ana Martínez</h3>
-                    <p class="text-blue-600 mb-2">Especialista en Marketing</p>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Peter Jones</h3>
+                    <p class="text-blue-600 mb-2">Consectetur Adipiscing</p>
                 </div>
             </div>
         </div>
@@ -241,68 +235,74 @@
                         ¿Por Qué Elegirnos?
                     </h2>
                     <p class="text-lg text-gray-300 max-w-2xl mx-auto">
-                        Las ventajas que nos convierten en tu mejor opción inmobiliaria.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     </p>
                 </div>
 
                 <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
+                    <div
+                        class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
                         <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-clock text-white"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-white mb-2">Respuesta Rápida</h3>
-                            <p class="text-gray-200">Respondemos a todas las consultas en menos de 2 horas.</p>
+                            <h3 class="text-lg font-semibold text-white mb-2">Lorem Ipsum</h3>
+                            <p class="text-gray-200">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
+                    <div
+                        class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
                         <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-shield-alt text-white"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-white mb-2">Transacciones Seguras</h3>
-                            <p class="text-gray-200">Proceso legal transparente y seguro en cada operación.</p>
+                            <h3 class="text-lg font-semibold text-white mb-2">Dolor Sit</h3>
+                            <p class="text-gray-200">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
+                    <div
+                        class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
                         <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-chart-line text-white"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-white mb-2">Análisis de Mercado</h3>
-                            <p class="text-gray-200">Evaluaciones precisas basadas en datos del mercado actual.</p>
+                            <h3 class="text-lg font-semibold text-white mb-2">Amet Consectetur</h3>
+                            <p class="text-gray-200">Ut enim ad minim veniam, quis nostrud exercitation.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
+                    <div
+                        class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
                         <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-handshake text-white"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-white mb-2">Asesoría Personalizada</h3>
-                            <p class="text-gray-200">Atención one-to-one adaptada a tus necesidades específicas.</p>
+                            <h3 class="text-lg font-semibold text-white mb-2">Adipiscing Elit</h3>
+                            <p class="text-gray-200">Ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
+                    <div
+                        class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
                         <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-camera text-white"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-white mb-2">Marketing Premium</h3>
-                            <p class="text-gray-200">Fotografía profesional y tours virtuales para cada propiedad.</p>
+                            <h3 class="text-lg font-semibold text-white mb-2">Nullam Ac</h3>
+                            <p class="text-gray-200">Duis aute irure dolor in reprehenderit in voluptate velit esse.</p>
                         </div>
                     </div>
 
-                    <div class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
+                    <div
+                        class="flex items-start space-x-4 bg-white/10 backdrop-blur-sm rounded-lg p-6 hover:bg-white/20 transition-all duration-300">
                         <div class="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-mobile-alt text-white"></i>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-white mb-2">Tecnología Avanzada</h3>
-                            <p class="text-gray-200">Plataforma digital moderna para búsquedas eficientes.</p>
+                            <h3 class="text-lg font-semibold text-white mb-2">Tellus Sed</h3>
+                            <p class="text-gray-200">Cillum dolore eu fugiat nulla pariatur excepteur.</p>
                         </div>
                     </div>
                 </div>

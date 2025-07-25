@@ -101,7 +101,9 @@ class HeroSearch extends Component
 
     public function setOperationType(string $type): void
     {
-        $this->operationType = $type;
+        if ($this->operationType !== $type) {
+            $this->operationType = $type;
+        }
     }
 
     public function searchProperties(): void

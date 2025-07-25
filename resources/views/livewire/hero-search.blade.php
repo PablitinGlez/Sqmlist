@@ -1,27 +1,17 @@
 <div class="max-w-2xl mx-auto">
-    <div class="flex justify-start mb-8" x-data="{
-        localOperationType: '{{ $operationType }}',
-
-        changeOperationType(type) {
-            this.localOperationType = type;
-
-            this.$nextTick(() => {
-                $wire.setOperationType(type);
-            });
-        }
-    }">
+    <div class="flex justify-start mb-8">
         <div class="flex gap-8">
             <button type="button"
-                    @click="changeOperationType('sale')"
+                    wire:click="setOperationType('sale')"
                     class="px-4 py-2 text-white font-medium transition-all duration-100 relative hover:opacity-80"
-                    :class="{ 'border-b-2 border-blue-500': localOperationType === 'sale' }">
+                    :class="{ 'border-b-2 border-blue-500': $wire.operationType === 'sale' }">
                 En Venta
             </button>
 
             <button type="button"
-                    @click="changeOperationType('rent')"
+                    wire:click="setOperationType('rent')"
                     class="px-4 py-2 text-white font-medium transition-all duration-100 relative hover:opacity-80"
-                    :class="{ 'border-b-2 border-blue-500': localOperationType === 'rent' }">
+                    :class="{ 'border-b-2 border-blue-500': $wire.operationType === 'rent' }">
                 En Renta
             </button>
         </div>
