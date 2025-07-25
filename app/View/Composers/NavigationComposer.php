@@ -38,8 +38,7 @@ class NavigationComposer
             ['value' => '1', 'label' => '1 recámara'],
             ['value' => '2', 'label' => '2 recámaras'],
             ['value' => '3', 'label' => '3 recámaras'],
-            ['value' => '4', 'label' => '4 recámaras'],
-            ['value' => '5+', 'label' => '5 o más recámaras']
+            ['value' => '4', 'label' => '4 o mas recámaras'],
         ];
 
         $navigationLinks = [

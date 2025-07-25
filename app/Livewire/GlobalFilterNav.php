@@ -192,8 +192,8 @@ class GlobalFilterNav extends Component
 
         if ($slug && $slug !== '') {
             $trimmedSlug = strtolower(trim($slug));
-            $propertyType = $this->propertyTypes->first(fn ($type) => strtolower(trim($type->slug)) === $trimmedSlug);
-            
+            $propertyType = $this->propertyTypes->first(fn($type) => strtolower(trim($type->slug)) === $trimmedSlug);
+
             if ($propertyType) {
                 $this->propertyTypeDisplayName = $propertyType->name;
             } else {
@@ -234,19 +234,31 @@ class GlobalFilterNav extends Component
 
     public function setRecamaras($value): void
     {
-        $this->filters['num_recamaras'] = $value;
+        if (isset($this->filters['num_recamaras']) && $this->filters['num_recamaras'] == $value) {
+            unset($this->filters['num_recamaras']);
+        } else {
+            $this->filters['num_recamaras'] = $value;
+        }
         $this->emitFilters();
     }
 
     public function setBanos($value): void
     {
-        $this->filters['num_banos'] = $value;
+        if (isset($this->filters['num_banos']) && $this->filters['num_banos'] == $value) {
+            unset($this->filters['num_banos']);
+        } else {
+            $this->filters['num_banos'] = $value;
+        }
         $this->emitFilters();
     }
 
     public function setEstacionamientos($value): void
     {
-        $this->filters['num_estacionamientos'] = $value;
+        if (isset($this->filters['num_estacionamientos']) && $this->filters['num_estacionamientos'] == $value) {
+            unset($this->filters['num_estacionamientos']);
+        } else {
+            $this->filters['num_estacionamientos'] = $value;
+        }
         $this->emitFilters();
     }
 
@@ -307,37 +319,37 @@ class GlobalFilterNav extends Component
         return $numericValue;
     }
 
-  public function clearField(string $field): void
-{
-    switch ($field) {
-        case 'minPrice':
-            $this->minPrice = null;
-            $this->updatePriceDisplay();
-            break;
-        case 'maxPrice':
-            $this->maxPrice = null;
-            $this->updatePriceDisplay();
-            break;
-        case 'minSuperficieConstruida':
-            $this->minSuperficieConstruida = null;
-            break;
-        case 'maxSuperficieConstruida':
-            $this->maxSuperficieConstruida = null;
-            break;
-        case 'minSuperficieTerreno':
-            $this->minSuperficieTerreno = null;
-            break;
-        case 'maxSuperficieTerreno':
-            $this->maxSuperficieTerreno = null;
-            break;
-        case 'locationSearch':
-            $this->locationSearch = '';
-            $this->locationSuggestions = [];
-            $this->showLocationSuggestions = false;
-            break;
+    public function clearField(string $field): void
+    {
+        switch ($field) {
+            case 'minPrice':
+                $this->minPrice = null;
+                $this->updatePriceDisplay();
+                break;
+            case 'maxPrice':
+                $this->maxPrice = null;
+                $this->updatePriceDisplay();
+                break;
+            case 'minSuperficieConstruida':
+                $this->minSuperficieConstruida = null;
+                break;
+            case 'maxSuperficieConstruida':
+                $this->maxSuperficieConstruida = null;
+                break;
+            case 'minSuperficieTerreno':
+                $this->minSuperficieTerreno = null;
+                break;
+            case 'maxSuperficieTerreno':
+                $this->maxSuperficieTerreno = null;
+                break;
+            case 'locationSearch':
+                $this->locationSearch = '';
+                $this->locationSuggestions = [];
+                $this->showLocationSuggestions = false;
+                break;
+        }
+        $this->emitFilters();
     }
-    $this->emitFilters();
-}
 
     private function initializeFeatureOptions(): void
     {
@@ -373,6 +385,7 @@ class GlobalFilterNav extends Component
         $this->amenityFeatures = collect();
         $this->filteredFeatures = collect();
 
+        
         $this->minSuperficieConstruida = null;
         $this->maxSuperficieConstruida = null;
         $this->minSuperficieTerreno = null;
@@ -399,16 +412,18 @@ class GlobalFilterNav extends Component
                 return $pivot ? $pivot->order_for_type : 999;
             });
         }
-        
+
         foreach ($featuresToConsider as $feature) {
+       
             if (isset($oldFilters[$feature->slug])) {
                 $this->filters[$feature->slug] = $oldFilters[$feature->slug];
             } elseif ($feature->input_type === 'boolean') {
                 $this->filters[$feature->slug] = false;
             } else {
-                $this->filters[$feature->slug] = null;
+                $this->filters[$feature->slug] = null; 
             }
 
+           
             if ($feature->slug === 'num_recamaras' && !isset($oldFilters[$feature->slug])) {
                 $this->filters[$feature->slug] = 'Todos';
             } elseif ($feature->slug === 'num_banos' && !isset($oldFilters[$feature->slug])) {
@@ -416,7 +431,7 @@ class GlobalFilterNav extends Component
             } elseif ($feature->slug === 'num_estacionamientos' && !isset($oldFilters[$feature->slug])) {
                 $this->filters[$feature->slug] = 'Todos';
             }
-            
+
             if ($feature->featureSection && $feature->featureSection->slug === 'amenidades') {
                 $this->amenityFeatures->push($feature);
             }
@@ -436,16 +451,12 @@ class GlobalFilterNav extends Component
             $operationTypeToEmit = 'rent';
         }
 
-
         $cleanedFeatures = [];
         foreach ($this->filters as $featureSlug => $featureValue) {
-            
             if (is_bool($featureValue)) {
-              
                 if ($featureValue === true) {
                     $cleanedFeatures[$featureSlug] = $featureValue;
                 }
-                
             } elseif ($featureValue !== null && $featureValue !== '' && $featureValue !== 'Todos') {
                 $cleanedFeatures[$featureSlug] = $featureValue;
             }

@@ -1,4 +1,5 @@
 <div class="flex flex-wrap items-center justify-start gap-3 p-3 rounded-lg mt-16 max-w-7xl mx-auto px-8">
+   
     <div class="relative w-full md:w-1/3 lg:w-1/4">
         <input
             type="text"
@@ -44,6 +45,7 @@
         </div>
     </div>
 
+ 
     <div x-data="{ open: false, toggle() { this.open = !this.open; }, close() { this.open = false; } }" @click.outside="close()" class="relative w-full sm:w-auto">
         <button
             @click="toggle()"
@@ -77,6 +79,7 @@
         </div>
     </div>
 
+   
     <div x-data="{ open: false }" @click.outside="open = false" class="relative w-full sm:w-auto">
         <button
             @click="open = !open"
@@ -100,7 +103,7 @@
         </div>
     </div>
 
-    <!-- FILTRO DE PRECIOS CON VALIDACIÓN DE LONGITUD -->
+   
     <div x-data="{ open: false }" @click.outside="open = false" class="relative w-full sm:w-auto">
         <button
             @click="open = !open"
@@ -162,11 +165,13 @@
         </div>
     </div>
 
+
     <div x-data="{ open: false }" @click.outside="open = false" class="relative w-full sm:w-auto md:ml-auto">
         <button
             @click="open = !open"
             class="flex items-center justify-center h-9 px-3 py-1.5 border border-gray-300 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 min-w-[10rem] w-full text-sm"
-            @if ($selectedPropertyTypeSlug && $filteredFeatures->isEmpty())
+          
+            @if ($filteredFeatures->isEmpty() && $selectedPropertyTypeSlug)
                 disabled
                 title="No hay filtros adicionales para este tipo de propiedad"
             @endif
@@ -181,7 +186,11 @@
             @if ($filteredFeatures->isEmpty() && $selectedPropertyTypeSlug)
                 <p class="text-gray-500 text-xs text-center py-3">No hay filtros adicionales para este tipo de propiedad.</p>
             @else
-                @if ($recamarasOptions->isNotEmpty())
+               
+                @php
+                    $hasRecamaras = $filteredFeatures->contains('slug', 'num_recamaras');
+                @endphp
+                @if ($hasRecamaras || !$selectedPropertyTypeSlug)
                     <div class="mb-3">
                         <label class="block text-xs font-semibold text-gray-700 mb-1">Recámaras</label>
                         <div class="flex flex-wrap gap-1.5">
@@ -189,7 +198,7 @@
                                 <button
                                     wire:key="recamaras-{{ $option->value }}"
                                     wire:click.prevent="setRecamaras('{{ $option->value }}')"
-                                    class="px-2.5 py-1 text-xs rounded-full border {{ isset($filters['num_recamaras']) && $filters['num_recamaras'] == $option->value ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}"
+                                    class="px-2.5 py-1 text-xs rounded-full border {{ (isset($filters['num_recamaras']) && $filters['num_recamaras'] == $option->value) || (!isset($filters['num_recamaras']) && $option->value === 'Todos') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}"
                                 >
                                     {{ $option->label }}
                                 </button>
@@ -198,7 +207,11 @@
                     </div>
                 @endif
 
-                @if ($banosOptions->isNotEmpty())
+             
+                @php
+                    $hasBanos = $filteredFeatures->contains('slug', 'num_banos');
+                @endphp
+                @if ($hasBanos || !$selectedPropertyTypeSlug)
                     <div class="mb-3">
                         <label class="block text-xs font-semibold text-gray-700 mb-1">Baños</label>
                         <div class="flex flex-wrap gap-1.5">
@@ -206,7 +219,7 @@
                                 <button
                                     wire:key="banos-{{ $option->value }}"
                                     wire:click.prevent="setBanos('{{ $option->value }}')"
-                                    class="px-2.5 py-1 text-xs rounded-full border {{ isset($filters['num_banos']) && $filters['num_banos'] == $option->value ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}"
+                                    class="px-2.5 py-1 text-xs rounded-full border {{ (isset($filters['num_banos']) && $filters['num_banos'] == $option->value) || (!isset($filters['num_banos']) && $option->value === 'Todos') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}"
                                 >
                                     {{ $option->label }}
                                 </button>
@@ -215,7 +228,11 @@
                     </div>
                 @endif
 
-                @if ($estacionamientosOptions->isNotEmpty())
+              
+                @php
+                    $hasEstacionamientos = $filteredFeatures->contains('slug', 'num_estacionamientos');
+                @endphp
+                @if ($hasEstacionamientos || !$selectedPropertyTypeSlug)
                     <div class="mb-3">
                         <label class="block text-xs font-semibold text-gray-700 mb-1">Estacionamiento</label>
                         <div class="flex flex-wrap gap-1.5">
@@ -223,7 +240,7 @@
                                 <button
                                     wire:key="estacionamiento-{{ $option->value }}"
                                     wire:click.prevent="setEstacionamientos('{{ $option->value }}')"
-                                    class="px-2.5 py-1 text-xs rounded-full border {{ isset($filters['num_estacionamientos']) && $filters['num_estacionamientos'] == $option->value ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}"
+                                    class="px-2.5 py-1 text-xs rounded-full border {{ (isset($filters['num_estacionamientos']) && $filters['num_estacionamientos'] == $option->value) || (!isset($filters['num_estacionamientos']) && $option->value === 'Todos') ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}"
                                 >
                                     {{ $option->label }}
                                 </button>
@@ -232,13 +249,13 @@
                     </div>
                 @endif
 
+              
                 @php
                     $hasSuperficieConstruida = $filteredFeatures->contains('slug', 'tamano_construccion_m2');
                 @endphp
                 @if ($hasSuperficieConstruida || !$selectedPropertyTypeSlug)
-                   
                     <div class="mb-3">
-                        <label class="block text-xs font-semibold text-gray-700 mb-1">Superficie Construida</label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Superficie Construida (m²)</label>
                         <div class="flex items-center gap-1.5">
                             <div class="relative w-1/2">
                                 <input
@@ -263,7 +280,7 @@
                                     </button>
                                 @endif
                             </div>
-                            <span class="text-gray-500 text-xs">m² -</span>
+                            <span class="text-gray-500 text-xs">-</span>
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
@@ -287,18 +304,17 @@
                                     </button>
                                 @endif
                             </div>
-                            <span class="text-gray-500 text-xs">m²</span>
                         </div>
                     </div>
                 @endif
 
+               
                 @php
                     $hasSuperficieTerreno = $filteredFeatures->contains('slug', 'tamano_terreno_m2');
                 @endphp
                 @if ($hasSuperficieTerreno || !$selectedPropertyTypeSlug)
-               
                     <div class="mb-3">
-                        <label class="block text-xs font-semibold text-gray-700 mb-1">Superficie de Terreno</label>
+                        <label class="block text-xs font-semibold text-gray-700 mb-1">Superficie de Terreno (m²)</label>
                         <div class="flex items-center gap-1.5">
                             <div class="relative w-1/2">
                                 <input
@@ -323,7 +339,7 @@
                                     </button>
                                 @endif
                             </div>
-                            <span class="text-gray-500 text-xs">m² -</span>
+                            <span class="text-gray-500 text-xs">-</span>
                             <div class="relative w-1/2">
                                 <input
                                     type="number"
@@ -347,15 +363,16 @@
                                     </button>
                                 @endif
                             </div>
-                            <span class="text-gray-500 text-xs">m²</span>
                         </div>
                     </div>
                 @endif
 
-                @if ($amenityFeatures->isNotEmpty() && ($recamarasOptions->isNotEmpty() || $banosOptions->isNotEmpty() || $estacionamientosOptions->isNotEmpty() || $hasSuperficieConstruida || $hasSuperficieTerreno))
+                
+                @if (($hasRecamaras || $hasBanos || $hasEstacionamientos || $hasSuperficieConstruida || $hasSuperficieTerreno) && $amenityFeatures->isNotEmpty())
                     <hr class="my-3 border-gray-200">
                 @endif
 
+            
                 @if ($amenityFeatures->isNotEmpty())
                     <div class="mb-3">
                         <label class="block text-xs font-semibold text-gray-700 mb-1">Amenidades</label>

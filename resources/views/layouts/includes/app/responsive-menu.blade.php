@@ -6,7 +6,7 @@
                     <button @click="mainDropdownOpen = !mainDropdownOpen"
                             class="flex items-center justify-between w-full ps-3 pe-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out"
                             :class="{
-                                'text-white hover:text-gray-200 hover:bg-white/20 border-white/30': scrolled,
+                                'text-black hover:text-gray-800 hover:bg-gray-100 border-gray-300': scrolled,
                                 'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-transparent': !scrolled
                             }">
                         <span>{{ $item['name'] }}</span>
@@ -85,7 +85,7 @@
             @else
                 <a href="{{ $item['route'] }}"
                    :class="{
-                        'text-white hover:text-gray-200 hover:bg-white/20 border-white/30': scrolled,
+                        'text-black hover:text-gray-800 hover:bg-gray-100 border-gray-300': scrolled,
                         'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-transparent': !scrolled
                    }"
                    class="block ps-3 pe-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out {{ $item['active'] ? 'border-indigo-400 bg-indigo-50' : '' }}">
@@ -96,7 +96,7 @@
     </div>
 
     <div :class="{
-        'border-white/30': scrolled,
+        'border-gray-300': scrolled,
         'border-gray-200': !scrolled
     }" class="pt-4 pb-1 border-t">
 
@@ -120,7 +120,7 @@
 
         @auth
             <div :class="{
-                'text-white': scrolled,
+                'text-black': scrolled,
                 'text-gray-800': !scrolled
             }" class="flex items-center px-4 mb-3">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
@@ -132,7 +132,7 @@
                 <div>
                     <div class="font-medium text-base">{{ Auth::user()->name }}</div>
                     <div :class="{
-                        'text-gray-300': scrolled,
+                        'text-gray-600': scrolled,
                         'text-gray-500': !scrolled
                     }" class="font-medium text-sm">{{ Auth::user()->email }}</div>
                 </div>
@@ -141,7 +141,7 @@
             <div class="mt-3 space-y-1">
                 <a href="{{ route('profile.show') }}"
                    :class="{
-                        'text-white hover:text-gray-200 hover:bg-white/20 border-white/30': scrolled,
+                        'text-black hover:text-gray-800 hover:bg-gray-100 border-gray-300': scrolled,
                         'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-transparent': !scrolled
                    }"
                    class="block ps-3 pe-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out {{ request()->routeIs('profile.show') ? 'border-indigo-400 bg-indigo-50' : '' }}">
@@ -151,7 +151,7 @@
                 @if($hasAdvertiserRole)
                     <a href="/dashboard" 
                         :class="{
-                            'text-white hover:text-gray-200 hover:bg-white/20 border-white/30': scrolled,
+                            'text-black hover:text-gray-800 hover:bg-gray-100 border-gray-300': scrolled,
                             'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-transparent': !scrolled
                         }"
                         class="block ps-3 pe-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out">
@@ -160,13 +160,13 @@
                 @endif
 
                 <x-responsive-nav-link href="{{ route('user.favorites.index') }}" :active="request()->routeIs('user.favorites.index')" wire:navigate>
-                    <div class="flex items-center">
+                    <div class="flex items-center text-base font-medium text-black ">
                         Mis Favoritos
                     </div>
                 </x-responsive-nav-link>
 
                 <x-dropdown-link href="{{ route('user.notifications.index') }}" wire:navigate>
-                    <div class="flex items-center">
+                    <div class="flex items-center text-base font-medium text-black">
                         Mis Notificaciones
                     </div>
                 </x-dropdown-link>
@@ -174,7 +174,7 @@
                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                     <a href="{{ route('api-tokens.index') }}"
                        :class="{
-                            'text-white hover:text-gray-200 hover:bg-white/20 border-white/30': scrolled,
+                            'text-black hover:text-gray-800 hover:bg-gray-100 border-gray-300': scrolled,
                             'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-transparent': !scrolled
                        }"
                        class="block ps-3 pe-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out">
@@ -186,7 +186,7 @@
                     @csrf
                     <button type="submit"
                             :class="{
-                                'text-white hover:text-gray-200 hover:bg-white/20 border-white/30': scrolled,
+                                'text-black hover:text-gray-800 hover:bg-gray-100 border-gray-300': scrolled,
                                 'text-gray-600 hover:text-gray-800 hover:bg-gray-50 border-transparent': !scrolled
                             }"
                             class="block w-full text-left ps-3 pe-4 py-2 border-l-4 text-base font-medium focus:outline-none transition duration-150 ease-in-out">

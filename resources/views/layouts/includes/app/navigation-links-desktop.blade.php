@@ -20,7 +20,6 @@
                     </svg>
                 </div>
 
-               
                 <div x-show="open"
                      x-cloak
                      style="display: none;"
@@ -76,13 +75,10 @@
                                 <ul class="space-y-1">
                                     @foreach ($item['dropdown_items']['bedrooms'] as $bedroom)
                                         <li>
-                                            <a href="{{ route('properties.index', [
-                                                'operacion' => $item['operacion'],
-                                                'recamaras' => $bedroom['value']
-                                            ]) }}"
-                                            class="block text-xs text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-2 py-1 rounded transition-colors duration-150"
-                                            wire:navigate
-                                            @click="open = false">
+                                            <a
+                                                href="{{ route('properties.index', array_merge(['operacion' => $item['operacion']], ['caracteristicas' => ['num_recamaras' => $bedroom['value']]])) }}"
+                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                            >
                                                 {{ $bedroom['label'] }}
                                             </a>
                                         </li>

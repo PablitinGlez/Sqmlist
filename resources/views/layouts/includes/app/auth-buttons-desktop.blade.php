@@ -76,7 +76,7 @@
                         <div class="border-t border-gray-200"></div>
                         <x-dropdown-link href="{{ route('filament.admin.pages.dashboard') }}">
                             <div class="flex items-center">
-                                <x-heroicon-s-cog-6-tooth class="w-4 h-4 mr-2 text-gray-500"/>
+                              
                                 Panel Administrativo
                             </div>
                         </x-dropdown-link>
@@ -86,7 +86,7 @@
                         <div class="border-t border-gray-200"></div>
                         <x-dropdown-link href="/dashboard" >
                             <div class="flex items-center">
-                                <x-heroicon-s-home-modern class="w-4 h-4 mr-2 text-gray-500"/>
+                               
                                 Panel de Anunciante
                             </div>
                         </x-dropdown-link>
