@@ -20,8 +20,12 @@ class NotificationResource extends Resource
     protected static ?string $model = DatabaseNotification::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-bell'; 
+ 
+    protected static ?int $navigationSort = 10;
+
     protected static ?string $navigationLabel = 'Mis Notificaciones';
-    protected static ?int $navigationSort = 10; 
+    protected static ?string $modelLabel = 'Notificaciones';
+    protected static ?string $pluralModelLabel = 'Mis Notificaciones';
 
     /**
      * 

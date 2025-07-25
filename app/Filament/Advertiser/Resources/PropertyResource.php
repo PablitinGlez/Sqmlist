@@ -369,145 +369,166 @@ class PropertyResource extends Resource
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->postal_code ?? 'Sin CP'),
 
-                    Forms\Components\Placeholder::make('google_map_display')
-                        ->label('Ubicación en el Mapa')
-                        ->content(function ($record) {
-                            $lat = $record->address->latitude ?? 19.4326;
-                            $lng = $record->address->longitude ?? -99.1332;
-                            $apiKey = Config::get('services.Maps.api_key');
+                Forms\Components\Placeholder::make('google_map_display')
+                    ->label('Ubicación en el Mapa')
+                    ->content(function ($record) {
+                        $lat = $record->address->latitude ?? 19.4326;
+                        $lng = $record->address->longitude ?? -99.1332;
+                        $apiKey = Config::get('services.Maps.api_key');
 
-                            if (!$apiKey) {
-                                return new HtmlString('<p class="text-red-500">La clave de la API de Google Maps no está configurada.</p>');
+                        if (!$apiKey) {
+                            return new HtmlString('<p class="text-red-500">La clave de la API de Google Maps no está configurada.</p>');
+                        }
+
+                        $mapId = 'map-' . uniqid();
+
+                        return new HtmlString("
+            <div wire:ignore>
+                <div id='{$mapId}' style='width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background-color: #e0e0e0;'></div>
+            </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const mapId = '{$mapId}';
+                    const lat = {$lat};
+                    const lng = {$lng};
+                    
+                    // Inicializar objeto global para mapas si no existe
+                    if (!window.propertyMaps) {
+                        window.propertyMaps = {};
+                    }
+                    
+                    function initializeMap() {
+                        const mapElement = document.getElementById(mapId);
+                        if (!mapElement) {
+                            console.warn('Elemento del mapa no encontrado:', mapId);
+                            return;
+                        }
+
+                        // Limpiar mapa existente si ya existe
+                        if (window.propertyMaps[mapId]) {
+                            window.propertyMaps[mapId] = null;
+                            mapElement.innerHTML = '';
+                        }
+                        
+                        // Validar coordenadas
+                        if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
+                            mapElement.innerHTML = '<div class=\"flex items-center justify-center h-full text-gray-500\"><p>Coordenadas no válidas para mostrar el mapa</p></div>';
+                            return;
+                        }
+
+                        try {
+                            const mapOptions = {
+                                center: { lat: parseFloat(lat), lng: parseFloat(lng) },
+                                zoom: 16,
+                                mapTypeControl: true,
+                                streetViewControl: true,
+                                fullscreenControl: true,
+                                zoomControl: true,
+                                gestureHandling: 'cooperative',
+                                disableDefaultUI: false,
+                                clickableIcons: false,
+                                backgroundColor: '#e5e3df'
+                            };
+
+                            const map = new google.maps.Map(mapElement, mapOptions);
+                            window.propertyMaps[mapId] = map;
+
+                            // Crear marcador
+                            const marker = new google.maps.Marker({
+                                position: { lat: parseFloat(lat), lng: parseFloat(lng) },
+                                map: map,
+                                title: 'Ubicación de la propiedad',
+                                icon: {
+                                    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"%23FF4444\"><path d=\"M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z\"/></svg>'),
+                                    scaledSize: new google.maps.Size(32, 32),
+                                    anchor: new google.maps.Point(16, 32)
+                                },
+                                draggable: false
+                            });
+
+                            // Asegurar que el mapa se renderice correctamente
+                            google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
+                                setTimeout(() => {
+                                    google.maps.event.trigger(map, 'resize');
+                                    map.setCenter({ lat: parseFloat(lat), lng: parseFloat(lng) });
+                                }, 100);
+                            });
+
+                        } catch (error) {
+                            console.error('Error inicializando el mapa:', error);
+                            mapElement.innerHTML = '<div class=\"flex items-center justify-center h-full text-red-500\"><p>Error al cargar el mapa</p></div>';
+                        }
+                    }
+                    
+                    function loadGoogleMapsAPI() {
+                        // Verificar si Google Maps ya está cargado
+                        if (typeof google !== 'undefined' && google.maps && google.maps.Map) {
+                            initializeMap();
+                            return;
+                        }
+
+                        // Verificar si ya se está cargando la API
+                        if (window.googleMapsAPILoading) {
+                            // Esperar a que termine de cargar
+                            const checkInterval = setInterval(() => {
+                                if (typeof google !== 'undefined' && google.maps && google.maps.Map) {
+                                    clearInterval(checkInterval);
+                                    initializeMap();
+                                }
+                            }, 100);
+                            return;
+                        }
+
+                        // Marcar que se está cargando la API
+                        window.googleMapsAPILoading = true;
+                        
+                        const script = document.createElement('script');
+                        script.src = 'https://maps.googleapis.com/maps/api/js?key={$apiKey}&libraries=geometry,places&callback=initGoogleMaps';
+                        script.async = true;
+                        script.defer = true;
+                        
+                        // Callback global para cuando se cargue la API
+                        window.initGoogleMaps = function() {
+                            window.googleMapsAPILoading = false;
+                            delete window.initGoogleMaps; // Limpiar callback
+                            initializeMap();
+                        };
+                        
+                        script.onerror = function() {
+                            window.googleMapsAPILoading = false;
+                            console.error('Error cargando Google Maps API');
+                            const mapElement = document.getElementById(mapId);
+                            if (mapElement) {
+                                mapElement.innerHTML = '<div class=\"flex items-center justify-center h-full text-red-500\"><p>Error al cargar Google Maps</p></div>';
                             }
+                        };
+                        
+                        document.head.appendChild(script);
+                    }
+                    
+                    // Usar IntersectionObserver para cargar cuando sea visible
+                    const mapElement = document.getElementById(mapId);
+                    if (mapElement) {
+                        const observer = new IntersectionObserver((entries) => {
+                            entries.forEach((entry) => {
+                                if (entry.isIntersecting && !window.propertyMaps[mapId]) {
+                                    observer.unobserve(entry.target);
+                                    loadGoogleMapsAPI();
+                                }
+                            });
+                        }, {
+                            threshold: 0.1,
+                            rootMargin: '50px'
+                        });
+                        
+                        observer.observe(mapElement);
+                    }
+                });
+            </script>
+        ");
+                    })
+                    ->columnSpanFull(),
 
-                            $mapId = 'map-' . uniqid();
-
-                            return new HtmlString("
-                                <div wire:ignore>
-                                    <div id='{$mapId}' style='width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background-color: #e0e0e0;'></div>
-                                </div>
-                                <script>
-                                    (function() {
-                                        const mapId = '{$mapId}';
-                                        const lat = {$lat};
-                                        const lng = {$lng};
-                                        
-                                        if (!window.propertyMaps) {
-                                            window.propertyMaps = {};
-                                        }
-                                        
-                                        function initMapInstance() {
-                                            const mapElement = document.getElementById(mapId);
-                                            if (!mapElement) {
-                                                console.error('Map element not found:', mapId);
-                                                return;
-                                            }
-
-                                            if (window.propertyMaps[mapId]) {
-                                                window.propertyMaps[mapId] = null;
-                                            }
-                                            
-                                            mapElement.innerHTML = '';
-                                            
-                                            if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
-                                                mapElement.innerHTML = '<p class=\"text-center text-gray-500 p-4\">No hay coordenadas válidas para mostrar el mapa.</p>';
-                                                return;
-                                            }
-
-                                            const mapOptions = {
-                                                center: { lat: lat, lng: lng },
-                                                zoom: 16,
-                                                mapTypeControl: false,
-                                                streetViewControl: false,
-                                                fullscreenControl: false,
-                                                zoomControl: true,
-                                                gestureHandling: 'cooperative',
-                                                disableDefaultUI: false,
-                                                clickableIcons: false,
-                                                backgroundColor: '#e5e3df'
-                                            };
-
-                                            const map = new google.maps.Map(mapElement, mapOptions);
-                                            
-                                            window.propertyMaps[mapId] = map;
-
-                                            new google.maps.Marker({
-                                                position: { lat: lat, lng: lng },
-                                                map: map,
-                                                title: 'Ubicación de la propiedad',
-                                                icon: {
-                                                    url: 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"%231E90FF\" class=\"icon icon-tabler icons-tabler-filled icon-tabler-home\"><path stroke=\"none\" d=\"M0 0h24v24H0z\" fill=\"none\"/><path d=\"M12.707 2.293l9 9c.63 .63 .184 1.707 -.707 1.707h-1v6a3 3 0 0 1 -3 3h-1v-7a3 3 0 0 0 -2.824 -2.995l-.176 -.005h-2a3 3 0 0 0 -3 3v7h-1a3 3 0 0 1 -3 -3v-6h-1c-.89 0 -1.337 -1.077 -.707 -1.707l9 -9a1 1 0 0 1 1.414 0m.293 11.707a1 1 0 0 1 1 1v7h-4v-7a1 1 0 0 1 .883 -.993l.117 -.007z\" /></svg>',
-                                                    scaledSize: new google.maps.Size(24, 24)
-                                                },
-                                                draggable: false
-                                            });
-
-                                            google.maps.event.addListenerOnce(map, 'idle', function() {
-                                                google.maps.event.trigger(map, 'resize');
-                                                map.setCenter(mapOptions.center);
-                                            });
-                                        }
-                                        
-                                        function loadGoogleMaps() {
-                                            if (typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
-                                                initMapInstance();
-                                            } else {
-                                                if (!window.googleMapsLoading) {
-                                                    window.googleMapsLoading = true;
-                                                    
-                                                    const script = document.createElement('script');
-                                                    script.src = 'https://maps.googleapis.com/maps/api/js?key={$apiKey}&libraries=places';
-                                                    script.async = true;
-                                                    script.defer = true;
-                                                    
-                                                    script.onload = function() {
-                                                        window.googleMapsLoading = false;
-                                                        initMapInstance();
-                                                    };
-                                                    
-                                                    script.onerror = function() {
-                                                        window.googleMapsLoading = false;
-                                                        console.error('Error loading Google Maps');
-                                                    };
-                                                    
-                                                    document.head.appendChild(script);
-                                                } else {
-                                                    setTimeout(function() {
-                                                        loadGoogleMaps();
-                                                    }, 500);
-                                                }
-                                            }
-                                        }
-                                        
-                                        setTimeout(function() {
-                                            loadGoogleMaps();
-                                        }, 100);
-                                        
-                                        if (typeof IntersectionObserver !== 'undefined') {
-                                            const observer = new IntersectionObserver(function(entries) {
-                                                entries.forEach(function(entry) {
-                                                    if (entry.isIntersecting && !window.propertyMaps[mapId]) {
-                                                        setTimeout(function() {
-                                                            loadGoogleMaps();
-                                                        }, 200);
-                                                    }
-                                                });
-                                            }, {
-                                                threshold: 0.1
-                                            });
-                                            
-                                            setTimeout(function() {
-                                                const mapElement = document.getElementById(mapId);
-                                                if (mapElement) {
-                                                    observer.observe(mapElement);
-                                                }
-                                            }, 100);
-                                        }
-                                    })();
-                                </script>
-                            ");
-                        })
-                        ->columnSpanFull(),
                 ])->columns(2),
 
             Forms\Components\Section::make('Especificaciones de la Propiedad')

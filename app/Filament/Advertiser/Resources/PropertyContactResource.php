@@ -21,9 +21,11 @@ class PropertyContactResource extends Resource
     protected static ?string $model = PropertyContact::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
- 
     protected static ?string $navigationLabel = 'Contactos de Propiedades';
+    protected static ?string $modelLabel = 'Contacto de Propiedad';
+    protected static ?string $pluralModelLabel = 'Contactos de Propiedades';
     protected static ?int $navigationSort = 1;
+
 
     public static function form(Form $form): Form
     {
