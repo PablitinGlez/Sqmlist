@@ -1,11 +1,11 @@
-
 <section class="max-w-4xl mx-auto">
+     <x-partials.container>
     <!-- Título Principal -->
-    <div class="text-center mb-8">
+    <div class="text-start md:text-center mb-8">
         <h2 class="text-lg md:text-2xl font-bold text-gray-900 mb-2">
             Conviértete en <span class="text-blue-600">Anunciante</span>
         </h2>
-        <p class="text-sm text-gray-600 max-w-xl mx-auto">
+        <p class="text-sm text-gray-600 md:max-w-xl md:mx-auto">
             Sigue estos pasos y comienza a publicar tus propiedades hoy mismo
         </p>
     </div>
@@ -22,7 +22,7 @@
                     <div class="border-l-2 mr-3 h-full border-blue-300 border-dashed"></div>
                 </div>
             </div>
-            <div class="flex-auto border rounded-xl border-blue-300 bg-white shadow-sm">
+            <div class="flex-auto border rounded-xl border-blue-300 bg-white shadow-sm mx-4 md:mx-0">
                 <div class="flex md:flex-row flex-col items-center">
                     <div class="flex-auto">
                         <div class="md:hidden text-xs font-normal uppercase pt-3 pl-3 text-blue-500">
@@ -82,7 +82,7 @@
                     <div class="border-l-2 ml-3 h-full border-green-300 border-dashed"></div>
                 </div>
             </div>
-            <div class="flex-auto border rounded-xl border-green-300 bg-white shadow-sm">
+            <div class="flex-auto border rounded-xl border-green-300 bg-white shadow-sm mx-4 md:mx-0">
                 <div class="flex md:flex-row flex-col items-center">
                     <div class="flex-auto">
                         <div class="md:hidden text-xs font-normal uppercase pt-3 pl-3 text-green-500">
@@ -142,7 +142,7 @@
                     <div class="border-l-2 mr-3 h-full border-yellow-300 border-dashed"></div>
                 </div>
             </div>
-            <div class="flex-auto border rounded-xl border-yellow-300 bg-white shadow-sm">
+            <div class="flex-auto border rounded-xl border-yellow-300 bg-white shadow-sm mx-4 md:mx-0">
                 <div class="flex md:flex-row flex-col items-center">
                     <div class="flex-auto">
                         <div class="md:hidden text-xs font-normal uppercase pt-3 pl-3 text-yellow-500">
@@ -199,7 +199,7 @@
                     <div class="text-purple-600 text-xs font-semibold">Publicar</div>
                 </div>
             </div>
-            <div class="flex-auto border rounded-xl border-purple-300 bg-white shadow-sm">
+            <div class="flex-auto border rounded-xl border-purple-300 bg-white shadow-sm mx-4 md:mx-0">
                 <div class="flex md:flex-row flex-col items-center">
                     <div class="flex-auto">
                         <div class="md:hidden text-xs font-normal uppercase pt-3 pl-3 text-purple-500">
@@ -247,5 +247,7 @@
             Explorar Propiedades
         </a>
     </div>
+</x-partials.container>
 
 </section>
+
