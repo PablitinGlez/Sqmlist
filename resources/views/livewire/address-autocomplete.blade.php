@@ -23,8 +23,8 @@
                 </svg>
             </div>
             @if($search)
-                <button
-                    wire:click="clearForm"
+                <button 
+                    wire:click="clearForm" 
                     class="pe-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                     title="Limpiar búsqueda"
                 >
@@ -249,146 +249,189 @@
 <script>
     let map;
     let marker;
-    let mapInitialized = false;
+    let mapContainer;
+    let googleMapsLoaded = false;
+    let pendingMapUpdate = null;
+    let mapInitTimeout = null;
 
-    window.initMap = function () {
-        document.addEventListener('livewire:initialized', () => {
-            Livewire.find('{{ $this->getId() }}').dispatch('setInitialAddressData', {
-                initialData: @json($selectedAddressData)
-            });
-
-            Livewire.on('updateMap', (eventData) => {
-                const data = eventData[0];
-                if (!data || typeof data.lat === 'undefined' || typeof data.lng === 'undefined') {
-                    return;
-                }
-                const newLat = parseFloat(data.lat);
-                const newLng = parseFloat(data.lng);
-
-                if (coordenadasValidas(newLat, newLng)) {
-                    Livewire.hook('commit', ({ component, succeed }) => {
-                        succeed(() => {
-                            crearOActualizarMapa(newLat, newLng);
-                        });
-                    });
-                }
-            });
-
-            Livewire.on('resetMap', () => {
-                limpiarMapa();
-            });
+    function ensureGoogleMapsLoaded() {
+        return new Promise((resolve) => {
+            if (window.google && window.google.maps) {
+                googleMapsLoaded = true;
+                resolve(true);
+            } else {
+                const checkInterval = setInterval(() => {
+                    if (window.google && window.google.maps) {
+                        googleMapsLoaded = true;
+                        clearInterval(checkInterval);
+                        resolve(true);
+                    }
+                }, 100);
+                
+                setTimeout(() => {
+                    clearInterval(checkInterval);
+                    resolve(false);
+                }, 10000);
+            }
         });
     }
 
-    function coordenadasValidas(lat, lng) {
-        return lat !== null && lng !== null && !isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0;
+    function setupMapContainer() {
+        mapContainer = document.getElementById('map');
+        if (!mapContainer) return false;
+        
+        mapContainer.style.width = '100%';
+        mapContainer.style.height = '256px';
+        mapContainer.style.minHeight = '256px';
+        mapContainer.style.display = 'block';
+        mapContainer.style.position = 'relative';
+        mapContainer.style.backgroundColor = '#e5e3df';
+        
+        return true;
     }
 
-    function crearOActualizarMapa(lat, lng) {
-        const mapElement = document.getElementById('map');
-        if (!mapElement) {
-            return;
+    async function initializeMap(lat, lng, forceRecreate = false) {
+        if (!googleMapsLoaded) {
+            const loaded = await ensureGoogleMapsLoaded();
+            if (!loaded) return false;
         }
 
-        if (mapElement.offsetWidth === 0 || mapElement.offsetHeight === 0) {
-            setTimeout(() => {
-                if (mapElement.offsetWidth === 0 || mapElement.offsetHeight === 0) {
-                    return;
-                }
-                inicializarOActualizarInterno(lat, lng, mapElement);
-            }, 50);
-        } else {
-            inicializarOActualizarInterno(lat, lng, mapElement);
-        }
-    }
+        if (!setupMapContainer()) return false;
 
-    function inicializarOActualizarInterno(lat, lng, mapElement) {
-        const centro = { lat: lat, lng: lng };
-
-        if (!mapInitialized || !map || !marker) {
-            crearNuevoMapa(lat, lng, mapElement);
-        } else {
+        const center = { lat: parseFloat(lat), lng: parseFloat(lng) };
+        
+        if (map && marker && !forceRecreate) {
             try {
-                marker.setPosition(centro);
-                map.setCenter(centro);
+                marker.setPosition(center);
+                map.setCenter(center);
                 map.setZoom(16);
                 google.maps.event.trigger(map, 'resize');
-                map.setCenter(centro);
+                return true;
             } catch (error) {
-                limpiarMapa();
-                crearNuevoMapa(lat, lng, mapElement);
+                destroyMap();
             }
         }
-    }
 
-    function crearNuevoMapa(lat, lng, mapElement) {
         try {
-            mapElement.innerHTML = '';
-            mapInitialized = false;
-
-            const centro = { lat: lat, lng: lng };
-
-            map = new google.maps.Map(mapElement, {
-                center: centro,
+            mapContainer.innerHTML = '';
+            
+            map = new google.maps.Map(mapContainer, {
+                center: center,
                 zoom: 16,
                 mapTypeControl: false,
                 streetViewControl: false,
                 fullscreenControl: false,
                 zoomControl: true,
                 gestureHandling: 'cooperative',
-                styles: [],
                 disableDefaultUI: false,
                 clickableIcons: false,
                 backgroundColor: '#e5e3df'
             });
 
             marker = new google.maps.Marker({
-                position: centro,
+                position: center,
                 map: map,
                 draggable: true,
                 title: 'Arrastra para ajustar la ubicación exacta',
                 animation: google.maps.Animation.DROP,
                 icon: {
-                    url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%231E90FF" class="icon icon-tabler icons-tabler-filled icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12.707 2.293l9 9c.63 .63 .184 1.707 -.707 1.707h-1v6a3 3 0 0 1 -3 3h-1v-7a3 3 0 0 0 -2.824 -2.995l-.176 -.005h-2a3 3 0 0 0 -3 3v7h-1a3 3 0 0 1 -3 -3v-6h-1c-.89 0 -1.337 -1.077 -.707 -1.707l9 -9a1 1 0 0 1 1.414 0m.293 11.707a1 1 0 0 1 1 1v7h-4v-7a1 1 0 0 1 .883 -.993l.117 -.007z" /></svg>',
+                    url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="%231E90FF"><path d="M12.707 2.293l9 9c.63 .63 .184 1.707 -.707 1.707h-1v6a3 3 0 0 1 -3 3h-1v-7a3 3 0 0 0 -2.824 -2.995l-.176 -.005h-2a3 3 0 0 0 -3 3v7h-1a3 3 0 0 1 -3 -3v-6h-1c-.89 0 -1.337 -1.077 -.707 -1.707l9 -9a1 1 0 0 1 1.414 0m.293 11.707a1 1 0 0 1 1 1v7h-4v-7a1 1 0 0 1 .883 -.993l.117 -.007z" /></svg>',
                     scaledSize: new google.maps.Size(24, 24)
                 }
             });
 
             marker.addListener('dragend', function() {
-                const nuevaLat = marker.getPosition().lat();
-                const nuevaLng = marker.getPosition().lng();
-                Livewire.dispatch('mapLocationUpdated', {
-                    lat: nuevaLat,
-                    lng: nuevaLng
-                });
+                const newLat = marker.getPosition().lat();
+                const newLng = marker.getPosition().lng();
+                Livewire.dispatch('mapLocationUpdated', { lat: newLat, lng: newLng });
             });
 
             google.maps.event.addListenerOnce(map, 'idle', function() {
                 google.maps.event.trigger(map, 'resize');
-                map.setCenter(centro);
-                mapInitialized = true;
+                map.setCenter(center);
             });
 
+            return true;
         } catch (error) {
-            mapInitialized = false;
+            return false;
         }
     }
 
-    function limpiarMapa() {
+    function destroyMap() {
         if (marker) {
             marker.setMap(null);
             marker = null;
         }
         if (map) {
             map = null;
-            mapInitialized = false;
         }
-        const mapElement = document.getElementById('map');
-        if (mapElement) {
-            mapElement.innerHTML = '';
+        if (mapContainer) {
+            mapContainer.innerHTML = '';
         }
     }
+
+    function isValidCoordinate(lat, lng) {
+        const numLat = parseFloat(lat);
+        const numLng = parseFloat(lng);
+        return !isNaN(numLat) && !isNaN(numLng) && 
+               numLat !== 0 && numLng !== 0 && 
+               numLat >= -90 && numLat <= 90 && 
+               numLng >= -180 && numLng <= 180;
+    }
+
+    async function handleMapUpdate(lat, lng) {
+        if (!isValidCoordinate(lat, lng)) return;
+        
+        if (mapInitTimeout) {
+            clearTimeout(mapInitTimeout);
+        }
+        
+        pendingMapUpdate = { lat, lng };
+        
+        mapInitTimeout = setTimeout(async () => {
+            if (pendingMapUpdate) {
+                const success = await initializeMap(pendingMapUpdate.lat, pendingMapUpdate.lng);
+                if (success) {
+                    pendingMapUpdate = null;
+                }
+            }
+        }, 500);
+    }
+
+    window.initMap = function () {
+        googleMapsLoaded = true;
+    }
+
+    document.addEventListener('livewire:initialized', async () => {
+        await ensureGoogleMapsLoaded();
+        
+        const initialLat = @json($selectedAddressData['latitude'] ?? null);
+        const initialLng = @json($selectedAddressData['longitude'] ?? null);
+        const showMapInitial = @json($show_map);
+
+        if (showMapInitial && isValidCoordinate(initialLat, initialLng)) {
+            await handleMapUpdate(initialLat, initialLng);
+        }
+
+        Livewire.on('updateMap', async (eventData) => {
+            if (!Array.isArray(eventData) || !eventData[0]) return;
+            
+            const data = eventData[0];
+            if (data.lat !== undefined && data.lng !== undefined) {
+                await handleMapUpdate(data.lat, data.lng);
+            }
+        });
+
+        Livewire.on('resetMap', () => {
+            if (mapInitTimeout) {
+                clearTimeout(mapInitTimeout);
+                mapInitTimeout = null;
+            }
+            pendingMapUpdate = null;
+            destroyMap();
+        });
+    });
 </script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config('services.Maps.api_key') }}&libraries=places&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&callback=initMap"></script>
 @endpush
