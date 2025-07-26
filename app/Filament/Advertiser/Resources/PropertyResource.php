@@ -392,7 +392,7 @@ class PropertyResource extends Resource
                     const lat = {$lat};
                     const lng = {$lng};
                     
-                    // Inicializar objeto global para mapas si no existe
+                  
                     if (!window.propertyMaps) {
                         window.propertyMaps = {};
                     }
@@ -404,13 +404,13 @@ class PropertyResource extends Resource
                             return;
                         }
 
-                        // Limpiar mapa existente si ya existe
+                   
                         if (window.propertyMaps[mapId]) {
                             window.propertyMaps[mapId] = null;
                             mapElement.innerHTML = '';
                         }
                         
-                        // Validar coordenadas
+                  
                         if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
                             mapElement.innerHTML = '<div class=\"flex items-center justify-center h-full text-gray-500\"><p>Coordenadas no válidas para mostrar el mapa</p></div>';
                             return;
@@ -433,7 +433,7 @@ class PropertyResource extends Resource
                             const map = new google.maps.Map(mapElement, mapOptions);
                             window.propertyMaps[mapId] = map;
 
-                            // Crear marcador
+                         
                             const marker = new google.maps.Marker({
                                 position: { lat: parseFloat(lat), lng: parseFloat(lng) },
                                 map: map,
@@ -446,7 +446,7 @@ class PropertyResource extends Resource
                                 draggable: false
                             });
 
-                            // Asegurar que el mapa se renderice correctamente
+                          
                             google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
                                 setTimeout(() => {
                                     google.maps.event.trigger(map, 'resize');
@@ -461,13 +461,13 @@ class PropertyResource extends Resource
                     }
                     
                     function loadGoogleMapsAPI() {
-                        // Verificar si Google Maps ya está cargado
+                      
                         if (typeof google !== 'undefined' && google.maps && google.maps.Map) {
                             initializeMap();
                             return;
                         }
 
-                        // Verificar si ya se está cargando la API
+                    
                         if (window.googleMapsAPILoading) {
                             // Esperar a que termine de cargar
                             const checkInterval = setInterval(() => {
@@ -479,7 +479,7 @@ class PropertyResource extends Resource
                             return;
                         }
 
-                        // Marcar que se está cargando la API
+                       
                         window.googleMapsAPILoading = true;
                         
                         const script = document.createElement('script');
@@ -506,7 +506,7 @@ class PropertyResource extends Resource
                         document.head.appendChild(script);
                     }
                     
-                    // Usar IntersectionObserver para cargar cuando sea visible
+                  
                     const mapElement = document.getElementById(mapId);
                     if (mapElement) {
                         const observer = new IntersectionObserver((entries) => {
