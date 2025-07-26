@@ -370,20 +370,20 @@ class PropertyResource extends Resource
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->postal_code ?? 'Sin CP'),
 
-                    Forms\Components\Placeholder::make('google_map_display')
-                        ->label('Ubicación en el Mapa')
-                        ->content(function ($record) {
-                            $lat = $record->address->latitude ?? 19.4326;
-                            $lng = $record->address->longitude ?? -99.1332;
-                            $apiKey = Config::get('services.Maps.api_key');
+                Forms\Components\Placeholder::make('google_map_display')
+                    ->label('Ubicación en el Mapa')
+                    ->content(function ($record) {
+                        $lat = $record->address->latitude ?? 19.4326;
+                        $lng = $record->address->longitude ?? -99.1332;
+                        $apiKey = Config::get('services.Maps.api_key');
 
-                            if (!$apiKey) {
-                                return new HtmlString('<p class="text-red-500">La clave de la API de Google Maps no está configurada.</p>');
-                            }
+                        if (!$apiKey) {
+                            return new HtmlString('<p class="text-red-500">La clave de la API de Google Maps no está configurada.</p>');
+                        }
 
-                            $mapId = 'map-' . uniqid();
+                        $mapId = 'map-' . uniqid();
 
-                            return new HtmlString("
+                        return new HtmlString("
             <div wire:ignore>
                 <div id='{$mapId}' style='width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background-color: #e0e0e0; position: relative;'>
                     <div id='{$mapId}-loading' style='position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; text-align: center; color: #666;'>
@@ -405,7 +405,6 @@ class PropertyResource extends Resource
                     const lng = parseFloat({$lng});
                     const apiKey = '{$apiKey}';
                     
-                    // Initialize global objects if they don't exist
                     window.propertyMaps = window.propertyMaps || {};
                     window.googleMapsPromise = window.googleMapsPromise || null;
                     
@@ -431,12 +430,10 @@ class PropertyResource extends Resource
                                 return;
                             }
                             
-                            // Clean up existing map
                             if (window.propertyMaps[mapId]) {
                                 delete window.propertyMaps[mapId];
                             }
                             
-                            // Validate coordinates
                             if (isNaN(lat) || isNaN(lng)) {
                                 reject(new Error('Invalid coordinates'));
                                 return;
@@ -466,7 +463,6 @@ class PropertyResource extends Resource
                                 const map = new google.maps.Map(mapEl, mapOptions);
                                 window.propertyMaps[mapId] = map;
                                 
-                                // Add marker
                                 new google.maps.Marker({
                                     position: { lat: lat, lng: lng },
                                     map: map,
@@ -480,14 +476,12 @@ class PropertyResource extends Resource
                                     animation: google.maps.Animation.DROP
                                 });
                                 
-                                // Ensure proper sizing
                                 google.maps.event.addListenerOnce(map, 'idle', () => {
                                     google.maps.event.trigger(map, 'resize');
                                     map.setCenter({ lat: lat, lng: lng });
                                     resolve(map);
                                 });
                                 
-                                // Handle resize
                                 const resizeHandler = () => {
                                     if (window.propertyMaps[mapId]) {
                                         google.maps.event.trigger(window.propertyMaps[mapId], 'resize');
@@ -503,24 +497,20 @@ class PropertyResource extends Resource
                     }
                     
                     function loadGoogleMaps() {
-                        // Return existing promise if already loading
                         if (window.googleMapsPromise) {
                             return window.googleMapsPromise;
                         }
                         
-                        // Check if already loaded
                         if (typeof google !== 'undefined' && google.maps) {
                             return Promise.resolve();
                         }
                         
-                        // Create new promise for loading
                         window.googleMapsPromise = new Promise((resolve, reject) => {
                             const script = document.createElement('script');
                             script.src = 'https://maps.googleapis.com/maps/api/js?key=' + apiKey + '&libraries=places&callback=__googleMapsCallback';
                             script.async = true;
                             script.defer = true;
                             
-                            // Global callback
                             window.__googleMapsCallback = () => {
                                 delete window.__googleMapsCallback;
                                 resolve();
@@ -540,30 +530,22 @@ class PropertyResource extends Resource
                     
                     function initialize() {
                         const mapEl = document.getElementById(mapId);
-                        if (!mapEl) {
-                            console.error('Map element not found:', mapId);
-                            return;
-                        }
+                        if (!mapEl) return;
                         
                         loadGoogleMaps()
                             .then(() => initMap())
-                            .then(() => {
-                                console.log('Map initialized successfully:', mapId);
-                            })
+                            .then(() => {})
                             .catch((error) => {
-                                console.error('Error initializing map:', error);
                                 showError('Error al cargar el mapa. Por favor, recarga la página.');
                             });
                     }
                     
-                    // Initialize when DOM is ready
                     if (document.readyState === 'loading') {
                         document.addEventListener('DOMContentLoaded', () => setTimeout(initialize, 100));
                     } else {
                         setTimeout(initialize, 100);
                     }
                     
-                    // Intersection Observer for performance
                     if ('IntersectionObserver' in window) {
                         const observer = new IntersectionObserver((entries) => {
                             entries.forEach((entry) => {
@@ -587,8 +569,17 @@ class PropertyResource extends Resource
                 })();
             </script>
         ");
-                        })
+                    })
+                    ->columnSpanFull(),
+                ])->columns(2),
+
+            Forms\Components\Section::make('Especificaciones de la Propiedad')
+                ->schema([
+                    Forms\Components\Tabs::make('Especificaciones')
+                        ->tabs(static::getFeatureSectionsTabs($propertyType, $record, $disabled))
                         ->columnSpanFull(),
+                ])
+                ->columnSpanFull(),
         ];
     }
 
