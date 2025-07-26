@@ -521,7 +521,6 @@ class PropertyResource extends Resource
         ];
     }
 
-
     public static function form(Form $form): Form
     {
         $isEditing = $form->getOperation() === 'edit';
@@ -539,6 +538,7 @@ class PropertyResource extends Resource
                                     ->extraAttributes([
                                         'class' => 'border-none',
                                         'wire:ignore.self' => true,
+                                        'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                                     ])
                                     ->statePath('selectedAddressData')
                                     ->live(),
@@ -546,17 +546,7 @@ class PropertyResource extends Resource
                                     ->reactive(),
                             ])
                             ->columns(1)
-                            ->extraAttributes([
-                                'x-on:keydown.enter.prevent' => 'true', 
-                            ])
-                            ->afterValidation(function (Forms\Get $get, array $state) {
-                                
-                                if (empty($get('selectedAddressData'))) {
-                                    throw new \Filament\Forms\ValidationException([
-                                        'selectedAddressData' => 'Por favor selecciona una dirección válida.'
-                                    ]);
-                                }
-                            }),
+                            ->afterValidation(function (Forms\Get $get, array $state) {}),
 
                         Forms\Components\Wizard\Step::make('Generales')
                             ->schema([
@@ -571,7 +561,7 @@ class PropertyResource extends Resource
                                     ->maxLength(40)
                                     ->columnSpanFull()
                                     ->extraAttributes([
-                                        'x-on:keydown.enter.prevent' => 'true',
+                                        'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                                     ]),
                                 Radio::make('operation_type')
                                     ->label('Tipo de operación')
@@ -582,7 +572,10 @@ class PropertyResource extends Resource
                                     ])
                                     ->required()
                                     ->inline()
-                                    ->live(),
+                                    ->live()
+                                    ->extraAttributes([
+                                        'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
+                                    ]),
                                 Select::make('property_type_id')
                                     ->label('Tipo de propiedad')
                                     ->options(function () {
@@ -602,32 +595,13 @@ class PropertyResource extends Resource
                                     ->live()
                                     ->afterStateUpdated(function (Forms\Set $set) {
                                         $set('feature_values', []);
-                                    }),
+                                    })
+                                    ->extraAttributes([
+                                        'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
+                                    ]),
                             ])
                             ->columns(1)
-                            ->extraAttributes([
-                                'x-on:keydown.enter.prevent' => 'true',
-                            ])
-                            ->afterValidation(function (Forms\Get $get, array $state) {
-                                // Validación específica para este paso
-                                $errors = [];
-
-                                if (empty($get('title'))) {
-                                    $errors['title'] = 'El título es requerido.';
-                                }
-
-                                if (empty($get('operation_type'))) {
-                                    $errors['operation_type'] = 'Selecciona un tipo de operación.';
-                                }
-
-                                if (empty($get('property_type_id'))) {
-                                    $errors['property_type_id'] = 'Selecciona un tipo de propiedad.';
-                                }
-
-                                if (!empty($errors)) {
-                                    throw new \Filament\Forms\ValidationException($errors);
-                                }
-                            }),
+                            ->afterValidation(function (Forms\Get $get, array $state) {}),
 
                         Forms\Components\Wizard\Step::make('Especificaciones')
                             ->schema(function (Forms\Get $get): array {
@@ -656,7 +630,9 @@ class PropertyResource extends Resource
                                     ];
                                 }
 
+
                                 $tabs = static::getFeatureSectionsTabs($propertyType, null, false);
+
 
                                 $tabs[] = Forms\Components\Tabs\Tab::make('Multimedia')
                                     ->icon('heroicon-o-photo')
@@ -686,7 +662,8 @@ class PropertyResource extends Resource
                                                     ->columnSpanFull()
                                                     ->extraAttributes([
                                                         'class' => 'custom-file-upload-grid',
-                                                        'style' => '--cols-default: 4; --cols-lg: 5; --cols-xl: 6;'
+                                                        'style' => '--cols-default: 4; --cols-lg: 5; --cols-xl: 6;',
+                                                        'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                                                     ]),
                                             ])
                                             ->columnSpanFull(),
@@ -705,7 +682,7 @@ class PropertyResource extends Resource
                                                     ->columnSpanFull()
                                                     ->maxLength(1500)
                                                     ->extraAttributes([
-                                                        'x-on:keydown.enter.prevent' => 'true',
+                                                        'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                                                     ]),
                                             ])
                                             ->columnSpanFull(),
@@ -715,21 +692,14 @@ class PropertyResource extends Resource
                                 return [
                                     Forms\Components\Tabs::make('Especificaciones de la Propiedad')
                                         ->tabs($tabs)
-                                        ->columnSpanFull(),
+                                        ->columnSpanFull()
+                                        ->extraAttributes([
+                                            'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
+                                        ]),
                                 ];
                             })
                             ->columns(1)
-                            ->extraAttributes([
-                                'x-on:keydown.enter.prevent' => 'true',
-                            ])
-                            ->afterValidation(function (Forms\Get $get, array $state) {
-                                // Validación específica para imágenes
-                                if (empty($get('images'))) {
-                                    throw new \Filament\Forms\ValidationException([
-                                        'images' => 'Debes subir al menos una imagen de la propiedad.'
-                                    ]);
-                                }
-                            }),
+                            ->afterValidation(function (Forms\Get $get, array $state) {}),
 
                         Forms\Components\Wizard\Step::make('Precio')
                             ->schema([
@@ -744,23 +714,13 @@ class PropertyResource extends Resource
                                             ->required()
                                             ->rules(['numeric', 'min:0', 'max:999999999.99'])
                                             ->extraAttributes([
-                                                'x-on:keydown.enter.prevent' => 'true',
+                                                'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                                             ]),
                                     ])
                                     ->columns(3)
                                     ->columnSpanFull(),
                             ])
-                            ->columns(1)
-                            ->extraAttributes([
-                                'x-on:keydown.enter.prevent' => 'true',
-                            ])
-                            ->afterValidation(function (Forms\Get $get, array $state) {
-                                if (empty($get('price')) || $get('price') <= 0) {
-                                    throw new \Filament\Forms\ValidationException([
-                                        'price' => 'El precio debe ser mayor a 0.'
-                                    ]);
-                                }
-                            }),
+                            ->columns(1),
 
                         Forms\Components\Wizard\Step::make('Contacto')
                             ->schema([
@@ -787,16 +747,16 @@ class PropertyResource extends Resource
                                             ->required()
                                             ->minLength(10)
                                             ->reactive()
-                                            ->extraAttributes([
-                                                'x-on:keydown.enter.prevent' => 'true',
-                                            ])
                                             ->afterStateUpdated(function ($state, $set) {
                                                 $cleanNumber = preg_replace('/[^0-9]/', '', $state);
                                                 if (strlen($cleanNumber) > 10) {
                                                     $cleanNumber = substr($cleanNumber, 0, 10);
                                                 }
                                                 $set('contact_whatsapp_number', $cleanNumber);
-                                            }),
+                                            })
+                                            ->extraAttributes([
+                                                'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
+                                            ]),
                                         Forms\Components\TextInput::make('contact_phone_number')
                                             ->label('Teléfono')
                                             ->placeholder('Número')
@@ -817,16 +777,16 @@ class PropertyResource extends Resource
                                             ->minLength(10)
                                             ->required()
                                             ->reactive()
-                                            ->extraAttributes([
-                                                'x-on:keydown.enter.prevent' => 'true',
-                                            ])
                                             ->afterStateUpdated(function ($state, $set) {
                                                 $cleanNumber = preg_replace('/[^0-9]/', '', $state);
                                                 if (strlen($cleanNumber) > 10) {
                                                     $cleanNumber = substr($cleanNumber, 0, 10);
                                                 }
                                                 $set('contact_phone_number', $cleanNumber);
-                                            }),
+                                            })
+                                            ->extraAttributes([
+                                                'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
+                                            ]),
                                         Forms\Components\TextInput::make('contact_email')
                                             ->label('Correo Electrónico')
                                             ->placeholder('e-mail')
@@ -847,8 +807,10 @@ class PropertyResource extends Resource
                                             ->maxLength(255)
                                             ->columnSpanFull()
                                             ->extraAttributes([
-                                                'x-on:keydown.enter.prevent' => 'true',
+                                                'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                                             ]),
+
+
 
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('enviar_a_revision')
@@ -869,18 +831,20 @@ class PropertyResource extends Resource
                                     ->columns(2)
                                     ->columnSpanFull(),
                             ])
-                            ->columns(1)
-                            ->extraAttributes([
-                                'x-on:keydown.enter.prevent' => 'true',
-                            ]),
+                            ->columns(1),
                     ])
                         ->columnSpanFull()
                         ->extraAttributes([
-                            'x-on:keydown.enter.prevent' => 'true', 
+                            'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                         ]),
+                ])
+                
+                ->extraAttributes([
+                    'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                 ]);
         }
     }
+
     public static function table(Table $table): Table
     {
         return $table
