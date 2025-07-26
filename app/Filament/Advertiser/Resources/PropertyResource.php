@@ -384,136 +384,221 @@ class PropertyResource extends Resource
 
                         return new HtmlString("
             <div wire:ignore>
-                <div id='{$mapId}' style='width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background-color: #e0e0e0;'></div>
+                <div id='{$mapId}' style='width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background-color: #e0e0e0; position: relative;'>
+                    <div id='{$mapId}-loading' style='position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10;'>
+                        <div style='text-align: center; color: #666;'>
+                            <div style='border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 10px;'></div>
+                            <p>Cargando mapa...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <style>
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            </style>
             <script>
-                document.addEventListener('DOMContentLoaded', function() {
+                (function() {
                     const mapId = '{$mapId}';
                     const lat = {$lat};
                     const lng = {$lng};
+                    const apiKey = '{$apiKey}';
                     
-                  
+                    // Global maps registry
                     if (!window.propertyMaps) {
                         window.propertyMaps = {};
                     }
                     
-                    function initializeMap() {
+                    // Global Google Maps loading state
+                    if (!window.googleMapsState) {
+                        window.googleMapsState = {
+                            loaded: false,
+                            loading: false,
+                            callbacks: []
+                        };
+                    }
+                    
+                    function hideLoading() {
+                        const loadingElement = document.getElementById(mapId + '-loading');
+                        if (loadingElement) {
+                            loadingElement.style.display = 'none';
+                        }
+                    }
+                    
+                    function showError(message) {
+                        const mapElement = document.getElementById(mapId);
+                        if (mapElement) {
+                            hideLoading();
+                            mapElement.innerHTML = '<div style=\"display: flex; align-items: center; justify-content: center; height: 100%; color: #e74c3c; text-align: center;\"><p>' + message + '</p></div>';
+                        }
+                    }
+                    
+                    function initMapInstance() {
                         const mapElement = document.getElementById(mapId);
                         if (!mapElement) {
-                            console.warn('Elemento del mapa no encontrado:', mapId);
+                            console.error('Map element not found:', mapId);
                             return;
                         }
 
-                   
+                        // Cleanup existing map
                         if (window.propertyMaps[mapId]) {
-                            window.propertyMaps[mapId] = null;
-                            mapElement.innerHTML = '';
+                            delete window.propertyMaps[mapId];
                         }
                         
-                  
-                        if (isNaN(lat) || isNaN(lng) || lat === 0 || lng === 0) {
-                            mapElement.innerHTML = '<div class=\"flex items-center justify-center h-full text-gray-500\"><p>Coordenadas no válidas para mostrar el mapa</p></div>';
+                        // Validate coordinates
+                        if (isNaN(lat) || isNaN(lng)) {
+                            showError('Coordenadas inválidas para mostrar el mapa.');
                             return;
                         }
 
                         try {
+                            hideLoading();
+                            
                             const mapOptions = {
                                 center: { lat: parseFloat(lat), lng: parseFloat(lng) },
                                 zoom: 16,
-                                mapTypeControl: true,
-                                streetViewControl: true,
-                                fullscreenControl: true,
+                                mapTypeControl: false,
+                                streetViewControl: false,
+                                fullscreenControl: false,
                                 zoomControl: true,
                                 gestureHandling: 'cooperative',
                                 disableDefaultUI: false,
                                 clickableIcons: false,
-                                backgroundColor: '#e5e3df'
+                                backgroundColor: '#e5e3df',
+                                styles: [
+                                    {
+                                        featureType: 'poi',
+                                        elementType: 'labels',
+                                        stylers: [{ visibility: 'off' }]
+                                    }
+                                ]
                             };
 
                             const map = new google.maps.Map(mapElement, mapOptions);
                             window.propertyMaps[mapId] = map;
 
-                         
+                            // Add marker
                             const marker = new google.maps.Marker({
                                 position: { lat: parseFloat(lat), lng: parseFloat(lng) },
                                 map: map,
                                 title: 'Ubicación de la propiedad',
                                 icon: {
-                                    url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent('<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"%23FF4444\"><path d=\"M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z\"/></svg>'),
+                                    url: 'data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"32\" viewBox=\"0 0 24 24\" fill=\"%23e74c3c\"><path d=\"M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z\"/></svg>',
                                     scaledSize: new google.maps.Size(32, 32),
                                     anchor: new google.maps.Point(16, 32)
                                 },
-                                draggable: false
+                                draggable: false,
+                                animation: google.maps.Animation.DROP
                             });
 
-                          
-                            google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
-                                setTimeout(() => {
-                                    google.maps.event.trigger(map, 'resize');
-                                    map.setCenter({ lat: parseFloat(lat), lng: parseFloat(lng) });
-                                }, 100);
+                            // Ensure map is properly sized
+                            google.maps.event.addListenerOnce(map, 'idle', function() {
+                                google.maps.event.trigger(map, 'resize');
+                                map.setCenter({ lat: parseFloat(lat), lng: parseFloat(lng) });
                             });
-
+                            
+                            // Handle window resize
+                            const resizeHandler = function() {
+                                if (window.propertyMaps[mapId]) {
+                                    google.maps.event.trigger(window.propertyMaps[mapId], 'resize');
+                                    window.propertyMaps[mapId].setCenter({ lat: parseFloat(lat), lng: parseFloat(lng) });
+                                }
+                            };
+                            
+                            window.addEventListener('resize', resizeHandler);
+                            
+                            console.log('Map initialized successfully:', mapId);
+                            
                         } catch (error) {
-                            console.error('Error inicializando el mapa:', error);
-                            mapElement.innerHTML = '<div class=\"flex items-center justify-center h-full text-red-500\"><p>Error al cargar el mapa</p></div>';
+                            console.error('Error initializing map:', error);
+                            showError('Error al inicializar el mapa.');
                         }
                     }
                     
-                    function loadGoogleMapsAPI() {
-                      
-                        if (typeof google !== 'undefined' && google.maps && google.maps.Map) {
-                            initializeMap();
+                    function loadGoogleMaps() {
+                        // Check if already loaded
+                        if (window.googleMapsState.loaded && typeof google !== 'undefined' && typeof google.maps !== 'undefined') {
+                            initMapInstance();
                             return;
                         }
-
-                    
-                        if (window.googleMapsAPILoading) {
-                            // Esperar a que termine de cargar
-                            const checkInterval = setInterval(() => {
-                                if (typeof google !== 'undefined' && google.maps && google.maps.Map) {
-                                    clearInterval(checkInterval);
-                                    initializeMap();
-                                }
-                            }, 100);
+                        
+                        // Add to callback queue
+                        window.googleMapsState.callbacks.push(initMapInstance);
+                        
+                        // If already loading, just wait
+                        if (window.googleMapsState.loading) {
                             return;
                         }
-
-                       
-                        window.googleMapsAPILoading = true;
+                        
+                        // Start loading
+                        window.googleMapsState.loading = true;
                         
                         const script = document.createElement('script');
-                        script.src = 'https://maps.googleapis.com/maps/api/js?key={$apiKey}&libraries=geometry,places&callback=initGoogleMaps';
+                        script.src = 'https://maps.googleapis.com/maps/api/js?key=' + apiKey + '&libraries=places&loading=async';
                         script.async = true;
                         script.defer = true;
                         
-                        // Callback global para cuando se cargue la API
-                        window.initGoogleMaps = function() {
-                            window.googleMapsAPILoading = false;
-                            delete window.initGoogleMaps; // Limpiar callback
-                            initializeMap();
+                        script.onload = function() {
+                            window.googleMapsState.loaded = true;
+                            window.googleMapsState.loading = false;
+                            
+                            // Execute all pending callbacks
+                            const callbacks = window.googleMapsState.callbacks.slice();
+                            window.googleMapsState.callbacks = [];
+                            
+                            callbacks.forEach(function(callback) {
+                                try {
+                                    callback();
+                                } catch (error) {
+                                    console.error('Error executing map callback:', error);
+                                }
+                            });
                         };
                         
                         script.onerror = function() {
-                            window.googleMapsAPILoading = false;
-                            console.error('Error cargando Google Maps API');
-                            const mapElement = document.getElementById(mapId);
-                            if (mapElement) {
-                                mapElement.innerHTML = '<div class=\"flex items-center justify-center h-full text-red-500\"><p>Error al cargar Google Maps</p></div>';
-                            }
+                            window.googleMapsState.loading = false;
+                            console.error('Error loading Google Maps script');
+                            showError('Error al cargar Google Maps. Verifique su conexión a internet.');
                         };
                         
                         document.head.appendChild(script);
                     }
                     
-                  
-                    const mapElement = document.getElementById(mapId);
-                    if (mapElement) {
-                        const observer = new IntersectionObserver((entries) => {
-                            entries.forEach((entry) => {
+                    // Initialize with delay to ensure DOM is ready
+                    function initWithRetry(attempts = 0) {
+                        const maxAttempts = 5;
+                        const mapElement = document.getElementById(mapId);
+                        
+                        if (mapElement) {
+                            loadGoogleMaps();
+                        } else if (attempts < maxAttempts) {
+                            setTimeout(function() {
+                                initWithRetry(attempts + 1);
+                            }, 200);
+                        } else {
+                            console.error('Map element not found after retries:', mapId);
+                        }
+                    }
+                    
+                    // Start initialization
+                    if (document.readyState === 'loading') {
+                        document.addEventListener('DOMContentLoaded', function() {
+                            setTimeout(initWithRetry, 100);
+                        });
+                    } else {
+                        setTimeout(initWithRetry, 100);
+                    }
+                    
+                    // Intersection Observer for lazy loading
+                    if (typeof IntersectionObserver !== 'undefined') {
+                        const observer = new IntersectionObserver(function(entries) {
+                            entries.forEach(function(entry) {
                                 if (entry.isIntersecting && !window.propertyMaps[mapId]) {
-                                    observer.unobserve(entry.target);
-                                    loadGoogleMapsAPI();
+                                    setTimeout(function() {
+                                        loadGoogleMaps();
+                                    }, 100);
                                 }
                             });
                         }, {
@@ -521,9 +606,15 @@ class PropertyResource extends Resource
                             rootMargin: '50px'
                         });
                         
-                        observer.observe(mapElement);
+                        setTimeout(function() {
+                            const mapElement = document.getElementById(mapId);
+                            if (mapElement) {
+                                observer.observe(mapElement);
+                            }
+                        }, 100);
                     }
-                });
+                    
+                })();
             </script>
         ");
                     })
