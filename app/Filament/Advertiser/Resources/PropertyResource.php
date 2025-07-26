@@ -368,20 +368,21 @@ class PropertyResource extends Resource
                         ->disabled()
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->postal_code ?? 'Sin CP'),
-                    Forms\Components\Placeholder::make('google_map_display')
-                        ->label('Ubicación en el Mapa')
-                        ->content(function ($record) {
-                            $lat = $record->address->latitude ?? 19.4326;
-                            $lng = $record->address->longitude ?? -99.1332;
-                            $apiKey = Config::get('services.Maps.api_key');
 
-                            if (!$apiKey) {
-                                return new HtmlString('<p class="text-red-500">La clave de la API de Google Maps no está configurada.</p>');
-                            }
+                Forms\Components\Placeholder::make('google_map_display')
+                    ->label('Ubicación en el Mapa')
+                    ->content(function ($record) {
+                        $lat = $record->address->latitude ?? 19.4326;
+                        $lng = $record->address->longitude ?? -99.1332;
+                        $apiKey = Config::get('services.Maps.api_key');
 
-                            $mapId = 'map-' . uniqid();
+                        if (!$apiKey) {
+                            return new HtmlString('<p class="text-red-500">La clave de la API de Google Maps no está configurada.</p>');
+                        }
 
-                            return new HtmlString("
+                        $mapId = 'map-' . uniqid();
+
+                        return new HtmlString("
             <div wire:ignore>
                 <div id='{$mapId}' style='width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background-color: #e0e0e0; position: relative;'>
                     <div id='{$mapId}-loading' style='position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10; text-align: center; color: #666;'>
@@ -585,9 +586,17 @@ class PropertyResource extends Resource
                 })();
             </script>
         ");
-                        })
+                    })
+                    ->columnSpanFull(),
+                ])->columns(2),
+
+            Forms\Components\Section::make('Especificaciones de la Propiedad')
+                ->schema([
+                    Forms\Components\Tabs::make('Especificaciones')
+                        ->tabs(static::getFeatureSectionsTabs($propertyType, $record, $disabled))
                         ->columnSpanFull(),
-                   
+                ])
+                ->columnSpanFull(),
         ];
     }
 
