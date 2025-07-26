@@ -166,7 +166,7 @@
                             @foreach($colonias as $colonia)
                                 <option value="{{ $colonia->id }}" @if($selected_colonia_id == $colonia->id) selected @endif>
                                     {{ $colonia->name }}
-                                </option>
+                </option>
                             @endforeach
                         </select>
                     </div>
@@ -231,19 +231,7 @@
                     </div>
                 </div>
 
-                <!-- Indicador de carga del mapa -->
-                <div id="map-loading" class="w-full h-64 bg-gray-100 dark:bg-gray-800 rounded-md flex items-center justify-center">
-                    <div class="text-center">
-                        <svg class="animate-spin h-8 w-8 text-primary-600 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <p class="text-xs text-gray-600 dark:text-gray-400">Cargando mapa...</p>
-                    </div>
-                </div>
-
-                <!-- El mapa real -->
-                <div id="map" class="w-full h-64 bg-gray-100 dark:bg-gray-800 rounded-md hidden" wire:ignore></div>
+                <div id="map" class="w-full h-64 bg-gray-100 dark:bg-gray-800 rounded-md" wire:ignore></div>
             </div>
         @endif
     </div>
@@ -259,407 +247,126 @@
 
 @push('scripts')
 <script>
-    // Variables globales para el mapa
     let map = null;
     let marker = null;
-    let mapInitialized = false;
-    let pendingUpdates = [];
-    let retryCount = 0;
-    const MAX_RETRIES = 3;
+    let isMapInitialized = false;
 
-    // Configuración inicial
-    let initialLat = @json($selectedAddressData['latitude'] ?? null);
-    let initialLng = @json($selectedAddressData['longitude'] ?? null);
-    let showMapInitial = @json($show_map);
-
-    // Función principal de inicialización
     window.initMap = function () {
-        console.log('🗺️ Inicializando sistema de mapas...');
-        
-        // Esperar a que Livewire esté listo
-        if (typeof Livewire !== 'undefined') {
-            setupLivewireListeners();
-        } else {
-            document.addEventListener('livewire:initialized', setupLivewireListeners);
-        }
-    }
+        document.addEventListener('livewire:initialized', () => {
+            const livewireComponent = Livewire.find('{{ $this->getId() }}');
+            
+            // Obtener datos iniciales
+            const initialData = @json($selectedAddressData);
+            if (initialData) {
+                livewireComponent.dispatch('setInitialAddressData', { initialData });
+            }
 
-    function setupLivewireListeners() {
-        console.log('📡 Configurando listeners de Livewire...');
-        
-        try {
-            // Configurar datos iniciales
-            if (typeof Livewire.find !== 'undefined') {
-                const livewireComponent = Livewire.find('{{ $this->getId() }}');
-                if (livewireComponent) {
-                    livewireComponent.dispatch('setInitialAddressData', {
-                        initialData: @json($selectedAddressData)
-                    });
+            // Escuchar eventos de Livewire
+            Livewire.on('updateMap', (eventData) => {
+                if (Array.isArray(eventData) && eventData[0]) {
+                    const { lat, lng } = eventData[0];
+                    if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+                        setTimeout(() => updateMapLocation(lat, lng), 100);
+                    }
                 }
-            }
+            });
 
-            // Listener para actualización del mapa
-            Livewire.on('updateMap', handleMapUpdate);
-            
-            // Listener para actualización con delay
-            Livewire.on('delayedMapUpdate', handleDelayedMapUpdate);
-
-            // Listener para resetear el mapa
-            Livewire.on('resetMap', handleMapReset);
-
-            // Si debe mostrar el mapa inicialmente
-            if (showMapInitial && coordenadasValidas(initialLat, initialLng)) {
-                console.log('🎯 Mostrando mapa inicial...');
-                setTimeout(() => {
-                    crearOActualizarMapa(initialLat, initialLng, true);
-                }, 500);
-            }
-
-        } catch (error) {
-            console.error('❌ Error configurando listeners:', error);
-        }
+            Livewire.on('resetMap', () => {
+                resetMap();
+            });
+        });
     }
 
-    function handleMapUpdate(eventData) {
-        console.log('📍 Recibida actualización de mapa:', eventData);
-        
-        if (!validarDatosEvento(eventData)) {
-            console.warn('⚠️ Datos de evento inválidos');
-            return;
-        }
-
-        const data = eventData[0];
-        const newLat = parseFloat(data.lat);
-        const newLng = parseFloat(data.lng);
-        const force = data.force || false;
-
-        // Validar coordenadas
-        if (!coordenadasValidas(newLat, newLng)) {
-            console.warn('⚠️ Coordenadas inválidas:', { newLat, newLng });
-            return;
-        }
-
-        // Agregar a la cola de actualizaciones pendientes
-        pendingUpdates.push({ lat: newLat, lng: newLng, force });
-        
-        // Procesar actualizaciones
-        procesarActualizacionesPendientes();
-    }
-
-    function handleDelayedMapUpdate(eventData) {
-        if (!validarDatosEvento(eventData)) return;
-        
-        const data = eventData[0];
-        const delay = data.delay || 1000;
-        
-        console.log(`⏰ Programando actualización con delay de ${delay}ms`);
-        
-        setTimeout(() => {
-            handleMapUpdate([{ lat: data.lat, lng: data.lng, force: true }]);
-        }, delay);
-    }
-
-    function handleMapReset() {
-        console.log('🔄 Reseteando mapa...');
-        limpiarMapa();
-        ocultarMapa();
-    }
-
-    function procesarActualizacionesPendientes() {
-        if (pendingUpdates.length === 0) return;
-        
-        // Tomar la última actualización
-        const ultimaActualizacion = pendingUpdates.pop();
-        pendingUpdates = []; // Limpiar otras actualizaciones pendientes
-        
-        // Ejecutar con un pequeño delay para evitar problemas de timing
-        setTimeout(() => {
-            crearOActualizarMapa(ultimaActualizacion.lat, ultimaActualizacion.lng, ultimaActualizacion.force);
-        }, 100);
-    }
-
-    function coordenadasValidas(lat, lng) {
-        return lat !== null && lng !== null &&
-               !isNaN(lat) && !isNaN(lng) &&
-               lat !== 0 && lng !== 0 &&
-               Math.abs(lat) <= 90 && Math.abs(lng) <= 180;
-    }
-
-    function validarDatosEvento(eventData) {
-        return Array.isArray(eventData) && 
-               eventData.length > 0 && 
-               eventData[0] && 
-               typeof eventData[0].lat !== 'undefined' && 
-               typeof eventData[0].lng !== 'undefined';
-    }
-
-    function crearOActualizarMapa(lat, lng, force = false) {
-        console.log(`🗺️ Creando/actualizando mapa: (${lat}, ${lng}), force: ${force}`);
-        
+    function updateMapLocation(lat, lng) {
         const mapElement = document.getElementById('map');
-        const loadingElement = document.getElementById('map-loading');
-        
-        if (!mapElement) {
-            console.error('❌ Elemento del mapa no encontrado');
-            return;
+        if (!mapElement) return;
+
+        const center = { lat: parseFloat(lat), lng: parseFloat(lng) };
+
+        if (!map || !isMapInitialized) {
+            createMap(mapElement, center);
+        } else {
+            updateExistingMap(center);
         }
-
-        // Mostrar el contenedor del mapa y ocultar loading
-        mostrarMapa();
-
-        const centro = { lat: parseFloat(lat), lng: parseFloat(lng) };
-
-        // Si el mapa ya existe y no se fuerza recreación, solo actualizar
-        if (map && marker && mapInitialized && !force) {
-            try {
-                console.log('🔄 Actualizando mapa existente...');
-                marker.setPosition(centro);
-                map.setCenter(centro);
-                map.setZoom(16);
-                
-                // Forzar resize para asegurar que se muestre correctamente
-                setTimeout(() => {
-                    google.maps.event.trigger(map, 'resize');
-                    map.setCenter(centro);
-                }, 100);
-                
-                return;
-            } catch (error) {
-                console.warn('⚠️ Error actualizando mapa existente, recreando...', error);
-                limpiarMapa();
-            }
-        }
-
-        // Crear nuevo mapa
-        crearNuevoMapa(lat, lng, mapElement);
     }
 
-    function crearNuevoMapa(lat, lng, mapElement) {
-        console.log('🆕 Creando nuevo mapa...');
-        
+    function createMap(mapElement, center) {
         try {
-            // Limpiar cualquier mapa anterior
-            limpiarMapa();
+            mapElement.innerHTML = '';
             
-            // Asegurar dimensiones correctas
-            verificarDimensiones(mapElement);
-            
-            const centro = { lat: parseFloat(lat), lng: parseFloat(lng) };
-            
-            // Crear el mapa con configuración robusta
             map = new google.maps.Map(mapElement, {
-                center: centro,
+                center: center,
                 zoom: 16,
                 mapTypeControl: false,
                 streetViewControl: false,
-                fullscreenControl: true,
+                fullscreenControl: false,
                 zoomControl: true,
-                gestureHandling: 'cooperative',
-                disableDefaultUI: false,
-                clickableIcons: false,
-                backgroundColor: '#e5e3df',
-                styles: []
+                gestureHandling: 'cooperative'
             });
-            
-            // Crear marcador personalizado
+
             marker = new google.maps.Marker({
-                position: centro,
+                position: center,
                 map: map,
                 draggable: true,
-                title: 'Arrastra para ajustar la ubicación exacta',
-                animation: google.maps.Animation.DROP,
-                icon: {
-                    url: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="%23DC2626"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z" /></svg>',
-                    scaledSize: new google.maps.Size(32, 32),
-                    anchor: new google.maps.Point(16, 32)
-                }
-            });
-            
-            // Listener para cuando se arrastra el marcador
-            marker.addListener('dragend', function() {
-                const nuevaLat = marker.getPosition().lat();
-                const nuevaLng = marker.getPosition().lng();
-                
-                console.log('📍 Marcador movido a:', { lat: nuevaLat, lng: nuevaLng });
-                
-                // Notificar a Livewire
-                try {
-                    Livewire.dispatch('mapLocationUpdated', { 
-                        lat: nuevaLat, 
-                        lng: nuevaLng 
-                    });
-                } catch (error) {
-                    console.error('❌ Error enviando ubicación a Livewire:', error);
-                }
+                title: 'Arrastra para ajustar la ubicación exacta'
             });
 
-            // Esperar a que el mapa se cargue completamente
-            google.maps.event.addListenerOnce(map, 'idle', function() {
-                console.log('✅ Mapa cargado completamente');
-                mapInitialized = true;
-                retryCount = 0;
-                
-                // Forzar resize final
-                setTimeout(() => {
-                    google.maps.event.trigger(map, 'resize');
-                    map.setCenter(centro);
-                    
-                    // Ocultar definitivamente el loading
-                    const loadingElement = document.getElementById('map-loading');
-                    if (loadingElement) {
-                        loadingElement.style.display = 'none';
-                    }
-                }, 200);
+            marker.addListener('dragend', () => {
+                const newPosition = marker.getPosition();
+                Livewire.dispatch('mapLocationUpdated', { 
+                    lat: newPosition.lat(), 
+                    lng: newPosition.lng() 
+                });
             });
 
-            // Listener para errores de carga
-            google.maps.event.addListener(map, 'tilesloaded', function() {
-                console.log('🎯 Tiles del mapa cargados');
+            google.maps.event.addListenerOnce(map, 'idle', () => {
+                isMapInitialized = true;
             });
-            
+
         } catch (error) {
-            console.error('❌ Error creando mapa:', error);
-            
-            // Reintentar si no hemos superado el límite
-            if (retryCount < MAX_RETRIES) {
-                retryCount++;
-                console.log(`🔄 Reintentando crear mapa (${retryCount}/${MAX_RETRIES})...`);
-                setTimeout(() => {
-                    crearNuevoMapa(lat, lng, mapElement);
-                }, 1000 * retryCount);
-            } else {
-                console.error('❌ No se pudo crear el mapa después de varios intentos');
-                mostrarErrorMapa();
+            console.error('Error creating map:', error);
+        }
+    }
+
+    function updateExistingMap(center) {
+        try {
+            if (marker) {
+                marker.setPosition(center);
+            }
+            if (map) {
+                map.setCenter(center);
+                map.setZoom(16);
+            }
+        } catch (error) {
+            console.error('Error updating map:', error);
+            isMapInitialized = false;
+            const mapElement = document.getElementById('map');
+            if (mapElement) {
+                createMap(mapElement, center);
             }
         }
     }
 
-    function verificarDimensiones(mapElement) {
-        // Asegurar que el elemento tenga las dimensiones correctas
-        mapElement.style.width = '100%';
-        mapElement.style.height = '256px';
-        mapElement.style.minHeight = '256px';
-        mapElement.style.display = 'block';
-        mapElement.style.position = 'relative';
-        mapElement.style.backgroundColor = '#e5e3df';
-        mapElement.style.borderRadius = '6px';
-        
-        // Forzar reflow
-        mapElement.offsetHeight;
-    }
-
-    function mostrarMapa() {
-        const mapElement = document.getElementById('map');
-        const loadingElement = document.getElementById('map-loading');
-        
-        if (mapElement) {
-            mapElement.classList.remove('hidden');
-            mapElement.style.display = 'block';
-        }
-        
-        // Mantener el loading visible hasta que el mapa esté completamente cargado
-        if (loadingElement && !mapInitialized) {
-            loadingElement.style.display = 'flex';
-        }
-    }
-
-    function ocultarMapa() {
-        const mapElement = document.getElementById('map');
-        const loadingElement = document.getElementById('map-loading');
-        
-        if (mapElement) {
-            mapElement.classList.add('hidden');
-            mapElement.style.display = 'none';
-        }
-        
-        if (loadingElement) {
-            loadingElement.style.display = 'none';
-        }
-    }
-
-    function limpiarMapa() {
-        console.log('🧹 Limpiando mapa...');
-        
+    function resetMap() {
         try {
             if (marker) {
                 marker.setMap(null);
                 marker = null;
             }
-            
             if (map) {
-                // Limpiar todos los listeners
-                google.maps.event.clearInstanceListeners(map);
                 map = null;
             }
+            isMapInitialized = false;
             
-            mapInitialized = false;
-            retryCount = 0;
-            
-            // Limpiar el contenedor del mapa
             const mapElement = document.getElementById('map');
             if (mapElement) {
                 mapElement.innerHTML = '';
             }
-            
         } catch (error) {
-            console.warn('⚠️ Error limpiando mapa:', error);
+            console.error('Error resetting map:', error);
         }
     }
-
-    function mostrarErrorMapa() {
-        const mapElement = document.getElementById('map');
-        const loadingElement = document.getElementById('map-loading');
-        
-        if (loadingElement) {
-            loadingElement.innerHTML = `
-                <div class="text-center">
-                    <svg class="h-8 w-8 text-red-500 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                    </svg>
-                    <p class="text-xs text-red-600 dark:text-red-400">Error cargando el mapa</p>
-                    <button onclick="location.reload()" class="text-xs text-blue-600 hover:underline mt-1">Recargar página</button>
-                </div>
-            `;
-        }
-    }
-
-    // Función de limpieza cuando se cierra la página
-    window.addEventListener('beforeunload', function() {
-        limpiarMapa();
-    });
-
-    // Observer para detectar cambios en la visibilidad del contenedor del mapa
-    function setupMapObserver() {
-        const mapElement = document.getElementById('map');
-        if (!mapElement) return;
-        
-        const observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                    const isVisible = !mapElement.classList.contains('hidden');
-                    if (isVisible && map && mapInitialized) {
-                        // El mapa se hizo visible, forzar resize
-                        setTimeout(() => {
-                            google.maps.event.trigger(map, 'resize');
-                            if (marker) {
-                                map.setCenter(marker.getPosition());
-                            }
-                        }, 100);
-                    }
-                }
-            });
-        });
-        
-        observer.observe(mapElement, { attributes: true });
-    }
-
-    // Configurar observer cuando el DOM esté listo
-    document.addEventListener('DOMContentLoaded', setupMapObserver);
-
 </script>
 
-<script async defer 
-    src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&callback=initMap"
-    onerror="console.error('❌ Error cargando Google Maps API'); mostrarErrorMapa();">
-</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&libraries=places&callback=initMap"></script>
 @endpush

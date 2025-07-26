@@ -61,17 +61,18 @@ class AddressAutocomplete extends Component
         if ($initialData) {
             $this->selectedAddressData = array_merge($this->selectedAddressData, $initialData);
 
+            // Asegurar que los booleanos se manejen correctamente si vienen como string o int
             $this->selectedAddressData['no_external_number'] = (bool)($this->selectedAddressData['no_external_number'] ?? false);
             $this->selectedAddressData['no_interior_number'] = (bool)($this->selectedAddressData['no_interior_number'] ?? false);
 
+            // Sincronizar los checkboxes 'S/N' con los datos iniciales
             $this->is_outdoor_number_sn = ($this->selectedAddressData['outdoor_number'] === 'S/N' || $this->selectedAddressData['no_external_number']);
             $this->is_interior_number_sn = ($this->selectedAddressData['interior_number'] === 'S/N' || $this->selectedAddressData['no_interior_number']);
 
             $this->buildSearchFromData();
             $this->initializeFromData();
 
-            // Mejorar la verificación para mostrar el mapa
-            $this->evaluateMapVisibility();
+            $this->forceShowMap();
         }
     }
 
@@ -82,12 +83,13 @@ class AddressAutocomplete extends Component
 
     public function updatedSelectedAddressData(): void
     {
+        $this->forceShowMap();
         $this->notifyAddressChange();
     }
 
     public function updatedSelectedAddressDataStreet(): void
     {
-        $this->evaluateMapVisibility();
+        $this->forceShowMap();
         $this->notifyAddressChange();
     }
 
@@ -97,6 +99,7 @@ class AddressAutocomplete extends Component
             $this->is_outdoor_number_sn = false;
             $this->selectedAddressData['no_external_number'] = false;
         }
+        $this->forceShowMap();
         $this->notifyAddressChange();
     }
 
@@ -106,6 +109,7 @@ class AddressAutocomplete extends Component
             $this->is_interior_number_sn = false;
             $this->selectedAddressData['no_interior_number'] = false;
         }
+        $this->forceShowMap();
         $this->notifyAddressChange();
     }
 
@@ -157,7 +161,8 @@ class AddressAutocomplete extends Component
     {
         $this->suggestions = [];
         $this->resetAddressData();
-        $this->hideMap();
+        $this->show_map = false;
+        $this->dispatch('resetMap');
 
         if (strlen($this->search) < 3) {
             return;
@@ -227,80 +232,18 @@ class AddressAutocomplete extends Component
 
             $this->autoCompleteWithLocalDatabase($googleComponents);
 
+            // Ajustar los checkboxes S/N después de intentar autocompletar con DB o Google
             $this->is_outdoor_number_sn = (empty($this->selectedAddressData['outdoor_number']) && !empty($this->selectedAddressData['street']));
             $this->is_interior_number_sn = (empty($this->selectedAddressData['interior_number']) && !empty($this->selectedAddressData['street']));
 
             $this->selectedAddressData['no_external_number'] = $this->is_outdoor_number_sn;
             $this->selectedAddressData['no_interior_number'] = $this->is_interior_number_sn;
 
-            // Usar el nuevo método mejorado para evaluar la visibilidad del mapa
-            $this->evaluateMapVisibility();
-
+            $this->forceShowMap();
             $this->notifyAddressChange();
         } else {
             $this->addError('search', 'No se pudieron obtener los detalles de la dirección. Inténtalo de nuevo.');
         }
-    }
-
-    // NUEVO MÉTODO MEJORADO PARA EVALUAR VISIBILIDAD DEL MAPA
-    private function evaluateMapVisibility(): void
-    {
-        $shouldShowMap = $this->shouldShowMap();
-
-        if ($shouldShowMap && !$this->show_map) {
-            $this->show_map = true;
-            // Si tenemos coordenadas, mostrar el mapa inmediatamente
-            if ($this->hasValidCoordinates()) {
-                $this->dispatchMapUpdate();
-            } else {
-                // Si no tenemos coordenadas, intentar obtenerlas
-                $this->updateMapFromFullAddress();
-            }
-        } elseif (!$shouldShowMap && $this->show_map) {
-            $this->hideMap();
-        } elseif ($shouldShowMap && $this->show_map) {
-            // Ya se está mostrando el mapa, solo actualizamos si es necesario
-            if ($this->hasValidCoordinates()) {
-                $this->dispatchMapUpdate();
-            } else {
-                $this->updateMapFromFullAddress();
-            }
-        }
-    }
-
-    // NUEVO MÉTODO PARA VERIFICAR SI DEBERÍA MOSTRAR EL MAPA
-    private function shouldShowMap(): bool
-    {
-        return !empty($this->selectedAddressData['state_name']) &&
-            !empty($this->selectedAddressData['municipality_name']) &&
-            !empty($this->selectedAddressData['neighborhood_name']) &&
-            !empty($this->selectedAddressData['postal_code']);
-    }
-
-    // NUEVO MÉTODO PARA VERIFICAR COORDENADAS VÁLIDAS
-    private function hasValidCoordinates(): bool
-    {
-        return $this->selectedAddressData['latitude'] !== null &&
-            $this->selectedAddressData['longitude'] !== null &&
-            is_numeric($this->selectedAddressData['latitude']) &&
-            is_numeric($this->selectedAddressData['longitude']);
-    }
-
-    // NUEVO MÉTODO PARA ENVIAR ACTUALIZACIÓN DEL MAPA
-    private function dispatchMapUpdate(): void
-    {
-        $this->dispatch('updateMap', [
-            'lat' => (float)$this->selectedAddressData['latitude'],
-            'lng' => (float)$this->selectedAddressData['longitude'],
-            'force' => true // Forzar actualización
-        ]);
-    }
-
-    // NUEVO MÉTODO PARA OCULTAR EL MAPA
-    private function hideMap(): void
-    {
-        $this->show_map = false;
-        $this->dispatch('resetMap');
     }
 
     public function updatedIsOutdoorNumberSn(): void
@@ -612,7 +555,7 @@ class AddressAutocomplete extends Component
             $this->selectedAddressData['state_name'] = '';
         }
         $this->buildSearchFromData();
-        $this->evaluateMapVisibility(); // Usar el nuevo método
+        $this->forceShowMap();
         $this->notifyAddressChange();
     }
 
@@ -630,7 +573,7 @@ class AddressAutocomplete extends Component
             $this->selectedAddressData['municipality_name'] = '';
         }
         $this->buildSearchFromData();
-        $this->evaluateMapVisibility(); // Usar el nuevo método
+        $this->forceShowMap();
         $this->notifyAddressChange();
     }
 
@@ -643,11 +586,13 @@ class AddressAutocomplete extends Component
             $this->selectedAddressData['neighborhood_name'] = $colonia->name;
             $this->selectedAddressData['postal_code'] = $colonia->postal_code;
             $this->buildSearchFromData();
+            $this->forceShowMap();
         } else {
             $this->selectedAddressData['neighborhood_name'] = '';
             $this->selectedAddressData['postal_code'] = '';
+            $this->show_map = false;
+            $this->dispatch('resetMap');
         }
-        $this->evaluateMapVisibility(); // Usar el nuevo método
         $this->notifyAddressChange();
     }
 
@@ -687,7 +632,8 @@ class AddressAutocomplete extends Component
         $this->show_colonia_select = false;
         $this->selectedAddressData['neighborhood_name'] = '';
         $this->selectedAddressData['postal_code'] = '';
-        $this->hideMap(); // Usar el nuevo método
+        $this->show_map = false;
+        $this->dispatch('resetMap');
     }
 
     private function resetAllDbSelects(): void
@@ -719,16 +665,48 @@ class AddressAutocomplete extends Component
         $this->is_interior_number_sn = false;
     }
 
-    // MÉTODO MEJORADO PARA OBTENER COORDENADAS
+    private function forceShowMap(): void
+    {
+        if ($this->hasCompleteAddress()) {
+            $this->show_map = true;
+
+            if ($this->hasCoordinates()) {
+                $this->dispatch('updateMap', [
+                    'lat' => $this->selectedAddressData['latitude'],
+                    'lng' => $this->selectedAddressData['longitude']
+                ]);
+            } else {
+                $this->updateMapFromFullAddress();
+            }
+        } else {
+            $this->show_map = false;
+            $this->dispatch('resetMap');
+        }
+    }
+
+    private function hasCompleteAddress(): bool
+    {
+        return !empty($this->selectedAddressData['state_name']) &&
+            !empty($this->selectedAddressData['municipality_name']) &&
+            !empty($this->selectedAddressData['neighborhood_name']) &&
+            !empty($this->selectedAddressData['postal_code']);
+    }
+
+    private function hasCoordinates(): bool
+    {
+        return $this->selectedAddressData['latitude'] !== null &&
+            $this->selectedAddressData['longitude'] !== null &&
+            $this->selectedAddressData['latitude'] != 0 &&
+            $this->selectedAddressData['longitude'] != 0;
+    }
+
     protected function updateMapFromFullAddress(): void
     {
-        if (!$this->shouldShowMap()) {
-            $this->hideMap();
+        if (!$this->hasCompleteAddress()) {
             return;
         }
 
         $fullAddress = implode(', ', array_filter([
-            $this->selectedAddressData['street'] ?? '',
             $this->selectedAddressData['neighborhood_name'],
             $this->selectedAddressData['municipality_name'],
             $this->selectedAddressData['state_name'],
@@ -749,43 +727,18 @@ class AddressAutocomplete extends Component
             'components' => 'country:mx',
         ];
 
-        try {
-            $response = Http::timeout(10)->get($apiUrl, $queryParams);
-            $data = $response->json();
+        $response = Http::get($apiUrl, $queryParams);
+        $data = $response->json();
 
-            if ($response->successful() && isset($data['results'][0])) {
-                $result = $data['results'][0];
-                $this->selectedAddressData['latitude'] = $result['geometry']['location']['lat'];
-                $this->selectedAddressData['longitude'] = $result['geometry']['location']['lng'];
-
-                // Asegurar que el mapa se muestre
-                $this->show_map = true;
-
-                // Enviar actualización con retry
-                $this->dispatchMapUpdate();
-
-                // Backup: intentar otra vez después de un pequeño delay
-                $this->dispatch('delayedMapUpdate', [
-                    'lat' => (float)$this->selectedAddressData['latitude'],
-                    'lng' => (float)$this->selectedAddressData['longitude'],
-                    'delay' => 500
-                ]);
-            } else {
-                // Si no se pueden obtener coordenadas pero tenemos todos los datos requeridos,
-                // aún mostrar el mapa con coordenadas por defecto de México
-                $this->selectedAddressData['latitude'] = 19.4326;
-                $this->selectedAddressData['longitude'] = -99.1332;
-                $this->show_map = true;
-                $this->dispatchMapUpdate();
-            }
-        } catch (\Exception $e) {
-            // En caso de error, usar coordenadas por defecto si tenemos todos los datos
-            if ($this->shouldShowMap()) {
-                $this->selectedAddressData['latitude'] = 19.4326;
-                $this->selectedAddressData['longitude'] = -99.1332;
-                $this->show_map = true;
-                $this->dispatchMapUpdate();
-            }
+        if ($response->successful() && isset($data['results'][0])) {
+            $result = $data['results'][0];
+            $this->selectedAddressData['latitude'] = $result['geometry']['location']['lat'];
+            $this->selectedAddressData['longitude'] = $result['geometry']['location']['lng'];
+            $this->show_map = true;
+            $this->dispatch('updateMap', [
+                'lat' => $this->selectedAddressData['latitude'],
+                'lng' => $this->selectedAddressData['longitude']
+            ]);
         }
     }
 
@@ -815,10 +768,11 @@ class AddressAutocomplete extends Component
         $this->colonias = [];
         $this->show_municipality_select = false;
         $this->show_colonia_select = false;
+        $this->show_map = false;
         $this->data_source = 'none';
         $this->is_outdoor_number_sn = false;
         $this->is_interior_number_sn = false;
-        $this->hideMap();
+        $this->dispatch('resetMap');
         $this->notifyAddressChange();
     }
 
