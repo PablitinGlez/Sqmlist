@@ -1,4 +1,4 @@
-{{--
+
 @php
     $user = filament()->auth()->user();
 @endphp
@@ -41,4 +41,3 @@
         </div>
     </x-filament::section>
 </x-filament-widgets::widget>
---}}
