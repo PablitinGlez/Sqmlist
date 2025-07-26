@@ -60,18 +60,14 @@ class AddressAutocomplete extends Component
     {
         if ($initialData) {
             $this->selectedAddressData = array_merge($this->selectedAddressData, $initialData);
-
-            // Asegurar que los booleanos se manejen correctamente si vienen como string o int
             $this->selectedAddressData['no_external_number'] = (bool)($this->selectedAddressData['no_external_number'] ?? false);
             $this->selectedAddressData['no_interior_number'] = (bool)($this->selectedAddressData['no_interior_number'] ?? false);
 
-            // Sincronizar los checkboxes 'S/N' con los datos iniciales
             $this->is_outdoor_number_sn = ($this->selectedAddressData['outdoor_number'] === 'S/N' || $this->selectedAddressData['no_external_number']);
             $this->is_interior_number_sn = ($this->selectedAddressData['interior_number'] === 'S/N' || $this->selectedAddressData['no_interior_number']);
 
             $this->buildSearchFromData();
             $this->initializeFromData();
-
             $this->forceShowMap();
         }
     }
@@ -79,12 +75,6 @@ class AddressAutocomplete extends Component
     public function mount(): void
     {
         $this->states = State::orderBy('name')->get();
-    }
-
-    public function updatedSelectedAddressData(): void
-    {
-        $this->forceShowMap();
-        $this->notifyAddressChange();
     }
 
     public function updatedSelectedAddressDataStreet(): void
@@ -113,12 +103,42 @@ class AddressAutocomplete extends Component
         $this->notifyAddressChange();
     }
 
+    public function updatedIsOutdoorNumberSn(): void
+    {
+        if ($this->is_outdoor_number_sn) {
+            $this->selectedAddressData['outdoor_number'] = 'S/N';
+            $this->selectedAddressData['no_external_number'] = true;
+        } else {
+            if ($this->selectedAddressData['outdoor_number'] === 'S/N') {
+                $this->selectedAddressData['outdoor_number'] = '';
+            }
+            $this->selectedAddressData['no_external_number'] = false;
+        }
+        $this->notifyAddressChange();
+        $this->forceShowMap();
+    }
+
+    public function updatedIsInteriorNumberSn(): void
+    {
+        if ($this->is_interior_number_sn) {
+            $this->selectedAddressData['interior_number'] = 'S/N';
+            $this->selectedAddressData['no_interior_number'] = true;
+        } else {
+            if ($this->selectedAddressData['interior_number'] === 'S/N') {
+                $this->selectedAddressData['interior_number'] = '';
+            }
+            $this->selectedAddressData['no_interior_number'] = false;
+        }
+        $this->notifyAddressChange();
+        $this->forceShowMap();
+    }
+
     private function buildSearchFromData(): void
     {
         $addressParts = array_filter([
             $this->selectedAddressData['street'],
-            $this->selectedAddressData['outdoor_number'],
-            $this->selectedAddressData['interior_number'],
+            $this->selectedAddressData['outdoor_number'] === 'S/N' ? 'S/N' : $this->selectedAddressData['outdoor_number'],
+            $this->selectedAddressData['interior_number'] === 'S/N' ? 'Int. S/N' : ($this->selectedAddressData['interior_number'] ? 'Int. ' . $this->selectedAddressData['interior_number'] : null),
             $this->selectedAddressData['neighborhood_name'],
             $this->selectedAddressData['municipality_name'],
             $this->selectedAddressData['state_name'],
@@ -168,7 +188,7 @@ class AddressAutocomplete extends Component
             return;
         }
 
-        $apiKey = Config::get('services.google_maps.api_key');
+        $apiKey = Config::get('services.Maps.api_key');
         if (!$apiKey) {
             $this->addError('api_key', 'La clave de la API de Google Maps no está configurada.');
             return;
@@ -198,7 +218,7 @@ class AddressAutocomplete extends Component
         $this->suggestions = [];
         $this->data_source = 'google';
 
-        $apiKey = Config::get('services.google_maps.api_key');
+        $apiKey = Config::get('services.Maps.api_key');
         if (!$apiKey) {
             $this->addError('api_key', 'La clave de la API de Google Maps no está configurada.');
             return;
@@ -232,7 +252,6 @@ class AddressAutocomplete extends Component
 
             $this->autoCompleteWithLocalDatabase($googleComponents);
 
-            // Ajustar los checkboxes S/N después de intentar autocompletar con DB o Google
             $this->is_outdoor_number_sn = (empty($this->selectedAddressData['outdoor_number']) && !empty($this->selectedAddressData['street']));
             $this->is_interior_number_sn = (empty($this->selectedAddressData['interior_number']) && !empty($this->selectedAddressData['street']));
 
@@ -244,34 +263,6 @@ class AddressAutocomplete extends Component
         } else {
             $this->addError('search', 'No se pudieron obtener los detalles de la dirección. Inténtalo de nuevo.');
         }
-    }
-
-    public function updatedIsOutdoorNumberSn(): void
-    {
-        if ($this->is_outdoor_number_sn) {
-            $this->selectedAddressData['outdoor_number'] = 'S/N';
-            $this->selectedAddressData['no_external_number'] = true;
-        } else {
-            if ($this->selectedAddressData['outdoor_number'] === 'S/N') {
-                $this->selectedAddressData['outdoor_number'] = '';
-            }
-            $this->selectedAddressData['no_external_number'] = false;
-        }
-        $this->notifyAddressChange();
-    }
-
-    public function updatedIsInteriorNumberSn(): void
-    {
-        if ($this->is_interior_number_sn) {
-            $this->selectedAddressData['interior_number'] = 'S/N';
-            $this->selectedAddressData['no_interior_number'] = true;
-        } else {
-            if ($this->selectedAddressData['interior_number'] === 'S/N') {
-                $this->selectedAddressData['interior_number'] = '';
-            }
-            $this->selectedAddressData['no_interior_number'] = false;
-        }
-        $this->notifyAddressChange();
     }
 
     protected function parseGoogleComponents(array $components): array
@@ -343,15 +334,12 @@ class AddressAutocomplete extends Component
                     if (!empty($googleComponents['neighborhood_name']) && $normalizedColoniaNameDB === $this->normalizeString($googleComponents['neighborhood_name'])) {
                         $currentScore += 3;
                     }
-
                     if (!empty($googleComponents['municipality_name']) && $normalizedMunicipalityNameDB === $this->normalizeString($googleComponents['municipality_name'])) {
                         $currentScore += 2;
                     }
-
                     if (!empty($googleComponents['state_name']) && str_starts_with($normalizedStateNameDB, $this->normalizeString($googleComponents['state_name']))) {
                         $currentScore += 1;
                     }
-
                     if (empty($googleComponents['neighborhood_name']) && str_contains($normalizedOriginalSearch, $normalizedColoniaNameDB)) {
                         $currentScore += 4;
                     }
@@ -417,15 +405,21 @@ class AddressAutocomplete extends Component
 
         $this->buildSearchFromData();
 
-        $this->is_outdoor_number_sn = false;
-        $this->selectedAddressData['no_external_number'] = false;
-        $this->selectedAddressData['outdoor_number'] = '';
+        $this->is_outdoor_number_sn = empty($this->selectedAddressData['outdoor_number']);
+        $this->selectedAddressData['no_external_number'] = $this->is_outdoor_number_sn;
+        if ($this->is_outdoor_number_sn) {
+            $this->selectedAddressData['outdoor_number'] = 'S/N';
+        }
 
-        $this->is_interior_number_sn = false;
-        $this->selectedAddressData['no_interior_number'] = false;
-        $this->selectedAddressData['interior_number'] = '';
+        $this->is_interior_number_sn = empty($this->selectedAddressData['interior_number']);
+        $this->selectedAddressData['no_interior_number'] = $this->is_interior_number_sn;
+        if ($this->is_interior_number_sn) {
+            $this->selectedAddressData['interior_number'] = 'S/N';
+        }
 
-        $this->selectedAddressData['street'] = '';
+        if ($this->data_source !== 'google') {
+            $this->selectedAddressData['street'] = '';
+        }
     }
 
     private function autoCompleteFromMunicipality(Municipality $municipality): void
@@ -446,15 +440,21 @@ class AddressAutocomplete extends Component
 
         $this->buildSearchFromData();
 
-        $this->is_outdoor_number_sn = false;
-        $this->selectedAddressData['no_external_number'] = false;
-        $this->selectedAddressData['outdoor_number'] = '';
+        $this->is_outdoor_number_sn = empty($this->selectedAddressData['outdoor_number']);
+        $this->selectedAddressData['no_external_number'] = $this->is_outdoor_number_sn;
+        if ($this->is_outdoor_number_sn) {
+            $this->selectedAddressData['outdoor_number'] = 'S/N';
+        }
 
-        $this->is_interior_number_sn = false;
-        $this->selectedAddressData['no_interior_number'] = false;
-        $this->selectedAddressData['interior_number'] = '';
+        $this->is_interior_number_sn = empty($this->selectedAddressData['interior_number']);
+        $this->selectedAddressData['no_interior_number'] = $this->is_interior_number_sn;
+        if ($this->is_interior_number_sn) {
+            $this->selectedAddressData['interior_number'] = 'S/N';
+        }
 
-        $this->selectedAddressData['street'] = '';
+        if ($this->data_source !== 'google') {
+            $this->selectedAddressData['street'] = '';
+        }
     }
 
     private function autoCompleteFromState(State $state): void
@@ -474,21 +474,26 @@ class AddressAutocomplete extends Component
 
         $this->buildSearchFromData();
 
-        $this->is_outdoor_number_sn = false;
-        $this->selectedAddressData['no_external_number'] = false;
-        $this->selectedAddressData['outdoor_number'] = '';
+        $this->is_outdoor_number_sn = empty($this->selectedAddressData['outdoor_number']);
+        $this->selectedAddressData['no_external_number'] = $this->is_outdoor_number_sn;
+        if ($this->is_outdoor_number_sn) {
+            $this->selectedAddressData['outdoor_number'] = 'S/N';
+        }
 
-        $this->is_interior_number_sn = false;
-        $this->selectedAddressData['no_interior_number'] = false;
-        $this->selectedAddressData['interior_number'] = '';
+        $this->is_interior_number_sn = empty($this->selectedAddressData['interior_number']);
+        $this->selectedAddressData['no_interior_number'] = $this->is_interior_number_sn;
+        if ($this->is_interior_number_sn) {
+            $this->selectedAddressData['interior_number'] = 'S/N';
+        }
 
-        $this->selectedAddressData['street'] = '';
+        if ($this->data_source !== 'google') {
+            $this->selectedAddressData['street'] = '';
+        }
     }
 
     private function findColoniaByName(string $coloniaName, ?string $municipalityName = null, ?string $stateName = null): ?Colonia
     {
         $normalizedColoniaName = $this->normalizeString($coloniaName);
-
         $query = Colonia::query();
 
         if ($municipalityName) {
@@ -507,38 +512,34 @@ class AddressAutocomplete extends Component
 
         $query->whereRaw('LOWER(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name, "á", "a"), "é", "e"), "í", "i"), "ó", "o"), "ú", "u"), "ñ", "n")) = ?', [$normalizedColoniaName]);
 
-        $result = $query->first();
-        return $result;
+        return $query->first();
     }
 
     private function findStateByName(string $stateName): ?State
     {
         $normalizedStateName = $this->normalizeString($stateName);
-        $result = State::whereRaw('LOWER(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name, "á", "a"), "é", "e"), "í", "i"), "ó", "o"), "ú", "u"), "ñ", "n")) LIKE ?', [$normalizedStateName . '%'])->first();
-        return $result;
+        return State::whereRaw('LOWER(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name, "á", "a"), "é", "e"), "í", "i"), "ó", "o"), "ú", "u"), "ñ", "n")) LIKE ?', [$normalizedStateName . '%'])->first();
     }
 
     private function findMunicipalityByName(string $municipalityName, int $stateId): ?Municipality
     {
         $normalizedMunicipalityName = $this->normalizeString($municipalityName);
-        $result = Municipality::where('state_id', $stateId)
+        return Municipality::where('state_id', $stateId)
             ->whereRaw('LOWER(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name, "á", "a"), "é", "e"), "í", "i"), "ó", "o"), "ú", "u"), "ñ", "n")) = ?', [$normalizedMunicipalityName])
             ->first();
-        return $result;
     }
 
     protected function normalizeString(string $string): string
     {
         $string = mb_strtolower($string, 'UTF-8');
         $string = str_replace(
-            ['á', 'é', 'í', 'ó', 'ú', 'ü', 'ñ', 'Á', 'É', 'Í', 'Ó', 'Ú', 'Ü', 'N'],
+            ['á', 'é', 'í', 'ó', 'ú', 'ü', 'ñ', 'Á', 'É', 'Í', 'Ó', 'Ú', 'Ü', 'Ñ'],
             ['a', 'e', 'i', 'o', 'u', 'u', 'n', 'A', 'E', 'I', 'O', 'U', 'U', 'N'],
             $string
         );
         $string = preg_replace('/[^a-z0-9\s]/', '', $string);
         $string = preg_replace('/\s+/', ' ', $string);
-        $normalized = trim($string);
-        return $normalized;
+        return trim($string);
     }
 
     public function updatedSelectedStateId(): void
@@ -553,6 +554,7 @@ class AddressAutocomplete extends Component
             $this->show_municipality_select = true;
         } else {
             $this->selectedAddressData['state_name'] = '';
+            $this->show_municipality_select = false;
         }
         $this->buildSearchFromData();
         $this->forceShowMap();
@@ -571,6 +573,7 @@ class AddressAutocomplete extends Component
             $this->show_colonia_select = true;
         } else {
             $this->selectedAddressData['municipality_name'] = '';
+            $this->show_colonia_select = false;
         }
         $this->buildSearchFromData();
         $this->forceShowMap();
@@ -598,22 +601,16 @@ class AddressAutocomplete extends Component
 
     private function loadMunicipalities(): void
     {
-        $this->municipalities = [];
-        if ($this->selected_state_id) {
-            $this->municipalities = Municipality::where('state_id', $this->selected_state_id)
-                ->orderBy('name')
-                ->get();
-        }
+        $this->municipalities = $this->selected_state_id
+            ? Municipality::where('state_id', $this->selected_state_id)->orderBy('name')->get()
+            : [];
     }
 
     private function loadColonias(): void
     {
-        $this->colonias = [];
-        if ($this->selected_municipality_id) {
-            $this->colonias = Colonia::where('municipality_id', $this->selected_municipality_id)
-                ->orderBy('name')
-                ->get();
-        }
+        $this->colonias = $this->selected_municipality_id
+            ? Colonia::where('municipality_id', $this->selected_municipality_id)->orderBy('name')->get()
+            : [];
     }
 
     private function resetMunicipalityAndBelow(): void
@@ -663,13 +660,23 @@ class AddressAutocomplete extends Component
         $this->resetAllDbSelects();
         $this->is_outdoor_number_sn = false;
         $this->is_interior_number_sn = false;
+        $this->data_source = 'none';
+    }
+
+    public function clearForm(): void
+    {
+        $this->search = '';
+        $this->suggestions = [];
+        $this->resetAddressData();
+        $this->show_map = false;
+        $this->dispatch('resetMap');
+        $this->notifyAddressChange();
     }
 
     private function forceShowMap(): void
     {
-        if ($this->hasCompleteAddress()) {
+        if ($this->hasCompleteAddress() || $this->hasCoordinates()) {
             $this->show_map = true;
-
             if ($this->hasCoordinates()) {
                 $this->dispatch('updateMap', [
                     'lat' => $this->selectedAddressData['latitude'],
@@ -707,6 +714,9 @@ class AddressAutocomplete extends Component
         }
 
         $fullAddress = implode(', ', array_filter([
+            $this->selectedAddressData['street'],
+            $this->selectedAddressData['outdoor_number'] === 'S/N' ? 'S/N' : $this->selectedAddressData['outdoor_number'],
+            $this->selectedAddressData['interior_number'] === 'S/N' ? 'Int. S/N' : ($this->selectedAddressData['interior_number'] ? 'Int. ' . $this->selectedAddressData['interior_number'] : null),
             $this->selectedAddressData['neighborhood_name'],
             $this->selectedAddressData['municipality_name'],
             $this->selectedAddressData['state_name'],
@@ -714,8 +724,12 @@ class AddressAutocomplete extends Component
             'México'
         ]));
 
-        $apiKey = Config::get('services.google_maps.api_key');
+        $apiKey = Config::get('services.Maps.api_key');
         if (!$apiKey) {
+            return;
+        }
+
+        if ($this->data_source === 'google' && $this->selectedAddressData['google_place_id'] !== null && $this->hasCoordinates()) {
             return;
         }
 
@@ -740,40 +754,6 @@ class AddressAutocomplete extends Component
                 'lng' => $this->selectedAddressData['longitude']
             ]);
         }
-    }
-
-    public function clearForm(): void
-    {
-        $this->search = '';
-        $this->suggestions = [];
-        $this->selectedAddressData = [
-            'street' => '',
-            'outdoor_number' => '',
-            'interior_number' => '',
-            'postal_code' => '',
-            'state_name' => '',
-            'municipality_name' => '',
-            'neighborhood_name' => '',
-            'latitude' => null,
-            'longitude' => null,
-            'google_place_id' => null,
-            'google_address_components' => null,
-            'no_external_number' => false,
-            'no_interior_number' => false,
-        ];
-        $this->selected_state_id = null;
-        $this->selected_municipality_id = null;
-        $this->selected_colonia_id = null;
-        $this->municipalities = [];
-        $this->colonias = [];
-        $this->show_municipality_select = false;
-        $this->show_colonia_select = false;
-        $this->show_map = false;
-        $this->data_source = 'none';
-        $this->is_outdoor_number_sn = false;
-        $this->is_interior_number_sn = false;
-        $this->dispatch('resetMap');
-        $this->notifyAddressChange();
     }
 
     private function notifyAddressChange(): void
