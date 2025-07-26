@@ -26,16 +26,17 @@ class CreateProperty extends CreateRecord
     {
         parent::mount();
 
+      
         $this->form->fill([
             'feature_values' => [],
-            'description' => '',
-            'images' => [],
-            'property_images' => [],
             'title' => '',
             'price' => null,
             'operation_type' => null,
             'property_type_id' => null,
             'address_data' => [],
+            'contact_whatsapp_number' => '',
+            'contact_phone_number' => '',
+            'contact_email' => '',
         ]);
     }
 
@@ -56,9 +57,9 @@ class CreateProperty extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['user_id'] = Auth::id();
-     
+
         $data['status'] = 'pending_review';
-        $data['draft_expires_at'] = now()->addDays(7); 
+        $data['draft_expires_at'] = now()->addDays(7);
 
         $this->featureValuesToSave = [];
 
@@ -97,7 +98,7 @@ class CreateProperty extends CreateRecord
 
     protected function afterCreate(): void
     {
-        
+
         foreach ($this->featureValuesToSave as $featureValueData) {
             $this->record->featureValues()->create($featureValueData);
         }
@@ -112,7 +113,7 @@ class CreateProperty extends CreateRecord
                 $address = $this->record->address()->create($formData['address_data']);
                 Log::info('CreateProperty: Dirección guardada exitosamente. ID de dirección: ' . $address->id);
 
-               
+
                 $this->record->fresh()->regenerateSlug();
                 Log::info('CreateProperty: Slug regenerado después de crear dirección. Nuevo slug: ' . $this->record->fresh()->slug);
             } catch (\Exception $e) {
@@ -122,7 +123,7 @@ class CreateProperty extends CreateRecord
             Log::warning('CreateProperty: address_data no está presente o está vacío en el formulario.');
         }
 
- 
+        // Manejo de imágenes
         $uploadedImagePaths = $formData['images'] ?? [];
         if (!empty($uploadedImagePaths) && is_array($uploadedImagePaths)) {
             $order = 1;
@@ -145,7 +146,7 @@ class CreateProperty extends CreateRecord
 
     protected function getRedirectUrl(): string
     {
-        
+
         return PropertyResource::getUrl('index');
     }
 
