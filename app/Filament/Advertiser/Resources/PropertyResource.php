@@ -521,16 +521,14 @@ class PropertyResource extends Resource
         ];
     }
 
+
     public static function form(Form $form): Form
     {
-
         $isEditing = $form->getOperation() === 'edit';
 
         if ($isEditing) {
-    
-            return $form->schema(static::getEditFormSchema($form, false)); 
+            return $form->schema(static::getEditFormSchema($form, false));
         } else {
-      
             return $form
                 ->schema([
                     Wizard::make([
@@ -548,22 +546,33 @@ class PropertyResource extends Resource
                                     ->reactive(),
                             ])
                             ->columns(1)
+                            ->extraAttributes([
+                                'x-on:keydown.enter.prevent' => 'true', 
+                            ])
                             ->afterValidation(function (Forms\Get $get, array $state) {
-                             
+                                
+                                if (empty($get('selectedAddressData'))) {
+                                    throw new \Filament\Forms\ValidationException([
+                                        'selectedAddressData' => 'Por favor selecciona una dirección válida.'
+                                    ]);
+                                }
                             }),
 
                         Forms\Components\Wizard\Step::make('Generales')
                             ->schema([
                                 Forms\Components\Placeholder::make('')
                                     ->content(new HtmlString('<h2 class="text-xl font-semibold text-gray-800 mb-4">¿Cuéntanos qué quieres publicar?</h2>')),
-                       
+
                                 Forms\Components\TextInput::make('title')
                                     ->label('Título de la Propiedad')
                                     ->placeholder('Ej. Casa bonita de dos pisos con jardín')
                                     ->helperText('Ingresa un título corto y descriptivo para que las personas encuentren más fácil tu propiedad.')
                                     ->required()
                                     ->maxLength(40)
-                                    ->columnSpanFull(), 
+                                    ->columnSpanFull()
+                                    ->extraAttributes([
+                                        'x-on:keydown.enter.prevent' => 'true',
+                                    ]),
                                 Radio::make('operation_type')
                                     ->label('Tipo de operación')
                                     ->options([
@@ -596,8 +605,28 @@ class PropertyResource extends Resource
                                     }),
                             ])
                             ->columns(1)
+                            ->extraAttributes([
+                                'x-on:keydown.enter.prevent' => 'true',
+                            ])
                             ->afterValidation(function (Forms\Get $get, array $state) {
-                        
+                                // Validación específica para este paso
+                                $errors = [];
+
+                                if (empty($get('title'))) {
+                                    $errors['title'] = 'El título es requerido.';
+                                }
+
+                                if (empty($get('operation_type'))) {
+                                    $errors['operation_type'] = 'Selecciona un tipo de operación.';
+                                }
+
+                                if (empty($get('property_type_id'))) {
+                                    $errors['property_type_id'] = 'Selecciona un tipo de propiedad.';
+                                }
+
+                                if (!empty($errors)) {
+                                    throw new \Filament\Forms\ValidationException($errors);
+                                }
                             }),
 
                         Forms\Components\Wizard\Step::make('Especificaciones')
@@ -627,10 +656,8 @@ class PropertyResource extends Resource
                                     ];
                                 }
 
-                             
                                 $tabs = static::getFeatureSectionsTabs($propertyType, null, false);
 
-                        
                                 $tabs[] = Forms\Components\Tabs\Tab::make('Multimedia')
                                     ->icon('heroicon-o-photo')
                                     ->schema([
@@ -664,21 +691,24 @@ class PropertyResource extends Resource
                                             ])
                                             ->columnSpanFull(),
                                     ])
-                                    ->columns(1); 
+                                    ->columns(1);
 
                                 $tabs[] = Forms\Components\Tabs\Tab::make('Descripción')
                                     ->icon('heroicon-o-document-text')
                                     ->schema([
-                            Forms\Components\Section::make('Describe tu propiedad')
-                                ->description('Agrega datos relevantes como: Acabados de la propiedad, Servicios adicionales, Reglamentos, Lugares cercanos como escuelas, hospitales, tiendas departamentales, Entretenimiento, etc.')
-                                ->schema([
-                                    Forms\Components\TextInput::make('description')
-                                        ->label('Descripción')
-                                        ->placeholder('Describe tu propiedad detalladamente...')
-                                        ->columnSpanFull()
-                                        ->maxLength(1500),
-                                ])
-                                ->columnSpanFull(),
+                                        Forms\Components\Section::make('Describe tu propiedad')
+                                            ->description('Agrega datos relevantes como: Acabados de la propiedad, Servicios adicionales, Reglamentos, Lugares cercanos como escuelas, hospitales, tiendas departamentales, Entretenimiento, etc.')
+                                            ->schema([
+                                                Forms\Components\TextInput::make('description')
+                                                    ->label('Descripción')
+                                                    ->placeholder('Describe tu propiedad detalladamente...')
+                                                    ->columnSpanFull()
+                                                    ->maxLength(1500)
+                                                    ->extraAttributes([
+                                                        'x-on:keydown.enter.prevent' => 'true',
+                                                    ]),
+                                            ])
+                                            ->columnSpanFull(),
                                     ])
                                     ->columns(1);
 
@@ -689,10 +719,17 @@ class PropertyResource extends Resource
                                 ];
                             })
                             ->columns(1)
+                            ->extraAttributes([
+                                'x-on:keydown.enter.prevent' => 'true',
+                            ])
                             ->afterValidation(function (Forms\Get $get, array $state) {
-                             
+                                // Validación específica para imágenes
+                                if (empty($get('images'))) {
+                                    throw new \Filament\Forms\ValidationException([
+                                        'images' => 'Debes subir al menos una imagen de la propiedad.'
+                                    ]);
+                                }
                             }),
-
 
                         Forms\Components\Wizard\Step::make('Precio')
                             ->schema([
@@ -705,12 +742,25 @@ class PropertyResource extends Resource
                                             ->prefix('$')
                                             ->suffix('MXN')
                                             ->required()
-                                            ->rules(['numeric', 'min:0', 'max:999999999.99']),
+                                            ->rules(['numeric', 'min:0', 'max:999999999.99'])
+                                            ->extraAttributes([
+                                                'x-on:keydown.enter.prevent' => 'true',
+                                            ]),
                                     ])
                                     ->columns(3)
                                     ->columnSpanFull(),
                             ])
-                            ->columns(1),
+                            ->columns(1)
+                            ->extraAttributes([
+                                'x-on:keydown.enter.prevent' => 'true',
+                            ])
+                            ->afterValidation(function (Forms\Get $get, array $state) {
+                                if (empty($get('price')) || $get('price') <= 0) {
+                                    throw new \Filament\Forms\ValidationException([
+                                        'price' => 'El precio debe ser mayor a 0.'
+                                    ]);
+                                }
+                            }),
 
                         Forms\Components\Wizard\Step::make('Contacto')
                             ->schema([
@@ -737,6 +787,9 @@ class PropertyResource extends Resource
                                             ->required()
                                             ->minLength(10)
                                             ->reactive()
+                                            ->extraAttributes([
+                                                'x-on:keydown.enter.prevent' => 'true',
+                                            ])
                                             ->afterStateUpdated(function ($state, $set) {
                                                 $cleanNumber = preg_replace('/[^0-9]/', '', $state);
                                                 if (strlen($cleanNumber) > 10) {
@@ -764,6 +817,9 @@ class PropertyResource extends Resource
                                             ->minLength(10)
                                             ->required()
                                             ->reactive()
+                                            ->extraAttributes([
+                                                'x-on:keydown.enter.prevent' => 'true',
+                                            ])
                                             ->afterStateUpdated(function ($state, $set) {
                                                 $cleanNumber = preg_replace('/[^0-9]/', '', $state);
                                                 if (strlen($cleanNumber) > 10) {
@@ -789,9 +845,10 @@ class PropertyResource extends Resource
                                             })
                                             ->prefixIcon('heroicon-o-envelope')
                                             ->maxLength(255)
-                                            ->columnSpanFull(),
-
-                                      
+                                            ->columnSpanFull()
+                                            ->extraAttributes([
+                                                'x-on:keydown.enter.prevent' => 'true',
+                                            ]),
 
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('enviar_a_revision')
@@ -812,13 +869,18 @@ class PropertyResource extends Resource
                                     ->columns(2)
                                     ->columnSpanFull(),
                             ])
-                            ->columns(1),
+                            ->columns(1)
+                            ->extraAttributes([
+                                'x-on:keydown.enter.prevent' => 'true',
+                            ]),
                     ])
-                        ->columnSpanFull(),
+                        ->columnSpanFull()
+                        ->extraAttributes([
+                            'x-on:keydown.enter.prevent' => 'true', 
+                        ]),
                 ]);
         }
     }
-
     public static function table(Table $table): Table
     {
         return $table
