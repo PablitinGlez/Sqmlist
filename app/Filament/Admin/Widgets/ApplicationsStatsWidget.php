@@ -13,12 +13,11 @@ class ApplicationsStatsWidget extends BaseWidget
 {
     protected function getStats(): array
     {
-        // Estadísticas de solicitudes
+      
         $pendingApplications = UserApplication::where('status', 'pending')->count();
         $approvedApplications = UserApplication::where('status', 'approved')->count();
         $rejectedApplications = UserApplication::where('status', 'rejected')->count();
 
-        // Estadísticas de perfiles por tipo
         $ownerProfiles = UserApplication::where('requested_user_type', 'owner')
             ->where('status', 'approved')->count();
         $agentProfiles = UserApplication::where('requested_user_type', 'agent')
@@ -26,7 +25,7 @@ class ApplicationsStatsWidget extends BaseWidget
         $companyProfiles = UserApplication::where('requested_user_type', 'real_estate_company')
             ->where('status', 'approved')->count();
 
-        // Perfiles activos
+        
         $activeProfiles = ProfileDetails::where('status', 'active')->count();
 
         return [

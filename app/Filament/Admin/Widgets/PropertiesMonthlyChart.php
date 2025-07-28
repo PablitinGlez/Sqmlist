@@ -18,8 +18,9 @@ class PropertiesMonthlyChart extends ChartWidget
         $months = [];
         $data = [];
 
-        // Obtener los últimos 6 meses
+        // aki obtengo los 6 meses 
         for ($i = 5; $i >= 0; $i--) {
+           
             $date = Carbon::now()->subMonths($i);
             $months[] = $date->format('M Y');
 
