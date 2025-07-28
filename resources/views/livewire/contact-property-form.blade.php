@@ -90,14 +90,14 @@
             </button>
         </div>
 
-        @if($propertyWhatsappNumber)
-            <div class="mt-3 sm:mt-4">
-                <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $propertyWhatsappNumber) }}?text=Hola,%20me%20interesa%20la%20propiedad:%20{{ urlencode($property->title ?? 'esta propiedad') }}%20-%20{{ urlencode(route('properties.show', $property->slug ?? '#')) }}"
-                   class="flex items-center justify-center w-full py-2 sm:py-2.5 text-xs sm:text-sm bg-green-500 hover:bg-green-600 text-white font-semibold rounded-md shadow-sm transition-colors duration-200"
-                   target="_blank" wire:navigate>
-                    <i class="fab fa-whatsapp mr-1 sm:mr-2"></i> WhatsApp
-                </a>
-            </div>
-        @endif
+      @if($propertyWhatsappNumber)
+    <div class="mt-3 sm:mt-4">
+        <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $propertyWhatsappNumber) }}?text=Hola,%20me%20interesa%20la%20propiedad:%20{{ urlencode($property->title ?? 'esta propiedad') }}%20-%20{{ urlencode(route('properties.show', $property->slug ?? '#')) }}"
+           class="flex items-center justify-center w-full py-2 sm:py-2.5 text-xs sm:text-sm bg-green-500 hover:bg-green-600 text-white font-semibold rounded-md shadow-sm transition-colors duration-200"
+           target="_blank">
+            <i class="fab fa-whatsapp mr-1 sm:mr-2"></i> WhatsApp
+        </a>
+    </div>
+@endif
     </form>
 </div>

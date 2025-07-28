@@ -1,22 +1,25 @@
 <x-app-layout>
     <div class="bg-white shadow-sm py-2 sm:py-4 border-b border-gray-200 sticky top-16 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-            <button onclick="window.history.back()"
-                class="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors duration-200 text-xs sm:text-sm font-semibold">
-                <i class="fas fa-arrow-left mr-1 sm:mr-2"></i> <span>Regresar a la
-                    búsqueda</span>
-                <span>Regresar</span>
-            </button>
+           <button onclick="window.history.back()"
+    class="inline-flex items-center text-gray-700 hover:text-gray-900 transition-colors duration-200 text-xs sm:text-sm font-semibold">
+    <i class="fas fa-arrow-left mr-1 sm:mr-2"></i> 
+   
+    <span class="hidden sm:inline">Regresar a la búsqueda</span>
+ 
+    <span class="sm:hidden">Regresar</span>
+</button>
 
             <div class="flex items-center space-x-2 sm:space-x-3 flex-nowrap">
                 @livewire('favorite-button-detail', ['property' => $property], key('detail-favorite-button-' . $property->id))
 
                 <button id="shareButton"
-                    class="inline-flex items-center px-2 py-1 sm:px-4 sm:py-2 rounded-full shadow-sm text-xs sm:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
-                    onclick="copyToClipboard('{{ url()->current() }}', this)">
-                    <i class="fas fa-share-alt mr-0 sm:mr-2"></i>
-                    <span>Compartir</span>
-                </button>
+    class="inline-flex items-center px-2 py-1 sm:px-4 sm:py-2 rounded-full shadow-sm text-xs sm:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200"
+    onclick="copyToClipboard('{{ url()->current() }}', this)">
+    <i class="fas fa-share-alt mr-0 sm:mr-2"></i>
+  
+    <span class="hidden sm:inline">Compartir</span>
+</button>
 
                 <a href="#contact-form-section"
                     class="hidden md:inline-flex items-center px-4 py-2 border border-blue-500 rounded-full shadow-sm text-xs md:text-sm font-medium text-blue-500 bg-white hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
