@@ -1,5 +1,5 @@
 <div class="flex flex-wrap items-center justify-start gap-3 p-3 rounded-lg mt-16 max-w-7xl mx-auto px-8">
-   
+
     <div class="relative w-full md:w-1/3 lg:w-1/4">
         <input
             type="text"
@@ -45,7 +45,7 @@
         </div>
     </div>
 
- 
+
     <div x-data="{ open: false, toggle() { this.open = !this.open; }, close() { this.open = false; } }" @click.outside="close()" class="relative w-full sm:w-auto">
         <button
             @click="toggle()"
@@ -79,7 +79,7 @@
         </div>
     </div>
 
-   
+
     <div x-data="{ open: false }" @click.outside="open = false" class="relative w-full sm:w-auto">
         <button
             @click="open = !open"
@@ -103,7 +103,7 @@
         </div>
     </div>
 
-   
+
     <div x-data="{ open: false }" @click.outside="open = false" class="relative w-full sm:w-auto">
         <button
             @click="open = !open"
@@ -170,7 +170,7 @@
         <button
             @click="open = !open"
             class="flex items-center justify-center h-9 px-3 py-1.5 border border-gray-300 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 min-w-[10rem] w-full text-sm"
-          
+
             @if ($filteredFeatures->isEmpty() && $selectedPropertyTypeSlug)
                 disabled
                 title="No hay filtros adicionales para este tipo de propiedad"
@@ -186,7 +186,7 @@
             @if ($filteredFeatures->isEmpty() && $selectedPropertyTypeSlug)
                 <p class="text-gray-500 text-xs text-center py-3">No hay filtros adicionales para este tipo de propiedad.</p>
             @else
-               
+
                 @php
                     $hasRecamaras = $filteredFeatures->contains('slug', 'num_recamaras');
                 @endphp
@@ -207,7 +207,7 @@
                     </div>
                 @endif
 
-             
+
                 @php
                     $hasBanos = $filteredFeatures->contains('slug', 'num_banos');
                 @endphp
@@ -228,7 +228,7 @@
                     </div>
                 @endif
 
-              
+
                 @php
                     $hasEstacionamientos = $filteredFeatures->contains('slug', 'num_estacionamientos');
                 @endphp
@@ -249,7 +249,7 @@
                     </div>
                 @endif
 
-              
+
                 @php
                     $hasSuperficieConstruida = $filteredFeatures->contains('slug', 'tamano_construccion_m2');
                 @endphp
@@ -308,7 +308,7 @@
                     </div>
                 @endif
 
-               
+
                 @php
                     $hasSuperficieTerreno = $filteredFeatures->contains('slug', 'tamano_terreno_m2');
                 @endphp
@@ -367,12 +367,12 @@
                     </div>
                 @endif
 
-                
+
                 @if (($hasRecamaras || $hasBanos || $hasEstacionamientos || $hasSuperficieConstruida || $hasSuperficieTerreno) && $amenityFeatures->isNotEmpty())
                     <hr class="my-3 border-gray-200">
                 @endif
 
-            
+
                 @if ($amenityFeatures->isNotEmpty())
                     <div class="mb-3">
                         <label class="block text-xs font-semibold text-gray-700 mb-1">Amenidades</label>

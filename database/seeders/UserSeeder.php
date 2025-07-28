@@ -8,16 +8,12 @@ use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
-   
         $admin1 = User::firstOrCreate(
-            ['email' => 'admin1@admin.com'],
+            ['email' => 'admin1@xerox.com'],
             [
                 'name' => 'Admin 1',
                 'password' => bcrypt('A$dmin1Secure2024!'),
@@ -26,9 +22,8 @@ class UserSeeder extends Seeder
         );
         $admin1->assignRole($adminRole);
 
-    
         $admin2 = User::firstOrCreate(
-            ['email' => 'admin2@admin.com'],
+            ['email' => 'admin2@xerox.com'],
             [
                 'name' => 'Admin 2',
                 'password' => bcrypt('S@feP4sswordAdmin2!'),
@@ -38,3 +33,4 @@ class UserSeeder extends Seeder
         $admin2->assignRole($adminRole);
     }
 }
+y

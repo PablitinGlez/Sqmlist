@@ -14,25 +14,22 @@ use Livewire\Attributes\On;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Address;
-use Illuminate\Support\Facades\Log;
+use Filament\Notifications\Notification;
 
 class CreateProperty extends CreateRecord
 {
     protected static string $resource = PropertyResource::class;
 
-    // Solo necesitamos esta propiedad personalizada
     protected array $featureValuesToSave = [];
 
-    // Sobrescribir la propiedad data para asegurar inicialización
     public ?array $data = [];
 
     public function mount(): void
     {
-        // Primero inicializar data antes del parent::mount()
         $this->data = [
             'feature_values' => [],
             'description' => '',
-            'images' => [], // MUY IMPORTANTE - debe estar presente
+            'images' => [],
             'property_images' => [],
             'title' => '',
             'price' => null,
@@ -43,21 +40,16 @@ class CreateProperty extends CreateRecord
 
         parent::mount();
 
-        // Llenar el formulario después del mount del padre
         $this->form->fill($this->data);
-
-        Log::info('CreateProperty: Mount completed with data:', $this->data);
     }
 
     #[On('updateFormData')]
     public function handleFormDataUpdate(array $data): void
     {
-        // Asegurar que 'images' siempre esté presente
         if (!isset($data['images'])) {
             $data['images'] = [];
         }
 
-        // Asegurar que otros campos importantes estén presentes
         $requiredFields = ['feature_values', 'description', 'property_images', 'title', 'address_data'];
         foreach ($requiredFields as $field) {
             if (!isset($data[$field])) {
@@ -67,8 +59,6 @@ class CreateProperty extends CreateRecord
         }
 
         $this->form->fill($data);
-
-        Log::info('CreateProperty: Form data updated:', $data);
     }
 
     #[On('addressSelected')]
@@ -77,8 +67,6 @@ class CreateProperty extends CreateRecord
         $this->form->fill([
             'address_data' => $addressData,
         ]);
-
-        Log::info('CreateProperty: Address selected:', $addressData);
     }
 
     protected function mutateFormDataBeforeCreate(array $data): array
@@ -119,41 +107,27 @@ class CreateProperty extends CreateRecord
             unset($data['feature_values']);
         }
 
-        Log::info('CreateProperty: Data before create:', $data);
         return $data;
     }
 
     protected function afterCreate(): void
     {
-        // Guardar feature values
         foreach ($this->featureValuesToSave as $featureValueData) {
             $this->record->featureValues()->create($featureValueData);
         }
 
         $formData = $this->form->getState();
 
-        Log::info('CreateProperty: afterCreate - Intentando guardar dirección para propiedad ID: ' . $this->record->id);
-        Log::info('CreateProperty: address_data recibida: ', $formData['address_data'] ?? []);
-
-        // Guardar dirección
         if (isset($formData['address_data']) && is_array($formData['address_data']) && !empty($formData['address_data'])) {
             try {
                 $address = $this->record->address()->create($formData['address_data']);
-                Log::info('CreateProperty: Dirección guardada exitosamente. ID de dirección: ' . $address->id);
-
-                // Regenerar slug
                 $this->record->fresh()->regenerateSlug();
-                Log::info('CreateProperty: Slug regenerado después de crear dirección. Nuevo slug: ' . $this->record->fresh()->slug);
             } catch (\Exception $e) {
-                Log::error('CreateProperty: Error al guardar la dirección: ' . $e->getMessage(), ['exception' => $e]);
+                // Manejo de errores si es necesario
             }
-        } else {
-            Log::warning('CreateProperty: address_data no está presente o está vacío en el formulario.');
         }
 
-        // Guardar imágenes
         $uploadedImagePaths = $formData['images'] ?? [];
-        Log::info('CreateProperty: Procesando imágenes:', $uploadedImagePaths);
 
         if (!empty($uploadedImagePaths) && is_array($uploadedImagePaths)) {
             $order = 1;
@@ -165,17 +139,14 @@ class CreateProperty extends CreateRecord
                         'order' => $order,
                         'is_featured' => $order === 1,
                     ]);
-                    Log::info('CreateProperty: Imagen guardada:', ['path' => $imagePath, 'order' => $order]);
                     $order++;
                 } catch (\Exception $e) {
-                    Log::error('CreateProperty: Error al guardar imagen: ' . $e->getMessage(), ['path' => $imagePath]);
+                    // Manejo de errores si es necesario
                 }
             }
-        } else {
-            Log::warning('CreateProperty: No se encontraron imágenes para guardar.');
         }
 
-        \Filament\Notifications\Notification::make()
+        Notification::make()
             ->title('Propiedad enviada a revisión exitosamente.')
             ->success()
             ->send();

@@ -1,4 +1,3 @@
-
 <x-app-layout>
     <div class="bg-transparent relative overflow-hidden mt-24">
         <div class="absolute top-0 left-0 right-0 h-[330px] bg-gradient-to-t from-blue-50 to-transparent"></div>
@@ -64,7 +63,6 @@
 @push('scripts')
 <script>
     function selectProfile(profileType) {
-        
         window.location.href = `{{ route('solicitud.formulario') }}?type=${profileType}`;
     }
 </script>

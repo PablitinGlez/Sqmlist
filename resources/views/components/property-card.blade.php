@@ -1,12 +1,11 @@
 @props(['property'])
 
 <div x-data="{ showContactModal: false }">
-    
     <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-200 h-[440px] flex flex-col">
 
         @livewire('favorite-button', ['property' => $property], key($property->id))
 
-        <div class="block h-full flex flex-col cursor-pointer" 
+        <div class="block h-full flex flex-col cursor-pointer"
              @click="if(!$event.target.closest('.no-navigate')) { window.location.href = '{{ route('properties.show', $property->slug) }}' }">
 
             <div class="relative h-48 overflow-hidden flex-shrink-0" x-data="{
@@ -47,18 +46,18 @@
                 <template x-if="images.length > 1">
                     <div class="no-navigate">
                         <button @click="prevSlide($event)" x-show="canGoPrev"
-                                 class="absolute left-3 top-1/2 transform -translate-y-1/2 z-20 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+                                class="absolute left-3 top-1/2 transform -translate-y-1/2 z-20 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
                             <i class="fas fa-chevron-left text-white text-xs"></i>
                         </button>
                         <button @click="nextSlide($event)" x-show="canGoNext"
-                                 class="absolute right-3 top-1/2 transform -translate-y-1/2 z-20 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
+                                class="absolute right-3 top-1/2 transform -translate-y-1/2 z-20 w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200">
                             <i class="fas fa-chevron-right text-white text-xs"></i>
                         </button>
                         <div class="absolute bottom-3 left-1/2 transform -translate-x-1/2 flex space-x-1 z-20">
                             <template x-for="(image, index) in images" :key="index">
                                 <button @click="goToSlide(index, $event)"
-                                         class="w-1.5 h-1.5 rounded-full transition-all duration-200"
-                                         :class="currentSlide === index ? 'bg-white' : 'bg-white/50'">
+                                        class="w-1.5 h-1.5 rounded-full transition-all duration-200"
+                                        :class="currentSlide === index ? 'bg-white' : 'bg-white/50'">
                                 </button>
                             </template>
                         </div>

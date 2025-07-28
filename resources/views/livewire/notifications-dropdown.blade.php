@@ -1,4 +1,3 @@
-
 <div class="relative"
      x-data="{ open: @entangle('showDropdown') }"
      x-init="
@@ -16,14 +15,14 @@
             class="relative p-2 transition-colors duration-300 focus:outline-none"
             aria-haspopup="true"
             aria-expanded="true">
-        <svg xmlns="http://www.w3.org/2000/svg" 
-             class="h-5 w-5" 
-             fill="none" 
-             viewBox="0 0 24 24" 
+        <svg xmlns="http://www.w3.org/2000/svg"
+             class="h-5 w-5"
+             fill="none"
+             viewBox="0 0 24 24"
              stroke="currentColor">
-            <path stroke-linecap="round" 
-                  stroke-linejoin="round" 
-                  stroke-width="1.5" 
+            <path stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
                   d="M10 5a2 2 0 1 1 4 0a7 7 0 0 1 4 6v3a4 4 0 0 0 2 3h-16a4 4 0 0 0 2 -3v-3a7 7 0 0 1 4 -6"/>
             <path d="M9 17v1a3 3 0 0 0 6 0v-1"/>
         </svg>
@@ -43,7 +42,7 @@
         <div class="px-4 py-2 border-b border-gray-100 flex justify-between items-center">
             <h3 class="text-sm font-medium text-gray-900">Notificaciones</h3>
             @if ($unreadNotifications->count() > 0)
-                <button wire:click="markAllAsRead" 
+                <button wire:click="markAllAsRead"
                         class="text-xs text-blue-600 hover:text-blue-800">
                     Marcar todas como leídas
                 </button>
@@ -56,13 +55,13 @@
                    class="flex items-start px-4 py-3 hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100 last:border-b-0 cursor-pointer">
                     <div class="flex-shrink-0 mt-1">
                         @php
-                            $iconColor = 'text-blue-500'; // Default color
-                            
+                            $iconColor = 'text-blue-500';
+
                             if(isset($notification->data['status'])) {
-                                $iconColor = $notification->data['status'] === \App\Models\UserApplication::STATUS_APPROVED 
-                                    ? 'text-green-500' 
-                                    : ($notification->data['status'] === \App\Models\UserApplication::STATUS_REJECTED 
-                                        ? 'text-red-500' 
+                                $iconColor = $notification->data['status'] === \App\Models\UserApplication::STATUS_APPROVED
+                                    ? 'text-green-500'
+                                    : ($notification->data['status'] === \App\Models\UserApplication::STATUS_REJECTED
+                                        ? 'text-red-500'
                                         : 'text-blue-500');
                             }
                         @endphp
@@ -76,7 +75,7 @@
                                 {{ $notification->data['title'] ?? 'Nueva Notificación' }}
                             @endif
                         </p>
-                        
+
                         <p class="text-xs text-gray-600 mt-1">
                             @if(isset($notification->data['status']))
                                 @if($notification->data['status'] === \App\Models\UserApplication::STATUS_APPROVED)
@@ -90,15 +89,15 @@
                                 {{ $notification->data['body'] ?? 'No hay descripción disponible' }}
                             @endif
                         </p>
-                        
+
                         @if(isset($notification->data['link']))
-                            <a href="{{ $notification->data['link'] }}" 
+                            <a href="{{ $notification->data['link'] }}"
                                wire:click.stop
-                               class="text-blue-600 hover:underline text-xs block mt-1"  wire:navigate>
+                               class="text-blue-600 hover:underline text-xs block mt-1" wire:navigate>
                                 Ver detalles
                             </a>
                         @endif
-                        
+
                         <p class="text-xs text-gray-500 mt-1">
                             {{ $notification->created_at->diffForHumans() }}
                         </p>
@@ -121,13 +120,13 @@
                        class="flex items-start px-4 py-3 hover:bg-gray-50 transition-colors duration-200 border-b border-gray-100 last:border-b-0 opacity-75 cursor-pointer">
                         <div class="flex-shrink-0 mt-1">
                             @php
-                                $iconColor = 'text-gray-500'; 
-                                
+                                $iconColor = 'text-gray-500';
+
                                 if(isset($notification->data['status'])) {
-                                    $iconColor = $notification->data['status'] === \App\Models\UserApplication::STATUS_APPROVED 
-                                        ? 'text-green-500' 
-                                        : ($notification->data['status'] === \App\Models\UserApplication::STATUS_REJECTED 
-                                            ? 'text-red-500' 
+                                    $iconColor = $notification->data['status'] === \App\Models\UserApplication::STATUS_APPROVED
+                                        ? 'text-green-500'
+                                        : ($notification->data['status'] === \App\Models\UserApplication::STATUS_REJECTED
+                                            ? 'text-red-500'
                                             : 'text-gray-500');
                                 }
                             @endphp
@@ -166,7 +165,7 @@
         @if ($unreadNotifications->isNotEmpty() || $readNotifications->isNotEmpty())
             <div class="border-t border-gray-100 text-center">
                 <a href="#"
-                   class="block px-4 py-2 text-sm text-blue-600 hover:text-blue-800"  wire:navigate>
+                   class="block px-4 py-2 text-sm text-blue-600 hover:text-blue-800" wire:navigate>
                     Ver todas las notificaciones
                 </a>
             </div>

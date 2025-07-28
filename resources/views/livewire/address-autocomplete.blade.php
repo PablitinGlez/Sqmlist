@@ -23,8 +23,8 @@
                 </svg>
             </div>
             @if($search)
-                <button 
-                    wire:click="clearForm" 
+                <button
+                    wire:click="clearForm"
                     class="pe-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
                     title="Limpiar búsqueda"
                 >
@@ -267,7 +267,7 @@
                         resolve(true);
                     }
                 }, 100);
-                
+
                 setTimeout(() => {
                     clearInterval(checkInterval);
                     resolve(false);
@@ -279,14 +279,14 @@
     function setupMapContainer() {
         mapContainer = document.getElementById('map');
         if (!mapContainer) return false;
-        
+
         mapContainer.style.width = '100%';
         mapContainer.style.height = '256px';
         mapContainer.style.minHeight = '256px';
         mapContainer.style.display = 'block';
         mapContainer.style.position = 'relative';
         mapContainer.style.backgroundColor = '#e5e3df';
-        
+
         return true;
     }
 
@@ -299,7 +299,7 @@
         if (!setupMapContainer()) return false;
 
         const center = { lat: parseFloat(lat), lng: parseFloat(lng) };
-        
+
         if (map && marker && !forceRecreate) {
             try {
                 marker.setPosition(center);
@@ -314,7 +314,7 @@
 
         try {
             mapContainer.innerHTML = '';
-            
+
             map = new google.maps.Map(mapContainer, {
                 center: center,
                 zoom: 16,
@@ -373,21 +373,21 @@
     function isValidCoordinate(lat, lng) {
         const numLat = parseFloat(lat);
         const numLng = parseFloat(lng);
-        return !isNaN(numLat) && !isNaN(numLng) && 
-               numLat !== 0 && numLng !== 0 && 
-               numLat >= -90 && numLat <= 90 && 
-               numLng >= -180 && numLng <= 180;
+        return !isNaN(numLat) && !isNaN(numLng) &&
+                numLat !== 0 && numLng !== 0 &&
+                numLat >= -90 && numLat <= 90 &&
+                numLng >= -180 && numLng <= 180;
     }
 
     async function handleMapUpdate(lat, lng) {
         if (!isValidCoordinate(lat, lng)) return;
-        
+
         if (mapInitTimeout) {
             clearTimeout(mapInitTimeout);
         }
-        
+
         pendingMapUpdate = { lat, lng };
-        
+
         mapInitTimeout = setTimeout(async () => {
             if (pendingMapUpdate) {
                 const success = await initializeMap(pendingMapUpdate.lat, pendingMapUpdate.lng);
@@ -404,7 +404,7 @@
 
     document.addEventListener('livewire:initialized', async () => {
         await ensureGoogleMapsLoaded();
-        
+
         const initialLat = @json($selectedAddressData['latitude'] ?? null);
         const initialLng = @json($selectedAddressData['longitude'] ?? null);
         const showMapInitial = @json($show_map);
@@ -415,7 +415,7 @@
 
         Livewire.on('updateMap', async (eventData) => {
             if (!Array.isArray(eventData) || !eventData[0]) return;
-            
+
             const data = eventData[0];
             if (data.lat !== undefined && data.lng !== undefined) {
                 await handleMapUpdate(data.lat, data.lng);

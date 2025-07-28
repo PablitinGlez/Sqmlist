@@ -2,10 +2,10 @@
 
 namespace App\Livewire;
 
-use Livewire\Component;
 use App\Models\Property;
+use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\On; 
+use Livewire\Attributes\On;
 
 class FavoriteButton extends Component
 {
@@ -45,9 +45,8 @@ class FavoriteButton extends Component
                 'message' => 'Propiedad añadida a favoritos.',
             ]);
         }
-        
-      
-        $this->dispatch('favorite-updated'); 
+
+        $this->dispatch('favorite-updated');
     }
 
     public function render()

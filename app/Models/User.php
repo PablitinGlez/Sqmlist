@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
@@ -12,13 +13,20 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
-    use HasApiTokens, HasFactory, HasProfilePhoto, Notifiable, TwoFactorAuthenticatable, HasRoles;
+    use HasApiTokens,
+        HasFactory,
+        HasProfilePhoto,
+        Notifiable,
+        TwoFactorAuthenticatable,
+        HasRoles,
+        SoftDeletes;
 
     public const STATUS_ACTIVE = 'active';
     public const STATUS_INACTIVE = 'inactive';
@@ -27,6 +35,9 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         self::STATUS_ACTIVE => 'Activo',
         self::STATUS_INACTIVE => 'Inactivo',
     ];
+
+    public const LOGIN_METHOD_GOOGLE = 'google';
+    public const LOGIN_METHOD_WEB = 'web';
 
     protected $fillable = [
         'name',
@@ -60,6 +71,10 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+        if (!$this->isActive()) {
+            return false;
+        }
+
         if ($panel->getId() === 'admin') {
             return $this->hasRole('admin');
         }
@@ -69,6 +84,28 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         }
 
         return false;
+    }
+
+    public function reactivate(): void
+    {
+        $this->update([
+            'status' => self::STATUS_ACTIVE,
+        ]);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
+
+    public function isInactive(): bool
+    {
+        return $this->status === self::STATUS_INACTIVE;
+    }
+
+    public function canLogin(): bool
+    {
+        return $this->isActive() && !$this->trashed();
     }
 
     public function hasSocialLogin(): bool
@@ -84,6 +121,21 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     public function canUpdatePassword(): bool
     {
         return !$this->hasSocialLogin() || !is_null($this->password);
+    }
+
+    public function getLoginMethodAttribute(): string
+    {
+        return $this->external_auth === 'google' ? self::LOGIN_METHOD_GOOGLE : self::LOGIN_METHOD_WEB;
+    }
+
+    public function isGoogleLogin(): bool
+    {
+        return $this->external_auth === 'google';
+    }
+
+    public function isWebLogin(): bool
+    {
+        return $this->external_auth !== 'google';
     }
 
     public function profileDetails()
@@ -187,16 +239,6 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
             'id',
             'id'
         );
-    }
-
-    public function isActive(): bool
-    {
-        return $this->status === self::STATUS_ACTIVE;
-    }
-
-    public function isInactive(): bool
-    {
-        return $this->status === self::STATUS_INACTIVE;
     }
 
     public function favoriteProperties(): BelongsToMany

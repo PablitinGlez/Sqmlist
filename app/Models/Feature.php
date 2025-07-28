@@ -69,4 +69,67 @@ class Feature extends Model
     {
         return $query->orderBy('order');
     }
+
+    public static function getFeaturesBySectionsForPropertyType($propertyTypeId = null)
+    {
+        $query = static::with(['featureSection', 'propertyTypes']);
+
+        if ($propertyTypeId) {
+            $query->whereHas('propertyTypes', function ($q) use ($propertyTypeId) {
+                $q->where('property_types.id', $propertyTypeId);
+            });
+        }
+
+        return $query->get()
+            ->groupBy('featureSection.name')
+            ->map(function ($features, $sectionName) use ($propertyTypeId) {
+                return [
+                    'section_name' => $sectionName,
+                    'section_id' => $features->first()->featureSection->id ?? null,
+                    'features' => $features->map(function ($feature) use ($propertyTypeId) {
+                        $pivotData = null;
+                        if ($propertyTypeId) {
+                            $pivotData = $feature->propertyTypes
+                                ->where('id', $propertyTypeId)
+                                ->first()
+                                ?->pivot;
+                        }
+
+                        return [
+                            'id' => $feature->id,
+                            'name' => $feature->name,
+                            'description' => $feature->description,
+                            'input_type' => $feature->input_type,
+                            'data_type' => $feature->data_type,
+                            'is_required' => $pivotData?->is_required_for_type ?? false,
+                            'order' => $pivotData?->order_for_type ?? $feature->order,
+                        ];
+                    })->sortBy('order')->values()
+                ];
+            });
+    }
+
+    public static function getAllSectionsWithFeatures()
+    {
+        return static::with(['features' => function ($query) {
+            $query->orderBy('order');
+        }])
+            ->active()
+            ->ordered()
+            ->get()
+            ->map(function ($section) {
+                return [
+                    'id' => $section->id,
+                    'name' => $section->name,
+                    'slug' => $section->slug,
+                    'features' => $section->features->map(function ($feature) {
+                        return [
+                            'id' => $feature->id,
+                            'name' => $feature->name,
+                            'description' => $feature->description,
+                        ];
+                    })
+                ];
+            });
+    }
 }

@@ -180,7 +180,7 @@
 
             {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::GLOBAL_SEARCH_AFTER) }}
 
-            {{-- @if (filament()->auth()->check())
+            @if (filament()->auth()->check())
                 @if (filament()->hasDatabaseNotifications())
                     @livewire(Filament\Livewire\DatabaseNotifications::class, [
                         'lazy' => filament()->hasLazyLoadedDatabaseNotifications(),
@@ -188,7 +188,7 @@
                 @endif
 
                 <x-filament-panels::user-menu />
-            @endif --}}
+            @endif 
         </div>
 
         {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::TOPBAR_END) }}

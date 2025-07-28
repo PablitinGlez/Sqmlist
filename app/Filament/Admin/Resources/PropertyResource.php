@@ -24,7 +24,6 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
-use Illuminate\Support\Facades\Log;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Collection;
@@ -41,6 +40,10 @@ class PropertyResource extends Resource
     protected static ?string $navigationGroup = 'Revisiones';
 
     protected static ?int $navigationSort = 1;
+
+    protected static ?string $modelLabel = 'Usuario';
+
+    protected static ?string $pluralModelLabel = 'Propiedades';
 
     public static function getEloquentQuery(): Builder
     {
@@ -230,7 +233,7 @@ class PropertyResource extends Resource
                         ->numeric()
                         ->rules(['numeric', 'min:0', 'max:999999999.99'])
                         ->required()
-                        ->disabled($disabled)
+                        ->disabled(true)
                         ->columnSpan(1),
                     Forms\Components\Select::make('operation_type')
                         ->label('Tipo de Operación')
@@ -240,14 +243,14 @@ class PropertyResource extends Resource
                             'both' => 'Venta y Renta',
                         ])
                         ->required()
-                        ->disabled($disabled)
+                        ->disabled(true)
                         ->columnSpan(1),
                     Forms\Components\Textarea::make('description')
                         ->label('Descripción')
                         ->rows(5)
                         ->maxLength(1500)
                         ->required()
-                        ->disabled($disabled)
+                        ->disabled(true)
                         ->columnSpanFull(),
                     Forms\Components\TextInput::make('contact_whatsapp_number')
                         ->label('WhatsApp Contacto')
@@ -256,7 +259,7 @@ class PropertyResource extends Resource
                         ->maxLength(10)
                         ->minLength(10)
                         ->required()
-                        ->disabled($disabled),
+                        ->disabled(true),
                     Forms\Components\TextInput::make('contact_phone_number')
                         ->label('Teléfono Contacto')
                         ->tel()
@@ -264,13 +267,13 @@ class PropertyResource extends Resource
                         ->maxLength(10)
                         ->minLength(10)
                         ->required()
-                        ->disabled($disabled),
+                        ->disabled(true),
                     Forms\Components\TextInput::make('contact_email')
                         ->label('Email Contacto')
                         ->email()
                         ->maxLength(255)
                         ->required()
-                        ->disabled($disabled),
+                        ->disabled(true),
                 ])->columns(2),
 
             Forms\Components\Section::make('Dirección de la Propiedad')
@@ -467,88 +470,84 @@ class PropertyResource extends Resource
                                     $imagePath = asset('storage/' . $get('path'));
 
                                     return new HtmlString('
-                                    <div x-data="{ showModal: false }" class="relative">
-                                        <!-- Imagen miniatura -->
-                                        <div 
-                                            @click.prevent.stop="showModal = true" 
-                                            class="relative cursor-pointer group overflow-hidden rounded-lg"
-                                        >
-                                            <img 
-                                                src="' . $imagePath . '" 
-                                                class="w-full h-36 object-cover transition-transform duration-300 group-hover:scale-105"
-                                                alt="Imagen de la propiedad"
-                                            />
-                                            
-                                            <!-- Overlay con ícono -->
-                                            <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                                                <svg class="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Modal (se renderiza fuera del contexto del formulario) -->
-                                        <template x-teleport="body">
-                                            <div 
-                                                x-show="showModal" 
-                                                x-transition:enter="transition ease-out duration-300" 
-                                                x-transition:enter-start="opacity-0" 
-                                                x-transition:enter-end="opacity-100" 
-                                                x-transition:leave="transition ease-in duration-200" 
-                                                x-transition:leave-start="opacity-100" 
-                                                x-transition:leave-end="opacity-0"
-                                                @click.prevent.stop="showModal = false"
-                                                @keydown.escape.window.prevent.stop="showModal = false"
-                                                class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
-                                                style="display: none;"
+                                        <div x-data="{ showModal: false }" class="relative">
+                                            <div
+                                                @click.prevent.stop="showModal = true"
+                                                class="relative cursor-pointer group overflow-hidden rounded-lg w-full h-48 bg-gray-100"
+                                                style="aspect-ratio: 4/3;"
                                             >
-                                                <!-- Contenedor del modal -->
-                                                <div 
-                                                    x-show="showModal"
-                                                    x-transition:enter="transition ease-out duration-300"
-                                                    x-transition:enter-start="opacity-0 transform scale-95"
-                                                    x-transition:enter-end="opacity-100 transform scale-100"
-                                                    x-transition:leave="transition ease-in duration-200"
-                                                    x-transition:leave-start="opacity-100 transform scale-100"
-                                                    x-transition:leave-end="opacity-0 transform scale-95"
-                                                    class="relative max-w-4xl max-h-full bg-white rounded-lg shadow-2xl overflow-hidden"
-                                                    @click.prevent.stop
-                                                >
-                                                    <!-- Botón cerrar -->
-                                                    <button 
-                                                        @click.prevent.stop="showModal = false"
-                                                        type="button"
-                                                        class="absolute top-4 right-4 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200"
-                                                    >
-                                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
-                                                    </button>
-                                                    
-                                                    <!-- Imagen grande -->
-                                                    <img 
-                                                        src="' . $imagePath . '" 
-                                                        class="w-full h-auto max-h-[80vh] object-contain"
-                                                        alt="Imagen de la propiedad"
-                                                    />
-                                                    
-                                                    <!-- Información adicional -->
-                                                    <div class="p-4 bg-gray-50 text-center">
-                                                        <p class="text-sm text-gray-600">
-                                                            Presiona <kbd class="px-2 py-1 text-xs bg-gray-200 rounded">Esc</kbd> o haz clic fuera para cerrar
-                                                        </p>
-                                                    </div>
+                                                <img
+                                                    src="' . $imagePath . '"
+                                                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                    alt="Imagen de la propiedad"
+                                                />
+                                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
+                                                    <svg class="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                                                    </svg>
                                                 </div>
                                             </div>
-                                        </template>
-                                    </div>
-                                ');
+                                            <template x-teleport="body">
+                                                <div
+                                                    x-show="showModal"
+                                                    x-transition:enter="transition ease-out duration-300"
+                                                    x-transition:enter-start="opacity-0"
+                                                    x-transition:enter-end="opacity-100"
+                                                    x-transition:leave="transition ease-in duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0"
+                                                    @click.prevent.stop="showModal = false"
+                                                    @keydown.escape.window.prevent.stop="showModal = false"
+                                                    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+                                                    style="display: none;"
+                                                >
+                                                    <div
+                                                        x-show="showModal"
+                                                        x-transition:enter="transition ease-out duration-300"
+                                                        x-transition:enter-start="opacity-0 transform scale-95"
+                                                        x-transition:enter-end="opacity-100 transform scale-100"
+                                                        x-transition:leave="transition ease-in duration-200"
+                                                        x-transition:leave-start="opacity-100 transform scale-100"
+                                                        x-transition:leave-end="opacity-0 transform scale-95"
+                                                        class="relative max-w-5xl max-h-full bg-white rounded-lg shadow-2xl overflow-hidden"
+                                                        @click.prevent.stop
+                                                    >
+                                                        <button
+                                                            @click.prevent.stop="showModal = false"
+                                                            type="button"
+                                                            class="absolute top-4 right-4 z-10 bg-black bg-opacity-50 hover:bg-opacity-70 text-white rounded-full p-2 transition-all duration-200"
+                                                        >
+                                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                            </svg>
+                                                        </button>
+                                                        <img
+                                                            src="' . $imagePath . '"
+                                                            class="w-full h-auto max-h-[85vh] object-contain"
+                                                            alt="Imagen de la propiedad"
+                                                        />
+                                                        <div class="p-4 bg-gray-50 text-center">
+                                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                                Presiona <kbd class="px-2 py-1 text-xs bg-gray-200 rounded">Esc</kbd> o haz clic fuera para cerrar
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    ');
                                 })
                                 ->hiddenLabel(),
                         ])
                         ->columns(1)
                         ->disabled()
-                        ->grid(3)
+                        ->grid([
+                            'default' => 1,
+                            'sm' => 2,
+                            'md' => 3,
+                            'lg' => 4,
+                            'xl' => 4,
+                        ])
                         ->defaultItems(0)
                         ->reorderable(false)
                         ->addable(false)
@@ -556,19 +555,59 @@ class PropertyResource extends Resource
                         ->hiddenLabel(),
                 ])->columnSpanFull(),
 
-            // Sección de Estado y Notas del Administrador
             Forms\Components\Section::make('Estado y Notas del Administrador')
                 ->schema([
                     Forms\Components\Select::make('status')
                         ->label('Estado de la Propiedad')
-                        ->options([
-                            Property::STATUS_PENDING_REVIEW => 'Pendiente de Revisión',
-                            Property::STATUS_PUBLISHED => 'Publicada',
-                            Property::STATUS_REJECTED => 'Rechazada',
-                            Property::STATUS_INACTIVE => 'Inactiva',
-                            Property::STATUS_SOLD => 'Vendida',
-                            Property::STATUS_RENTED => 'Rentada',
-                        ])
+                        ->options(function (?Property $record): array {
+                            $currentStatus = $record->status ?? Property::STATUS_PENDING_REVIEW;
+                            $options = [];
+
+                            switch ($currentStatus) {
+                                case Property::STATUS_PENDING_REVIEW:
+                                    $options = [
+                                        Property::STATUS_PENDING_REVIEW => 'Pendiente de Revisión',
+                                        Property::STATUS_PUBLISHED => 'Publicada',
+                                        Property::STATUS_REJECTED => 'Rechazada',
+                                    ];
+                                    break;
+                                case Property::STATUS_PUBLISHED:
+                                    $options = [
+                                        Property::STATUS_PUBLISHED => 'Publicada',
+                                        Property::STATUS_INACTIVE => 'Inactiva',
+                                        Property::STATUS_SOLD => 'Vendida',
+                                        Property::STATUS_RENTED => 'Rentada',
+                                    ];
+                                    break;
+                                case Property::STATUS_REJECTED:
+                                    $options = [
+                                        Property::STATUS_REJECTED => 'Rechazada',
+                                        Property::STATUS_PUBLISHED => 'Publicada',
+                                    ];
+                                    break;
+                                case Property::STATUS_INACTIVE:
+                                case Property::STATUS_SOLD:
+                                case Property::STATUS_RENTED:
+                                    $options = [
+                                        Property::STATUS_INACTIVE => 'Inactiva',
+                                        Property::STATUS_SOLD => 'Vendida',
+                                        Property::STATUS_RENTED => 'Rentada',
+                                        Property::STATUS_PUBLISHED => 'Publicada',
+                                    ];
+                                    break;
+                                default:
+                                    $options = [
+                                        Property::STATUS_PENDING_REVIEW => 'Pendiente de Revisión',
+                                        Property::STATUS_PUBLISHED => 'Publicada',
+                                        Property::STATUS_REJECTED => 'Rechazada',
+                                        Property::STATUS_INACTIVE => 'Inactiva',
+                                        Property::STATUS_SOLD => 'Vendida',
+                                        Property::STATUS_RENTED => 'Rentada',
+                                    ];
+                                    break;
+                            }
+                            return $options;
+                        })
                         ->required()
                         ->native(false)
                         ->live(),
@@ -579,7 +618,7 @@ class PropertyResource extends Resource
                         ->columnSpanFull()
                         ->visible(fn(Forms\Get $get) => $get('status') === Property::STATUS_REJECTED),
                 ])->columns(1),
-        ]; 
+        ];
     }
 
     public static function form(Form $form): Form
@@ -606,9 +645,7 @@ class PropertyResource extends Resource
                                     ->reactive(),
                             ])
                             ->columns(1)
-                            ->afterValidation(function (Forms\Get $get, array $state) {
-                             
-                            }),
+                            ->afterValidation(function (Forms\Get $get, array $state) {}),
 
                         Forms\Components\Wizard\Step::make('Generales')
                             ->schema([
@@ -646,9 +683,7 @@ class PropertyResource extends Resource
                                     }),
                             ])
                             ->columns(1)
-                            ->afterValidation(function (Forms\Get $get, array $state) {
-                                
-                            }),
+                            ->afterValidation(function (Forms\Get $get, array $state) {}),
 
                         Forms\Components\Wizard\Step::make('Especificaciones')
                             ->schema(function (Forms\Get $get): array {
@@ -737,9 +772,7 @@ class PropertyResource extends Resource
                                 ];
                             })
                             ->columns(1)
-                            ->afterValidation(function (Forms\Get $get, array $state) {
-                                
-                            }),
+                            ->afterValidation(function (Forms\Get $get, array $state) {}),
 
                         Forms\Components\Wizard\Step::make('Precio')
                             ->schema([
@@ -781,8 +814,8 @@ class PropertyResource extends Resource
                                             ->prefixIcon('heroicon-o-device-phone-mobile')
                                             ->prefix('+52')
                                             ->maxLength(10)
-                                            ->required()
                                             ->minLength(10)
+                                            ->required()
                                             ->reactive()
                                             ->afterStateUpdated(function ($state, $set) {
                                                 $cleanNumber = preg_replace('/[^0-9]/', '', $state);
@@ -846,7 +879,6 @@ class PropertyResource extends Resource
                                                 </div>
                                             '))
                                             ->columnSpanFull(),
-
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('enviar_a_revision')
                                                 ->label('Enviar a Revisión')
@@ -876,7 +908,6 @@ class PropertyResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->modifyQueryUsing(fn(Builder $query) => $query->where('status', Property::STATUS_PENDING_REVIEW))
             ->columns([
                 Tables\Columns\ImageColumn::make('featuredImage.path')
                     ->label('Imagen')
@@ -930,6 +961,31 @@ class PropertyResource extends Resource
                     ->searchable()
                     ->sortable(),
 
+                Tables\Columns\TextColumn::make('status')
+                    ->label('Estado')
+                    ->formatStateUsing(fn(string $state): string => match ($state) {
+                        Property::STATUS_PENDING_REVIEW => 'Pendiente de Revisión',
+                        Property::STATUS_PUBLISHED => 'Publicada',
+                        Property::STATUS_REJECTED => 'Rechazada',
+                        Property::STATUS_INACTIVE => 'Inactiva',
+                        Property::STATUS_SOLD => 'Vendida',
+                        Property::STATUS_RENTED => 'Rentada',
+                        Property::STATUS_DRAFT => 'Borrador',
+                        default => ucfirst($state),
+                    })
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        Property::STATUS_PENDING_REVIEW => 'warning',
+                        Property::STATUS_PUBLISHED => 'success',
+                        Property::STATUS_REJECTED => 'danger',
+                        Property::STATUS_INACTIVE => 'gray',
+                        Property::STATUS_SOLD => 'info',
+                        Property::STATUS_RENTED => 'info',
+                        Property::STATUS_DRAFT => 'secondary',
+                        default => 'gray',
+                    })
+                    ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Fecha de Solicitud')
                     ->dateTime('d/m/Y H:i')
@@ -948,17 +1004,21 @@ class PropertyResource extends Resource
                         Property::STATUS_SOLD => 'Vendida',
                         Property::STATUS_RENTED => 'Rentada',
                     ])
-                    ->default(Property::STATUS_PENDING_REVIEW),
+                    ->placeholder('Todos los estados'),
+
                 Tables\Filters\SelectFilter::make('operation_type')
                     ->label('Tipo de Operación')
                     ->options([
                         'sale' => 'Venta',
                         'rent' => 'Renta',
                         'both' => 'Venta y Renta',
-                    ]),
+                    ])
+                    ->placeholder('Todas las operaciones'),
+
                 Tables\Filters\SelectFilter::make('property_type_id')
                     ->label('Tipo de Propiedad')
-                    ->options(PropertyType::all()->pluck('name', 'id')),
+                    ->relationship('propertyType', 'name')
+                    ->placeholder('Todos los tipos'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
@@ -974,8 +1034,6 @@ class PropertyResource extends Resource
                         ->modalDescription('Una vez aprobada, la propiedad será visible públicamente.')
                         ->visible(fn(Property $record): bool => $record->status === Property::STATUS_PENDING_REVIEW || $record->status === Property::STATUS_REJECTED)
                         ->action(function (Property $record) {
-                            Log::info('Iniciando aprobación de propiedad desde acción de tabla', ['property_id' => $record->id]);
-
                             $record->update([
                                 'status' => Property::STATUS_PUBLISHED,
                                 'published_at' => now(),
@@ -985,7 +1043,6 @@ class PropertyResource extends Resource
                             ]);
 
                             if (!$record->user) {
-                                Log::error('Usuario no encontrado para la propiedad', ['property_id' => $record->id]);
                                 Notification::make()
                                     ->title('Error')
                                     ->body('No se encontró el usuario propietario para enviar la notificación.')
@@ -994,19 +1051,14 @@ class PropertyResource extends Resource
                                 return;
                             }
 
-                            Log::info('Usuario encontrado, enviando notificación de aprobación desde acción de tabla', [
-                                'property_id' => $record->id,
-                                'user_id' => $record->user->id
-                            ]);
-
                             try {
                                 $record->user->notify(new PropertyStatusUpdated($record));
-                                Log::info('Notificación de aprobación enviada exitosamente desde acción de tabla');
                             } catch (\Exception $e) {
-                                Log::error('Error al enviar notificación de aprobación desde acción de tabla', [
-                                    'error' => $e->getMessage(),
-                                    'property_id' => $record->id
-                                ]);
+                                Notification::make()
+                                    ->title('Error al enviar notificación de aprobación')
+                                    ->body('Hubo un error al intentar notificar al usuario: ' . $e->getMessage())
+                                    ->danger()
+                                    ->send();
                             }
 
                             Notification::make()
@@ -1033,11 +1085,6 @@ class PropertyResource extends Resource
                         ->action(function (Property $record, array $data) {
                             $adminNotes = $data['admin_notes'];
 
-                            Log::info('Iniciando rechazo de propiedad desde acción de tabla', [
-                                'property_id' => $record->id,
-                                'admin_notes' => $adminNotes
-                            ]);
-
                             $record->update([
                                 'status' => Property::STATUS_REJECTED,
                                 'admin_notes' => $adminNotes,
@@ -1047,7 +1094,6 @@ class PropertyResource extends Resource
                             ]);
 
                             if (!$record->user) {
-                                Log::error('Usuario no encontrado para la propiedad', ['property_id' => $record->id]);
                                 Notification::make()
                                     ->title('Error')
                                     ->body('No se encontró el usuario propietario para enviar la notificación.')
@@ -1056,19 +1102,14 @@ class PropertyResource extends Resource
                                 return;
                             }
 
-                            Log::info('Usuario encontrado, enviando notificación de rechazo desde acción de tabla', [
-                                'property_id' => $record->id,
-                                'user_id' => $record->user->id
-                            ]);
-
                             try {
                                 $record->user->notify(new PropertyStatusUpdated($record, $adminNotes));
-                                Log::info('Notificación de rechazo enviada exitosamente desde acción de tabla');
                             } catch (\Exception $e) {
-                                Log::error('Error al enviar notificación de rechazo desde acción de tabla', [
-                                    'error' => $e->getMessage(),
-                                    'property_id' => $record->id
-                                ]);
+                                Notification::make()
+                                    ->title('Error al enviar notificación de rechazo')
+                                    ->body('Hubo un error al intentar notificar al usuario: ' . $e->getMessage())
+                                    ->danger()
+                                    ->send();
                             }
 
                             Notification::make()
@@ -1076,24 +1117,28 @@ class PropertyResource extends Resource
                                 ->danger()
                                 ->send();
                         }),
-                ])->label('Acciones de Moderación'),
+                ])
+                    ->label('Acciones de Moderación')
+                    ->visible(
+                        fn(Property $record): bool =>
+                        $record->status === Property::STATUS_PENDING_REVIEW ||
+                            $record->status === Property::STATUS_REJECTED
+                    ),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])
-            ->defaultSort('created_at', 'asc')
-            ->emptyStateHeading('No hay solicitudes de propiedades pendientes')
-            ->emptyStateDescription('Todas las propiedades han sido revisadas o no hay nuevas solicitudes.')
+            ->defaultSort('created_at', 'desc')
+            ->emptyStateHeading('No hay propiedades para mostrar')
+            ->emptyStateDescription('No se encontraron propiedades con los filtros seleccionados.')
             ->emptyStateIcon('heroicon-o-clipboard-document-check');
     }
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

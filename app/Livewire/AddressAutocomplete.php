@@ -61,11 +61,9 @@ class AddressAutocomplete extends Component
         if ($initialData) {
             $this->selectedAddressData = array_merge($this->selectedAddressData, $initialData);
 
-            // Asegurar que los booleanos se manejen correctamente si vienen como string o int
             $this->selectedAddressData['no_external_number'] = (bool)($this->selectedAddressData['no_external_number'] ?? false);
             $this->selectedAddressData['no_interior_number'] = (bool)($this->selectedAddressData['no_interior_number'] ?? false);
 
-            // Sincronizar los checkboxes 'S/N' con los datos iniciales
             $this->is_outdoor_number_sn = ($this->selectedAddressData['outdoor_number'] === 'S/N' || $this->selectedAddressData['no_external_number']);
             $this->is_interior_number_sn = ($this->selectedAddressData['interior_number'] === 'S/N' || $this->selectedAddressData['no_interior_number']);
 
@@ -232,7 +230,6 @@ class AddressAutocomplete extends Component
 
             $this->autoCompleteWithLocalDatabase($googleComponents);
 
-            // Ajustar los checkboxes S/N después de intentar autocompletar con DB o Google
             $this->is_outdoor_number_sn = (empty($this->selectedAddressData['outdoor_number']) && !empty($this->selectedAddressData['street']));
             $this->is_interior_number_sn = (empty($this->selectedAddressData['interior_number']) && !empty($this->selectedAddressData['street']));
 
@@ -443,6 +440,7 @@ class AddressAutocomplete extends Component
         $this->selected_colonia_id = null;
         $this->selectedAddressData['neighborhood_name'] = '';
         $this->selectedAddressData['postal_code'] = '';
+        $this->colonias = [];
 
         $this->buildSearchFromData();
 
@@ -551,6 +549,9 @@ class AddressAutocomplete extends Component
             $this->selectedAddressData['state_name'] = $state->name;
             $this->loadMunicipalities();
             $this->show_municipality_select = true;
+
+            $this->selectedAddressData['latitude'] = null;
+            $this->selectedAddressData['longitude'] = null;
         } else {
             $this->selectedAddressData['state_name'] = '';
         }
@@ -569,6 +570,9 @@ class AddressAutocomplete extends Component
             $this->selectedAddressData['municipality_name'] = $municipality->name;
             $this->loadColonias();
             $this->show_colonia_select = true;
+
+            $this->selectedAddressData['latitude'] = null;
+            $this->selectedAddressData['longitude'] = null;
         } else {
             $this->selectedAddressData['municipality_name'] = '';
         }
@@ -585,6 +589,10 @@ class AddressAutocomplete extends Component
             $colonia = Colonia::find($this->selected_colonia_id);
             $this->selectedAddressData['neighborhood_name'] = $colonia->name;
             $this->selectedAddressData['postal_code'] = $colonia->postal_code;
+
+            $this->selectedAddressData['latitude'] = null;
+            $this->selectedAddressData['longitude'] = null;
+
             $this->buildSearchFromData();
             $this->forceShowMap();
         } else {

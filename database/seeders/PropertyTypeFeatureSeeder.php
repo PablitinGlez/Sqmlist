@@ -9,26 +9,19 @@ use App\Models\Feature;
 
 class PropertyTypeFeatureSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run(): void
     {
-        // Obtener todas las características y indexarlas por su 'slug' para un acceso rápido.
         $features = Feature::all()->keyBy('slug');
 
-        // Asignar características al tipo de propiedad 'casa'
         $this->assignFeaturesToPropertyType('casa', $features, [
-            ['slug' => 'num_recamaras', 'is_required_for_type' => true, 'order_for_type' => 10], // Una casa siempre tendrá un número de recámaras.
-            ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 20],     // Y un número de baños.
+            ['slug' => 'num_recamaras', 'is_required_for_type' => true, 'order_for_type' => 10],
+            ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 20],
             ['slug' => 'num_medios_banos', 'is_required_for_type' => false, 'order_for_type' => 30],
             ['slug' => 'num_niveles', 'is_required_for_type' => false, 'order_for_type' => 40],
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 50], // No todas las casas tienen estacionamiento dedicado.
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 50],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 60],
-            ['slug' => 'tamano_terreno_m2', 'is_required_for_type' => true, 'order_for_type' => 70], // Una casa siempre tiene un tamaño de terreno.
-            ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 80], // Y un tamaño de construcción.
+            ['slug' => 'tamano_terreno_m2', 'is_required_for_type' => true, 'order_for_type' => 70],
+            ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 80],
             ['slug' => 'tamano_jardin_m2', 'is_required_for_type' => false, 'order_for_type' => 90],
             ['slug' => 'has_alberca', 'is_required_for_type' => false, 'order_for_type' => 100],
             ['slug' => 'is_amueblado', 'is_required_for_type' => false, 'order_for_type' => 110],
@@ -54,12 +47,11 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'vigilancia', 'is_required_for_type' => false, 'order_for_type' => 310],
         ]);
 
-        // Asignar características al tipo de propiedad 'departamento'
         $this->assignFeaturesToPropertyType('departamento', $features, [
             ['slug' => 'num_recamaras', 'is_required_for_type' => true, 'order_for_type' => 10],
             ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 20],
             ['slug' => 'num_medios_banos', 'is_required_for_type' => false, 'order_for_type' => 30],
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 40], // Muchos departamentos no incluyen estacionamiento o es opcional.
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 40],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 50],
             ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 60],
             ['slug' => 'has_alberca', 'is_required_for_type' => false, 'order_for_type' => 70],
@@ -82,25 +74,23 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'vigilancia', 'is_required_for_type' => false, 'order_for_type' => 240],
         ]);
 
-        // Asignar características al tipo de propiedad 'terreno-habitacional'
         $this->assignFeaturesToPropertyType('terreno-habitacional', $features, [
-            ['slug' => 'tamano_terreno_m2', 'is_required_for_type' => true, 'order_for_type' => 10], // Un terreno siempre tiene un tamaño.
+            ['slug' => 'tamano_terreno_m2', 'is_required_for_type' => true, 'order_for_type' => 10],
             ['slug' => 'ancho_m', 'is_required_for_type' => false, 'order_for_type' => 20],
             ['slug' => 'profundidad_m', 'is_required_for_type' => false, 'order_for_type' => 30],
-            ['slug' => 'uso_suelo', 'is_required_for_type' => true, 'order_for_type' => 40], // El uso de suelo es fundamental para un terreno.
+            ['slug' => 'uso_suelo', 'is_required_for_type' => true, 'order_for_type' => 40],
             ['slug' => 'vias_comunicacion', 'is_required_for_type' => false, 'order_for_type' => 50],
             ['slug' => 'has_zona_privada', 'is_required_for_type' => false, 'order_for_type' => 60],
             ['slug' => 'has_seguridad_privada', 'is_required_for_type' => false, 'order_for_type' => 70],
             ['slug' => 'vigilancia', 'is_required_for_type' => false, 'order_for_type' => 80],
         ]);
 
-        // Asignar características al tipo de propiedad 'casa-en-condominio'
         $this->assignFeaturesToPropertyType('casa-en-condominio', $features, [
             ['slug' => 'num_recamaras', 'is_required_for_type' => true, 'order_for_type' => 10],
             ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 20],
             ['slug' => 'num_medios_banos', 'is_required_for_type' => false, 'order_for_type' => 30],
             ['slug' => 'num_niveles', 'is_required_for_type' => false, 'order_for_type' => 40],
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 50], // Puede que no todas las casas en condominio tengan estacionamiento dedicado.
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 50],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 60],
             ['slug' => 'tamano_terreno_m2', 'is_required_for_type' => true, 'order_for_type' => 70],
             ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 80],
@@ -109,7 +99,7 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'has_jardines', 'is_required_for_type' => false, 'order_for_type' => 110],
             ['slug' => 'permite_mascotas', 'is_required_for_type' => false, 'order_for_type' => 120],
             ['slug' => 'has_terraza', 'is_required_for_type' => false, 'order_for_type' => 130],
-            ['slug' => 'has_zona_privada', 'is_required_for_type' => false, 'order_for_type' => 140], // No todas las casas en condominio tienen una "zona privada" específica más allá de la construcción.
+            ['slug' => 'has_zona_privada', 'is_required_for_type' => false, 'order_for_type' => 140],
             ['slug' => 'has_chimenea', 'is_required_for_type' => false, 'order_for_type' => 150],
             ['slug' => 'has_gimnasio', 'is_required_for_type' => false, 'order_for_type' => 160],
             ['slug' => 'has_aire_acondicionado', 'is_required_for_type' => false, 'order_for_type' => 170],
@@ -117,23 +107,22 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'has_cisterna', 'is_required_for_type' => false, 'order_for_type' => 190],
             ['slug' => 'has_gas_natural', 'is_required_for_type' => false, 'order_for_type' => 200],
             ['slug' => 'has_lavanderia', 'is_required_for_type' => false, 'order_for_type' => 210],
-            ['slug' => 'has_seguridad_privada', 'is_required_for_type' => false, 'order_for_type' => 220], // La seguridad privada es una amenidad, no una característica fundamental de la casa en sí.
+            ['slug' => 'has_seguridad_privada', 'is_required_for_type' => false, 'order_for_type' => 220],
             ['slug' => 'circuito_cerrado_tv', 'is_required_for_type' => false, 'order_for_type' => 230],
             ['slug' => 'vigilancia', 'is_required_for_type' => false, 'order_for_type' => 240],
         ]);
 
-        // Asignar características al tipo de propiedad 'rancho-residencial'
         $this->assignFeaturesToPropertyType('rancho-residencial', $features, [
             ['slug' => 'num_recamaras', 'is_required_for_type' => true, 'order_for_type' => 10],
             ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 20],
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 30], // Un rancho puede tener espacio abierto sin estacionamientos definidos.
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 30],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 40],
             ['slug' => 'tamano_terreno_m2', 'is_required_for_type' => true, 'order_for_type' => 50],
             ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 60],
             ['slug' => 'tamano_jardin_m2', 'is_required_for_type' => false, 'order_for_type' => 70],
             ['slug' => 'has_cisterna', 'is_required_for_type' => false, 'order_for_type' => 80],
             ['slug' => 'has_alberca', 'is_required_for_type' => false, 'order_for_type' => 90],
-            ['slug' => 'has_jardines', 'is_required_for_type' => false, 'order_for_type' => 100], // Un rancho puede tener vastas áreas verdes, no necesariamente "jardines" manicurados.
+            ['slug' => 'has_jardines', 'is_required_for_type' => false, 'order_for_type' => 100],
             ['slug' => 'permite_mascotas', 'is_required_for_type' => false, 'order_for_type' => 110],
             ['slug' => 'has_terraza', 'is_required_for_type' => false, 'order_for_type' => 120],
             ['slug' => 'has_chimenea', 'is_required_for_type' => false, 'order_for_type' => 130],
@@ -142,11 +131,10 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'vigilancia', 'is_required_for_type' => false, 'order_for_type' => 160],
         ]);
 
-        // Asignar características al tipo de propiedad 'oficina'
         $this->assignFeaturesToPropertyType('oficina', $features, [
             ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 10],
-            ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 20], // Una oficina siempre tendrá baños (propios o compartidos).
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 30], // Muchas oficinas no incluyen estacionamiento dedicado.
+            ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 20],
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 30],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 40],
             ['slug' => 'uso_suelo', 'is_required_for_type' => true, 'order_for_type' => 50],
             ['slug' => 'vias_comunicacion', 'is_required_for_type' => false, 'order_for_type' => 60],
@@ -157,10 +145,9 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'fibra_optica', 'is_required_for_type' => false, 'order_for_type' => 110],
             ['slug' => 'planta_emergencia', 'is_required_for_type' => false, 'order_for_type' => 120],
             ['slug' => 'vigilancia', 'is_required_for_type' => false, 'order_for_type' => 130],
-            ['slug' => 'has_zona_privada', 'is_required_for_type' => false, 'order_for_type' => 140], // No todas las oficinas tienen una "zona privada" definida.
+            ['slug' => 'has_zona_privada', 'is_required_for_type' => false, 'order_for_type' => 140],
         ]);
 
-        // Asignar características al tipo de propiedad 'terreno-comercial'
         $this->assignFeaturesToPropertyType('terreno-comercial', $features, [
             ['slug' => 'tamano_terreno_m2', 'is_required_for_type' => true, 'order_for_type' => 10],
             ['slug' => 'ancho_m', 'is_required_for_type' => false, 'order_for_type' => 20],
@@ -169,11 +156,10 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'vias_comunicacion', 'is_required_for_type' => false, 'order_for_type' => 50],
         ]);
 
-        // Asignar características al tipo de propiedad 'edificio'
         $this->assignFeaturesToPropertyType('edificio', $features, [
             ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 10],
-            ['slug' => 'num_niveles', 'is_required_for_type' => true, 'order_for_type' => 20], // Un edificio siempre tendrá un número de niveles.
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 30], // No todos los edificios tienen estacionamiento dedicado.
+            ['slug' => 'num_niveles', 'is_required_for_type' => true, 'order_for_type' => 20],
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 30],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 40],
             ['slug' => 'uso_suelo', 'is_required_for_type' => true, 'order_for_type' => 50],
             ['slug' => 'vias_comunicacion', 'is_required_for_type' => false, 'order_for_type' => 60],
@@ -186,11 +172,10 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'vigilancia', 'is_required_for_type' => false, 'order_for_type' => 130],
         ]);
 
-        // Asignar características al tipo de propiedad 'local' (comercial)
         $this->assignFeaturesToPropertyType('local', $features, [
             ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 10],
-            ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 20], // Un local comercial casi siempre tendrá baños.
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 30], // Muchos locales no tienen estacionamiento dedicado.
+            ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 20],
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 30],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 40],
             ['slug' => 'uso_suelo', 'is_required_for_type' => true, 'order_for_type' => 50],
             ['slug' => 'vias_comunicacion', 'is_required_for_type' => false, 'order_for_type' => 60],
@@ -199,12 +184,11 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'fibra_optica', 'is_required_for_type' => false, 'order_for_type' => 90],
         ]);
 
-        // Asignar características al tipo de propiedad 'bodega-comercial'
         $this->assignFeaturesToPropertyType('bodega-comercial', $features, [
             ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 10],
-            ['slug' => 'tamano_bodega_m2', 'is_required_for_type' => true, 'order_for_type' => 20], // Una bodega debe tener su tamaño de bodega.
-            ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 30], // Una bodega suele tener baños para el personal.
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 40], // No todas las bodegas tienen estacionamiento dedicado.
+            ['slug' => 'tamano_bodega_m2', 'is_required_for_type' => true, 'order_for_type' => 20],
+            ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 30],
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 40],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 50],
             ['slug' => 'uso_suelo', 'is_required_for_type' => true, 'order_for_type' => 60],
             ['slug' => 'ancho_m', 'is_required_for_type' => false, 'order_for_type' => 70],
@@ -222,7 +206,6 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'vigilancia', 'is_required_for_type' => false, 'order_for_type' => 190],
         ]);
 
-        // Asignar características al tipo de propiedad 'terreno-industrial'
         $this->assignFeaturesToPropertyType('terreno-industrial', $features, [
             ['slug' => 'tamano_terreno_m2', 'is_required_for_type' => true, 'order_for_type' => 10],
             ['slug' => 'ancho_m', 'is_required_for_type' => false, 'order_for_type' => 20],
@@ -232,12 +215,11 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'tipo_electricidad', 'is_required_for_type' => false, 'order_for_type' => 60],
         ]);
 
-        // Asignar características al tipo de propiedad 'nave-industrial'
         $this->assignFeaturesToPropertyType('nave-industrial', $features, [
             ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 10],
             ['slug' => 'tamano_bodega_m2', 'is_required_for_type' => true, 'order_for_type' => 20],
             ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 30],
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 40], // No todas las naves industriales tienen estacionamiento dedicado.
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 40],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 50],
             ['slug' => 'uso_suelo', 'is_required_for_type' => true, 'order_for_type' => 60],
             ['slug' => 'ancho_m', 'is_required_for_type' => false, 'order_for_type' => 70],
@@ -245,7 +227,7 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'profundidad_m', 'is_required_for_type' => false, 'order_for_type' => 90],
             ['slug' => 'andenes', 'is_required_for_type' => false, 'order_for_type' => 100],
             ['slug' => 'area_maniobras', 'is_required_for_type' => false, 'order_for_type' => 110],
-            ['slug' => 'tipo_electricidad', 'is_required_for_type' => true, 'order_for_type' => 120], // La electricidad es casi siempre un factor clave en naves industriales.
+            ['slug' => 'tipo_electricidad', 'is_required_for_type' => true, 'order_for_type' => 120],
             ['slug' => 'tipo_techo', 'is_required_for_type' => false, 'order_for_type' => 130],
             ['slug' => 'vias_comunicacion', 'is_required_for_type' => false, 'order_for_type' => 140],
             ['slug' => 'circuito_cerrado_tv', 'is_required_for_type' => false, 'order_for_type' => 150],
@@ -255,12 +237,11 @@ class PropertyTypeFeatureSeeder extends Seeder
             ['slug' => 'vigilancia', 'is_required_for_type' => false, 'order_for_type' => 190],
         ]);
 
-        // Asignar características al tipo de propiedad 'bodega-industrial'
         $this->assignFeaturesToPropertyType('bodega-industrial', $features, [
             ['slug' => 'tamano_construccion_m2', 'is_required_for_type' => true, 'order_for_type' => 10],
             ['slug' => 'tamano_bodega_m2', 'is_required_for_type' => true, 'order_for_type' => 20],
             ['slug' => 'num_banos', 'is_required_for_type' => true, 'order_for_type' => 30],
-            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 40], // No todas las bodegas industriales tienen estacionamiento dedicado.
+            ['slug' => 'num_estacionamientos', 'is_required_for_type' => false, 'order_for_type' => 40],
             ['slug' => 'anos_antiguedad', 'is_required_for_type' => false, 'order_for_type' => 50],
             ['slug' => 'uso_suelo', 'is_required_for_type' => true, 'order_for_type' => 60],
             ['slug' => 'ancho_m', 'is_required_for_type' => false, 'order_for_type' => 70],
@@ -279,14 +260,6 @@ class PropertyTypeFeatureSeeder extends Seeder
         ]);
     }
 
-    /**
-     * Helper method to assign features to a property type.
-     *
-     * @param string $propertyTypeSlug The slug of the property type.
-     * @param \Illuminate\Support\Collection $features A collection of all features, keyed by slug.
-     * @param array $featureDataArray An array of feature data (slug, is_required_for_type, order_for_type).
-     * @return void
-     */
     private function assignFeaturesToPropertyType(string $propertyTypeSlug, $features, array $featureDataArray): void
     {
         $propertyType = PropertyType::where('slug', $propertyTypeSlug)->first();
@@ -302,17 +275,13 @@ class PropertyTypeFeatureSeeder extends Seeder
                         'updated_at' => now(),
                     ];
                 } else {
-                    // Usar $this->command->warn para mostrar mensajes de advertencia en la consola.
                     $this->command->warn("Característica '{$featureData['slug']}' no encontrada para el tipo de propiedad '{$propertyTypeSlug}'.");
                 }
             }
 
-            // Sincronizar las características con el tipo de propiedad.
             $propertyType->features()->sync($syncData);
-            // Usar $this->command->info para mostrar mensajes informativos en la consola.
             $this->command->info("Características asignadas al tipo de propiedad '" . $propertyType->name . "'.");
         } else {
-            // Usar $this->command->warn para mostrar mensajes de advertencia.
             $this->command->warn("Tipo de propiedad '{$propertyTypeSlug}' no encontrado. Saltando la asignación de características.");
         }
     }

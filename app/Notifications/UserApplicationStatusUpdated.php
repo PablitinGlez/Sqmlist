@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Log;
 
 class UserApplicationStatusUpdated extends Notification implements ShouldQueue
 {
@@ -38,7 +37,6 @@ class UserApplicationStatusUpdated extends Notification implements ShouldQueue
         if ($status === UserApplication::STATUS_APPROVED) {
             $messageBody = "¡Felicidades! Tu solicitud para registrarte como {$readableType} ha sido aprobada.";
 
-            
             if ($requestedType === UserApplication::TYPE_AGENT) {
                 $messageBody .= " Ahora puedes publicar propiedades y gestionar tus clientes.";
             } elseif ($requestedType === UserApplication::TYPE_REAL_ESTATE_COMPANY) {
@@ -104,12 +102,6 @@ class UserApplicationStatusUpdated extends Notification implements ShouldQueue
             'link' => $link,
             'time' => now()->toDateTimeString(),
         ];
-
-        Log::channel('notifications')->info('Notification sent:', [
-            'user_id' => $notifiable->id,
-            'application_id' => $this->userApplication->id,
-            'type' => $requestedType
-        ]);
 
         return $notificationData;
     }

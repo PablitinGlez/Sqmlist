@@ -243,14 +243,13 @@ class PropertyResource extends Resource
                         ->required()
                         ->disabled($disabled)
                         ->columnSpan(1),
-                Forms\Components\TextInput::make('description')
-                    ->label('Descripción')
-                    ->placeholder('Describe tu propiedad detalladamente...')
-                    ->maxLength(1500)
-                    ->required()
-                    ->disabled($disabled)
-                 
-                    ->columnSpanFull(),
+                    Forms\Components\TextInput::make('description')
+                        ->label('Descripción')
+                        ->placeholder('Describe tu propiedad detalladamente...')
+                        ->maxLength(1500)
+                        ->required()
+                        ->disabled($disabled)
+                        ->columnSpanFull(),
                     Forms\Components\TextInput::make('contact_whatsapp_number')
                         ->label('WhatsApp Contacto')
                         ->tel()
@@ -370,12 +369,12 @@ class PropertyResource extends Resource
                         ->dehydrated(false)
                         ->formatStateUsing(fn($record) => $record->address?->postal_code ?? 'Sin CP'),
 
-               Forms\Components\Placeholder::make('google_map_display')
+                    Forms\Components\Placeholder::make('google_map_display')
                         ->label('Ubicación en el Mapa')
                         ->content(function ($record) {
                             $lat = $record->address->latitude ?? 19.4326;
                             $lng = $record->address->longitude ?? -99.1332;
-                    $apiKey = config('services.google_maps.api_key');
+                            $apiKey = config('services.google_maps.api_key');
 
                             if (!$apiKey) {
                                 return new HtmlString('<p class="text-red-500">La clave de la API de Google Maps no está configurada.</p>');
@@ -555,7 +554,7 @@ class PropertyResource extends Resource
 
                                 Forms\Components\TextInput::make('title')
                                     ->label('Título de la Propiedad')
-                                    ->placeholder('Ej. Casa bonita de dos pisos con jardín')
+                                    ->placeholder('Casa bonita de dos pisos con jardín')
                                     ->helperText('Ingresa un título corto y descriptivo para que las personas encuentren más fácil tu propiedad.')
                                     ->required()
                                     ->maxLength(40)
@@ -630,9 +629,7 @@ class PropertyResource extends Resource
                                     ];
                                 }
 
-
                                 $tabs = static::getFeatureSectionsTabs($propertyType, null, false);
-
 
                                 $tabs[] = Forms\Components\Tabs\Tab::make('Multimedia')
                                     ->icon('heroicon-o-photo')
@@ -681,9 +678,10 @@ class PropertyResource extends Resource
                                                     ->placeholder('Describe tu propiedad detalladamente...')
                                                     ->columnSpanFull()
                                                     ->maxLength(1500)
+                                                    ->required()
                                                     ->extraAttributes([
                                                         'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
-                                                    ]),
+                                                    ])
                                             ])
                                             ->columnSpanFull(),
                                     ])
@@ -712,7 +710,8 @@ class PropertyResource extends Resource
                                             ->prefix('$')
                                             ->suffix('MXN')
                                             ->required()
-                                            ->rules(['numeric', 'min:0', 'max:999999999.99'])
+                                            ->minValue(1000)
+                                            ->maxValue(999999999)
                                             ->extraAttributes([
                                                 'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                                             ]),
@@ -809,9 +808,6 @@ class PropertyResource extends Resource
                                             ->extraAttributes([
                                                 'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                                             ]),
-
-
-
                                         Forms\Components\Actions::make([
                                             Forms\Components\Actions\Action::make('enviar_a_revision')
                                                 ->label('Enviar a Revisión')
@@ -838,7 +834,6 @@ class PropertyResource extends Resource
                             'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                         ]),
                 ])
-                
                 ->extraAttributes([
                     'onkeydown' => 'if(event.key === "Enter") event.preventDefault();'
                 ]);
@@ -853,8 +848,6 @@ class PropertyResource extends Resource
                     ->label('Imagen')
                     ->defaultImageUrl(url('/images/placeholder.png'))
                     ->size(60),
-
-              
 
                 Tables\Columns\TextColumn::make('propertyType.name')
                     ->label('Tipo de Propiedad')
@@ -1001,9 +994,7 @@ class PropertyResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array
@@ -1051,11 +1042,8 @@ class PropertyResource extends Resource
         ];
     }
 
-
     protected function getFormActions(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 }

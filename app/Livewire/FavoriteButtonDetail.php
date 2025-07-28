@@ -15,14 +15,12 @@ class FavoriteButtonDetail extends Component
     public function mount(Property $property): void
     {
         $this->property = $property;
-       
         $this->checkFavoriteStatus();
     }
 
     private function checkFavoriteStatus(): void
     {
         if (Auth::check()) {
-            
             $this->isFavorited = Auth::user()
                 ->favoriteProperties()
                 ->where('property_id', $this->property->id)
@@ -45,7 +43,6 @@ class FavoriteButtonDetail extends Component
         $user = Auth::user();
 
         if ($this->isFavorited) {
-            // Remover de favoritos
             $user->favoriteProperties()->detach($this->property->id);
             $this->isFavorited = false;
             $this->dispatch('show-toast', [
@@ -53,15 +50,13 @@ class FavoriteButtonDetail extends Component
                 'message' => 'Propiedad eliminada de favoritos.',
             ]);
         } else {
-            // Añadir a favoritos
             $user->favoriteProperties()->attach($this->property->id);
             $this->isFavorited = true;
-            $this->dispatch('show-toast', [  
+            $this->dispatch('show-toast', [
                 'type' => 'success',
                 'message' => 'Propiedad añadida a favoritos.',
             ]);
         }
-
 
         $this->dispatch('favorite-updated', [
             'propertyId' => $this->property->id,
@@ -72,7 +67,6 @@ class FavoriteButtonDetail extends Component
     #[On('favorite-updated')]
     public function refreshFavoriteStatus($propertyId = null): void
     {
-       
         if (!$propertyId || $propertyId == $this->property->id) {
             $this->checkFavoriteStatus();
         }

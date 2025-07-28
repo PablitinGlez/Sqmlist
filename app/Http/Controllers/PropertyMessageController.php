@@ -7,7 +7,6 @@ use App\Models\Property;
 use App\Models\PropertyContact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
 
 class PropertyMessageController extends Controller
 {
@@ -45,12 +44,7 @@ class PropertyMessageController extends Controller
 
             return back()->with('success', '¡Tu mensaje ha sido enviado y guardado con éxito!');
         } catch (\Exception $e) {
-            Log::error("Error al procesar mensaje de propiedad: " . $e->getMessage(), [
-                'property_id' => $property->id,
-                'sender_email' => $request->email,
-                'exception' => $e
-            ]);
-
+         
             return back()->with('error', 'Hubo un problema al enviar o guardar tu mensaje. Por favor, inténtalo de nuevo más tarde.')
                 ->withInput();
         }

@@ -13,11 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Section;
 use Filament\Support\Colors\Color;
 
-/**
- * Recurso de Filament para la gestión de Categorías.
- * Permite a los administradores crear, editar, visualizar y eliminar categorías de propiedades
- * dentro del panel de administración de Filament.
- */
+
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
@@ -34,7 +30,6 @@ class CategoryResource extends Resource
 
     protected static ?int $navigationSort = 1;
 
-   
     public static function form(Form $form): Form
     {
         return $form
@@ -100,9 +95,7 @@ class CategoryResource extends Resource
                     ->badge()
                     ->color('success'),
             ])
-            ->filters([
-          
-            ])
+            ->filters([])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
@@ -121,15 +114,11 @@ class CategoryResource extends Resource
             ->defaultSort('created_at', 'desc');
     }
 
-  
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
-   
     public static function getPages(): array
     {
         return [

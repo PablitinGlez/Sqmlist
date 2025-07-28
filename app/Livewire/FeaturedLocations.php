@@ -3,12 +3,13 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 
 class FeaturedLocations extends Component
 {
     public string $activeTab = 'ciudades-principales';
 
-   
     public array $locationsData = [
         'ciudades-principales' => [
             'name' => 'Ciudades Principales',
@@ -120,11 +121,6 @@ class FeaturedLocations extends Component
         ],
     ];
 
-    /**
-     * Cambia la pestaña activa.
-     *
-     * @param string $tab El identificador de la nueva pestaña activa.
-     */
     public function selectTab(string $tab): void
     {
         if (array_key_exists($tab, $this->locationsData)) {
@@ -132,24 +128,14 @@ class FeaturedLocations extends Component
         }
     }
 
-    /**
-     * 
-     *
-     * @param string 
-     * @param string
-     * @param string 
-     * @return string 
-     */
     public function generateUrl(string $location, string $propertyType, string $operationType): string
     {
-       
         $locationSlug = \Illuminate\Support\Str::slug($location);
         $propertyTypeSlug = \Illuminate\Support\Str::slug($propertyType);
 
-       
         return route('properties.index', [
             'ubicacion' => $location,
-            'tipo' => str_contains($propertyType, 'Casas') ? 'casa' : 'departamento', 
+            'tipo' => str_contains($propertyType, 'Casas') ? 'casa' : 'departamento',
             'operacion' => $operationType
         ]);
     }

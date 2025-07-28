@@ -1,15 +1,12 @@
-
 <x-app-layout>
     <div class="py-12">
         <div class="max-w-3xl mx-auto mt-16 sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <div class="p-6 lg:p-8">
                     @php
-                     
                         $requestedUserTypeLabel = \App\Models\UserApplication::TYPE_OPTIONS[$userApplication->requested_user_type] ?? 'un perfil';
                     @endphp
 
-                  
                     @if($userApplication->status === 'pending')
                         <div class="text-center">
                             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100">
@@ -39,7 +36,7 @@
                             </div>
                             <h3 class="mt-4 text-lg font-medium text-gray-900">¡Solicitud Aprobada!</h3>
                             <p class="mt-2 text-sm text-gray-500">
-                                ¡Felicidades! Tu solicitud para ser **{{ $requestedUserTypeLabel }}** ha sido aprobada.
+                                ¡Felicidades! Tu solicitud para ser {{ $requestedUserTypeLabel }} ha sido aprobada.
                             </p>
                             @if($userApplication->status_message)
                                 <div class="mt-4 p-4 bg-green-50 rounded-md">
@@ -47,7 +44,7 @@
                                 </div>
                             @endif
                             <div class="mt-6">
-                                <a href="/dashboard" 
+                                <a href="/dashboard"
                                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                                     Ir al Dashboard
                                 </a>
@@ -62,7 +59,7 @@
                             </div>
                             <h3 class="mt-4 text-lg font-medium text-gray-900">Solicitud Rechazada</h3>
                             <p class="mt-2 text-sm text-gray-500">
-                                Lamentamos informarte que tu solicitud para ser **{{ $requestedUserTypeLabel }}** no fue aprobada.
+                                Lamentamos informarte que tu solicitud para ser {{ $requestedUserTypeLabel }} no fue aprobada.
                             </p>
                             @if($userApplication->status_message)
                                 <div class="mt-4 p-4 bg-red-50 rounded-md">
@@ -78,7 +75,6 @@
                         </div>
                     @endif
 
-            
                     <div class="mt-8 border-t border-gray-200 pt-6">
                         <h4 class="text-sm font-medium text-gray-900 mb-4">Detalles de la Solicitud</h4>
                         <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-16 gap-y-4">
@@ -105,7 +101,7 @@
                                 <dd class="mt-1 text-sm text-gray-900">{{ $requestedUserTypeLabel }}</dd>
                             </div>
 
-                            @if($userApplication->years_experience !== null) 
+                            @if($userApplication->years_experience !== null)
                                 <div class="flex flex-col sm:flex-row sm:items-baseline sm:space-x-2">
                                     <dt class="text-sm font-medium text-gray-500 flex-shrink-0">Años de experiencia:</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $userApplication->years_experience }} año{{ $userApplication->years_experience != 1 ? 's' : '' }}</dd>
@@ -119,7 +115,7 @@
                                 </div>
                             @endif
 
-                            @if($userApplication->rfc) {{-- Mostrar RFC si existe --}}
+                            @if($userApplication->rfc)
                                 <div class="flex flex-col sm:flex-row sm:items-baseline sm:space-x-2">
                                     <dt class="text-sm font-medium text-gray-500 flex-shrink-0">RFC:</dt>
                                     <dd class="mt-1 text-sm text-gray-900">{{ $userApplication->rfc }}</dd>
@@ -176,14 +172,15 @@
                                             <div class="flex items-center">
                                                 <svg class="w-5 h-5 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                                 <span class="text-sm font-medium text-gray-700">
-                                                  
-                                                    {{ ($userApplication->requested_user_type === 'agent' || $userApplication->requested_user_type === 'real_estate_company') ? 'Licencia/Documento Profesional' : 'Documento de respaldo' }}
+                                                    @php
+                                                        $requiresLicense = in_array($userApplication->requested_user_type, ['agent', 'real_estate_company']);
+                                                    @endphp
+                                                    {{ $requiresLicense ? 'Licencia/Documento Profesional' : 'Documento de respaldo' }}
                                                 </span>
                                             </div>
                                             <a href="{{ Storage::url($userApplication->license_path) }}" target="_blank" class="text-blue-600 hover:text-blue-800 text-sm font-medium">Ver / Descargar</a>
                                         </div>
                                     @else
-                                        
                                         @php
                                             $requiresLicense = in_array($userApplication->requested_user_type, ['agent', 'real_estate_company']);
                                         @endphp

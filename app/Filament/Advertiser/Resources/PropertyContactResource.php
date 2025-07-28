@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\ActionGroup; 
+use Filament\Tables\Actions\ActionGroup;
 
 class PropertyContactResource extends Resource
 {
@@ -88,13 +88,12 @@ class PropertyContactResource extends Resource
     {
         return $table
             ->columns([
-          
                 Tables\Columns\ImageColumn::make('property.featuredImage.path')
                     ->label('Imagen')
                     ->width(80)
-                    ->height(50) 
-                    ->circular() 
-                    ->defaultImageUrl(url('images/placeholder.png')) 
+                    ->height(50)
+                    ->circular()
+                    ->defaultImageUrl(url('images/placeholder.png'))
                     ->tooltip(fn(PropertyContact $record): string => $record->property->title ?? 'Propiedad sin título')
                     ->toggleable(isToggledHiddenByDefault: false),
 
@@ -231,9 +230,7 @@ class PropertyContactResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

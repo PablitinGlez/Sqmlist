@@ -5,6 +5,8 @@ namespace App\Filament\Admin\Resources;
 use App\Filament\Admin\Resources\PropertyTypeResource\Pages;
 use App\Models\PropertyType;
 use App\Models\Category;
+use App\Models\FeatureSection;
+use App\Models\Feature;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,7 +15,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Filters\SelectFilter;
-
+use Filament\Forms\Get;
 
 class PropertyTypeResource extends Resource
 {
@@ -70,7 +72,56 @@ class PropertyTypeResource extends Resource
                             ->default(true)
                             ->inline(false),
                     ])
-                    ->columns(2)
+                    ->columns(2),
+
+                Section::make('Asignación de Características')
+                    ->description('Seleccione las secciones y características que tendrá este tipo de propiedad')
+                    ->schema([
+                        Forms\Components\CheckboxList::make('feature_sections')
+                            ->label('Secciones de Características')
+                            ->options(
+                                FeatureSection::active()
+                                    ->ordered()
+                                    ->pluck('name', 'id')
+                                    ->toArray()
+                            )
+                            ->live()
+                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                                $set('selected_features', []);
+                            })
+                            ->columnSpanFull(),
+
+                        Forms\Components\Grid::make(1)
+                            ->schema(function (Get $get): array {
+                                $selectedSections = $get('feature_sections') ?? [];
+                                $components = [];
+
+                                if (!empty($selectedSections)) {
+                                    foreach ($selectedSections as $sectionId) {
+                                        $section = FeatureSection::with('features')->find($sectionId);
+
+                                        if ($section && $section->features->isNotEmpty()) {
+                                            $featureCheckboxes = [];
+
+                                            foreach ($section->features as $feature) {
+                                                $featureCheckboxes[] = Forms\Components\Checkbox::make("feature_{$feature->id}")
+                                                    ->label($feature->name)
+                                                    ->helperText($feature->description)
+                                                    ->inline(false);
+                                            }
+
+                                            $components[] = Forms\Components\Fieldset::make($section->name)
+                                                ->schema($featureCheckboxes)
+                                                ->columns(2);
+                                        }
+                                    }
+                                }
+
+                                return $components;
+                            })
+                    ])
+                    ->collapsible()
+                    ->collapsed(false)
             ]);
     }
 
@@ -100,6 +151,14 @@ class PropertyTypeResource extends Resource
                         return '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" style="background-color: ' . $color . '; color: ' . $textColor . '">' . e($state) . '</span>';
                     })
                     ->sortable(),
+
+                Tables\Columns\TextColumn::make('features_count')
+                    ->label('Características')
+                    ->badge()
+                    ->color('info')
+                    ->getStateUsing(function (PropertyType $record): int {
+                        return $record->features()->count();
+                    }),
 
                 Tables\Columns\TextColumn::make('description')
                     ->label('Descripción')
@@ -164,9 +223,7 @@ class PropertyTypeResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-            //
-        ];
+        return [];
     }
 
     public static function getPages(): array

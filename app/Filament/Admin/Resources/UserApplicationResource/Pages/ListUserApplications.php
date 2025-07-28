@@ -2,12 +2,12 @@
 
 namespace App\Filament\Admin\Resources\UserApplicationResource\Pages;
 
-use App\Filament\Admin\Resources\UserApplicationResource; 
+use App\Filament\Admin\Resources\UserApplicationResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Resources\Components\Tab; 
+use Filament\Resources\Components\Tab;
 use Illuminate\Database\Eloquent\Builder;
-use App\Models\UserApplication; 
+use App\Models\UserApplication;
 
 class ListUserApplications extends ListRecords
 {
@@ -15,9 +15,7 @@ class ListUserApplications extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [
-          
-        ];
+        return [];
     }
 
     /**
@@ -27,7 +25,7 @@ class ListUserApplications extends ListRecords
     {
         return [
             'all' => Tab::make('Todas')
-                ->badge(fn() => $this->getModel()::count()), 
+                ->badge(fn() => $this->getModel()::count()),
             'pending' => Tab::make('Pendientes')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('status', UserApplication::STATUS_PENDING))
                 ->badge(fn() => $this->getModel()::where('status', UserApplication::STATUS_PENDING)->count())
@@ -40,7 +38,6 @@ class ListUserApplications extends ListRecords
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('status', UserApplication::STATUS_REJECTED))
                 ->badge(fn() => $this->getModel()::where('status', UserApplication::STATUS_REJECTED)->count())
                 ->badgeColor('danger'),
-            
         ];
     }
 }

@@ -12,10 +12,10 @@
                     <div class="relative z-10 flex flex-col h-full">
                         <div>
                             <h2 class="text-2xl font-bold mb-4">
-                                Lorem Ipsum Dolor
+                                Conéctate con Nosotros
                             </h2>
                             <p class="text-gray-300 mb-12">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                                Estamos aquí para ayudarte a encontrar la propiedad perfecta o a vender la tuya con éxito. Tu consulta es el primer paso hacia tu próximo gran movimiento.
                             </p>
 
                             <div class="space-y-8">
@@ -23,14 +23,14 @@
                                     <div class="w-6 h-6 flex items-center justify-center">
                                         <i class="fas fa-phone-alt w-5 h-5 text-white"></i>
                                     </div>
-                                    <span class="text-white">Lorem Ipsum</span>
+                                    <span class="text-white">+52 55 1234 5678</span>
                                 </div>
 
                                 <div class="flex items-center space-x-4">
                                     <div class="w-6 h-6 flex items-center justify-center">
                                         <i class="fas fa-envelope w-5 h-5 text-white"></i>
                                     </div>
-                                    <span class="text-white">lorem@ipsum.com</span>
+                                    <span class="text-white">contacto@inmobiliaria.com</span>
                                 </div>
 
                                 <div class="flex items-start space-x-4">
@@ -38,23 +38,23 @@
                                         <i class="fas fa-map-marker-alt w-5 h-5 text-white"></i>
                                     </div>
                                     <span class="text-white leading-relaxed">
-                                        Lorem ipsum dolor sit amet<br>
-                                        consectetur adipiscing elit
+                                        Av. Principal #123, Colonia Centro<br>
+                                        lorem
                                     </span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="flex space-x-4 mt-auto pt-16">
-                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"  wire:navigate>
-                                <i class="fab fa-facebook text-gray-900" ></i>
+                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
+                                <i class="fab fa-facebook text-gray-900"></i>
                             </a>
 
-                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"  wire:navigate>
+                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
                                 <i class="fab fa-x-twitter text-gray-900"></i>
                             </a>
 
-                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors"  wire:navigate>
+                            <a href="#" class="w-10 h-10 bg-white rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors">
                                 <i class="fab fa-instagram text-gray-900"></i>
                             </a>
                         </div>
@@ -71,12 +71,14 @@
                         </div>
                     @endsession
 
+                   
+
                     <form method="POST" action="{{ route('contact.store') }}" class="space-y-6">
                         @csrf
 
                         <div class="grid md:grid-cols-2 gap-6 ">
                             <div>
-                                <x-label for="first_name" value="Lorem" />
+                                <x-label for="first_name" value="Nombre" />
                                 <x-input
                                     id="first_name"
                                     class="block mt-1 w-full"
@@ -88,7 +90,7 @@
                                 />
                             </div>
                             <div>
-                                <x-label for="last_name" value="Ipsum" />
+                                <x-label for="last_name" value="Apellido" />
                                 <x-input
                                     id="last_name"
                                     class="block mt-1 w-full"
@@ -102,7 +104,7 @@
 
                         <div class="grid md:grid-cols-2 gap-6">
                             <div>
-                                <x-label for="email" value="Dolor Sit Amet" />
+                                <x-label for="email" value="Correo Electrónico" />
                                 <x-input
                                     id="email"
                                     class="block mt-1 w-full"
@@ -113,7 +115,7 @@
                                 />
                             </div>
                             <div>
-                                <x-label for="phone" value="Consectetur" />
+                                <x-label for="phone" value="Teléfono" />
                                 <x-input
                                     id="phone"
                                     class="block mt-1 w-full"
@@ -125,44 +127,50 @@
                         </div>
 
                         <div>
-                            <x-label for="subject" value="Adipiscing Elit" />
+                            <x-label for="subject" value="Motivo de Contacto" />
                             <select
                                 id="subject"
                                 name="subject"
                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
                                 required
                             >
-                                <option value="">Lorem ipsum</option>
-                                <option value="consulta_general" {{ old('subject') == 'consulta_general' ? 'selected' : '' }}>
-                                    Incididunt Ut Labore
+                                <option value="">Selecciona un motivo</option>
+                                <option value="informacion_propiedad" {{ old('subject') == 'informacion_propiedad' ? 'selected' : '' }}>
+                                    Información sobre una propiedad específica
                                 </option>
-                                <option value="soporte_tecnico" {{ old('subject') == 'soporte_tecnico' ? 'selected' : '' }}>
-                                    Et Dolore Magna
+                                <option value="agendar_visita" {{ old('subject') == 'agendar_visita' ? 'selected' : '' }}>
+                                    Agendar una visita a una propiedad
                                 </option>
-                                <option value="ventas" {{ old('subject') == 'ventas' ? 'selected' : '' }}>
-                                    Aliqua
+                                <option value="vender_propiedad" {{ old('subject') == 'vender_propiedad' ? 'selected' : '' }}>
+                                    Quiero vender mi propiedad
+                                </option>
+                                <option value="alquilar_propiedad" {{ old('subject') == 'alquilar_propiedad' ? 'selected' : '' }}>
+                                    Quiero alquilar mi propiedad
+                                </option>
+                                <option value="asesoria_general" {{ old('subject') == 'asesoria_general' ? 'selected' : '' }}>
+                                    Asesoría general inmobiliaria
                                 </option>
                                 <option value="otros" {{ old('subject') == 'otros' ? 'selected' : '' }}>
-                                    Sed Do Eiusmod
+                                    Otro motivo
                                 </option>
                             </select>
                         </div>
 
                         <div>
-                            <x-label for="message" value="Tempor" />
+                            <x-label for="message" value="Mensaje" />
                             <textarea
                                 id="message"
                                 name="message"
                                 rows="4"
                                 class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full resize-none"
-                                placeholder="Lorem ipsum dolor sit amet.."
+                                placeholder="Me gustaría obtener más detalles sobre..."
                                 required
                             >{{ old('message') }}</textarea>
                         </div>
 
                         <div class="flex justify-end">
                             <x-button class="bg-gray-900 hover:bg-gray-800">
-                                Lorem Ipsum
+                                Enviar Mensaje
                             </x-button>
                         </div>
                     </form>

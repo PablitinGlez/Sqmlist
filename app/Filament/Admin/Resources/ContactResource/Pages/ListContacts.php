@@ -7,9 +7,6 @@ use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Actions\Action;
 
-/**
- *  lista principal de mensajes de contacto y proporciona acceso a los mensajes archivados.
- */
 class ListContacts extends ListRecords
 {
     protected static string $resource = ContactResource::class;

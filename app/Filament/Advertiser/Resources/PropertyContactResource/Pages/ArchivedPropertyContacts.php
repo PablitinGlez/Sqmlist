@@ -7,19 +7,19 @@ use App\Models\PropertyContact;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Table;
-use Filament\Tables\Columns\ImageColumn;  
-use Filament\Tables\Columns\TextColumn;   
-use Filament\Tables\Filters\TernaryFilter; 
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
-use Filament\Tables\Actions\ViewAction;        
-use Filament\Tables\Actions\DeleteAction;      
-use Filament\Tables\Actions\BulkActionGroup;   
-use Filament\Tables\Actions\DeleteBulkAction;  
-use Filament\Tables\Actions\BulkAction;        
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\BulkActionGroup;
+use Filament\Tables\Actions\DeleteBulkAction;
+use Filament\Tables\Actions\BulkAction;
 
 class ArchivedPropertyContacts extends ListRecords
 {
@@ -36,11 +36,10 @@ class ArchivedPropertyContacts extends ListRecords
         $query = PropertyContact::query()
             ->where('is_archived', true)
             ->orderByDesc('archived_at')
-            ->orderByDesc('created_at'); 
+            ->orderByDesc('created_at');
 
         $user = Auth::user();
 
-    
         $query->whereHas('property', function (Builder $propertyQuery) use ($user) {
             $propertyQuery->where('user_id', $user->id);
         });
@@ -51,10 +50,9 @@ class ArchivedPropertyContacts extends ListRecords
     public function table(Table $table): Table
     {
         return $table
-            ->query($this->getTableQuery()) // Usa la consulta de esta página
+            ->query($this->getTableQuery())
             ->columns([
-                // Nueva columna para la imagen de la propiedad
-                ImageColumn::make('property.featuredImage.path')  // ← CAMBIADO DE Tables\Columns\ImageColumn
+                ImageColumn::make('property.featuredImage.path')
                     ->label('Imagen')
                     ->width(80)
                     ->height(50)
@@ -63,7 +61,7 @@ class ArchivedPropertyContacts extends ListRecords
                     ->tooltip(fn(PropertyContact $record): string => $record->property->title ?? 'Propiedad sin título')
                     ->toggleable(isToggledHiddenByDefault: false),
 
-                TextColumn::make('property.title')  // ← CAMBIADO DE Tables\Columns\TextColumn
+                TextColumn::make('property.title')
                     ->label('Propiedad Contactada')
                     ->searchable()
                     ->sortable()
@@ -102,10 +100,9 @@ class ArchivedPropertyContacts extends ListRecords
                     ->label('Fecha Archivo')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false), // Mantener visible en la página de archivados
+                    ->toggleable(isToggledHiddenByDefault: false),
             ])
             ->filters([
-                // Mantener el filtro de archivado, aunque en esta página siempre serán archivados
                 TernaryFilter::make('is_archived')
                     ->label('Estado de Archivo')
                     ->placeholder('Todos')
@@ -115,7 +112,7 @@ class ArchivedPropertyContacts extends ListRecords
             ])
             ->actions([
                 ActionGroup::make([
-                    ViewAction::make()  // ← CAMBIADO DE Tables\Actions\ViewAction
+                    ViewAction::make()
                         ->label('Ver Detalles'),
 
                     Action::make('unarchive')
@@ -135,7 +132,7 @@ class ArchivedPropertyContacts extends ListRecords
                                 ->send();
                         }),
 
-                    DeleteAction::make()  // ← CAMBIADO DE Tables\Actions\DeleteAction
+                    DeleteAction::make()
                         ->requiresConfirmation()
                         ->modalHeading('Eliminar mensaje archivado')
                         ->modalDescription('¿Estás seguro de que deseas eliminar permanentemente este mensaje? Esta acción no se puede deshacer.')
@@ -151,11 +148,11 @@ class ArchivedPropertyContacts extends ListRecords
                 ])
             ])
             ->bulkActions([
-                BulkActionGroup::make([  // ← CAMBIADO DE Tables\Actions\BulkActionGroup
-                    DeleteBulkAction::make()  // ← CAMBIADO DE Tables\Actions\DeleteBulkAction
-                        ->hidden(fn() => !Auth::user()->hasRole('admin')), // Control de acceso para eliminar masivamente
+                BulkActionGroup::make([
+                    DeleteBulkAction::make()
+                        ->hidden(fn() => !Auth::user()->hasRole('admin')),
 
-                    BulkAction::make('unarchive_selected_messages')  // ← CAMBIADO DE Tables\Actions\BulkAction
+                    BulkAction::make('unarchive_selected_messages')
                         ->label('Desarchivar seleccionados')
                         ->icon('heroicon-o-arrow-uturn-left')
                         ->color('success')

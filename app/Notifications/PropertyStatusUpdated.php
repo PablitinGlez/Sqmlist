@@ -7,7 +7,6 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Log;
 
 class PropertyStatusUpdated extends Notification implements ShouldQueue
 {
@@ -46,7 +45,6 @@ class PropertyStatusUpdated extends Notification implements ShouldQueue
             if (Route::has('filament.advertiser.resources.properties.edit')) {
                 $link = route('filament.advertiser.resources.properties.edit', ['record' => $this->property->id]);
             } else {
-                Log::warning('Ruta filament.advertiser.resources.properties.edit no definida para notificación de propiedad publicada.', ['property_id' => $propertyId]);
                 $link = '#';
             }
         } elseif ($status === Property::STATUS_REJECTED) {
@@ -62,7 +60,6 @@ class PropertyStatusUpdated extends Notification implements ShouldQueue
             if (Route::has('filament.advertiser.resources.properties.edit')) {
                 $link = route('filament.advertiser.resources.properties.edit', ['record' => $this->property->id]);
             } else {
-                Log::warning('Ruta filament.advertiser.resources.properties.edit no definida para notificación de propiedad rechazada.', ['property_id' => $propertyId]);
                 $link = '#';
             }
         } else {
@@ -73,7 +70,6 @@ class PropertyStatusUpdated extends Notification implements ShouldQueue
             if (Route::has('filament.advertiser.resources.properties.edit')) {
                 $link = route('filament.advertiser.resources.properties.edit', ['record' => $this->property->id]);
             } else {
-                Log::warning('Ruta filament.advertiser.resources.properties.edit no definida para notificación de propiedad con estado genérico.', ['property_id' => $propertyId]);
                 $link = '#';
             }
         }
@@ -88,13 +84,6 @@ class PropertyStatusUpdated extends Notification implements ShouldQueue
             'link' => $link,
             'time' => now()->toDateTimeString(),
         ];
-
-        Log::channel('notifications')->info('Property Status Notification created:', [
-            'user_id' => $notifiable->id,
-            'property_id' => $propertyId,
-            'status' => $status,
-            'data' => $notificationData
-        ]);
 
         return $notificationData;
     }

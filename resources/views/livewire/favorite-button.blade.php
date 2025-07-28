@@ -1,4 +1,4 @@
-<div x-data="{ tooltip: false }" class="relative inline-block">
+<div x-data="{ isFavorited: @json($isFavorited), tooltip: false }" class="relative inline-block">
     <button
         class="absolute top-3 right-3 z-20 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-white/30 transition-all duration-200"
         @if(Auth::check())

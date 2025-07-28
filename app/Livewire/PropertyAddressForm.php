@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\On;
 
 class PropertyAddressForm extends Component
@@ -88,7 +87,7 @@ class PropertyAddressForm extends Component
                 $this->showSuggestions = true;
             }
         } catch (\Exception $e) {
-            Log::error('Error en búsqueda de Google Places:', ['error' => $e->getMessage()]);
+            // Error handling for production
         }
     }
 
@@ -121,7 +120,7 @@ class PropertyAddressForm extends Component
                 $this->processPlaceData($data['result']);
             }
         } catch (\Exception $e) {
-            Log::error('Error obteniendo detalles del lugar:', ['error' => $e->getMessage()]);
+            // Error handling for production
         }
     }
 

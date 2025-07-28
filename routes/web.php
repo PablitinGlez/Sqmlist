@@ -10,7 +10,7 @@ use App\Http\Middleware\EnsureUserCanAccessAdvertiserPanel;
 use App\Livewire\PropertiesIndex;
 use App\Livewire\ShowProperties;
 use App\Livewire\FavoritePropertiesIndex;
-use App\Livewire\NotificationsIndex; // <--- ¡Añade esta línea!
+use App\Livewire\NotificationsIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,15 +42,7 @@ Route::middleware([
     Route::get('/solicitud/estado', [UserApplicationController::class, 'status'])->name('solicitud.estado');
     Route::get('/solicitud/{type?}', [UserApplicationController::class, 'create'])->name('solicitud.formulario');
 
-    // Ruta para las propiedades favoritas
     Route::get('/mis-favoritos', FavoritePropertiesIndex::class)->name('user.favorites.index');
 
-    // ¡NUEVO! Ruta para las notificaciones
-    Route::get('/mis-notificaciones', NotificationsIndex::class)->name('user.notifications.index'); // <--- ¡NUEVO!
-
-    // Route::middleware([EnsureUserCanAccessAdvertiserPanel::class])->group(function () {
-    //     Route::get('/dashboard', function () {
-    //         return view('dashboard');
-    //     })->name('dashboard');
-    // });
+    Route::get('/mis-notificaciones', NotificationsIndex::class)->name('user.notifications.index');
 });

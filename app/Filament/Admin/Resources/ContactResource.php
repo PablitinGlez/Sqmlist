@@ -3,7 +3,6 @@
 namespace App\Filament\Admin\Resources;
 
 use App\Filament\Admin\Resources\ContactResource\Pages;
-
 use App\Models\Contact;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -16,9 +15,6 @@ use Filament\Forms\Components\DateTimePicker;
 use Filament\Tables\Actions\Action;
 use Filament\Notifications\Notification;
 
-/**
- *  gestiona la visualización, edición, archivado y eliminación de mensajes de contacto.
- */
 class ContactResource extends Resource
 {
     protected static ?string $model = Contact::class;
@@ -28,6 +24,9 @@ class ContactResource extends Resource
     protected static ?string $navigationLabel = 'Mensajes de Contacto';
 
     protected static ?string $navigationGroup = 'Gestión de Contenidos';
+
+    protected static ?string $pluralModelLabel = 'Contactos';
+
 
     protected static ?int $navigationSort = 1;
 

@@ -4,11 +4,11 @@
     'description',
     'filePath',
     'buttonText',
-    'buttonColor' => 'custom-blue',
+    'buttonColor' => 'primary',
 ])
 
-<div>
-    <div class="flex justify-start w-lg">
+<div class="w-full">
+    <div class="flex justify-start"> 
         @if ($filePath)
             <x-filament::button
                 x-data=""
@@ -18,11 +18,11 @@
                     fileUrl: '{{ Storage::url($filePath) }}',
                     fileName: '{{ basename($filePath) }}'
                 })"
-                color="custom-blue"
+                color="primary" 
                 size="md"
                 icon="heroicon-o-eye"
-                icon-position="after"
-                class="w-full max-w-xs"
+                icon-position="before" 
+                class="inline-flex items-center gap-x-2"
             >
                 {{ $buttonText }}
             </x-filament::button>
@@ -31,7 +31,7 @@
                 color="gray"
                 size="md"
                 icon="heroicon-o-x-circle"
-                class="w-full max-w-xs text-center py-2"
+                class="inline-flex items-center gap-x-2"
             >
                 No disponible
             </x-filament::badge>
@@ -76,18 +76,20 @@
         x-transition:leave-start="opacity-100 scale-100"
         x-transition:leave-end="opacity-0 scale-95"
     >
-        <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+        {{-- Header del modal --}}
+        <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white" x-text="title"></h3>
             <div class="flex items-center gap-x-2">
                 <x-filament::button
                     x-bind:href="fileUrl"
                     download
-                    color="gray"
+                    color="success"
                     size="sm"
                     icon="heroicon-o-arrow-down-tray"
                     tag="a"
                     x-tooltip="'Descargar'"
-                >Descargar
+                >
+                    Descargar
                 </x-filament::button>
                 
                 <x-filament::button
@@ -96,13 +98,16 @@
                     size="sm"
                     icon="heroicon-o-x-mark"
                     x-tooltip="'Cerrar'"
-                >Cerrar
+                >
+                    Cerrar
                 </x-filament::button>
             </div>
         </div>
 
-        <div class="flex-1 overflow-auto">
-            <div class="w-full h-full bg-gray-100 dark:bg-gray-800">
+        {{-- Contenido del modal --}}
+        <div class="flex-1 overflow-auto bg-gray-50 dark:bg-gray-800">
+            <div class="w-full h-full">
+                {{-- Vista para PDFs --}}
                 <iframe 
                     x-bind:src="fileUrl"
                     class="w-full h-full border-0"
@@ -111,6 +116,7 @@
                     loading="lazy"
                 ></iframe>
                 
+                {{-- Vista para imágenes --}}
                 <div 
                     x-show="fileUrl.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/)"
                     class="w-full h-full flex items-center justify-center p-4"
@@ -119,11 +125,12 @@
                     <img 
                         x-bind:src="fileUrl"
                         x-bind:alt="fileName"
-                        class="max-w-full max-h-full object-contain"
+                        class="max-w-full max-h-full object-contain rounded-lg shadow-lg"
                         loading="lazy"
                     >
                 </div>
                 
+                {{-- Vista para otros tipos de archivo --}}
                 <div 
                     x-show="!fileUrl.toLowerCase().includes('.pdf') && !fileUrl.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/)"
                     class="flex flex-col items-center justify-center h-full p-8 text-center"
@@ -131,16 +138,16 @@
                 >
                     <x-filament::icon
                         icon="heroicon-o-document"
-                        class="w-16 h-16 text-gray-400 mb-4"
+                        class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4"
                     />
-                    <p class="text-gray-600 dark:text-gray-400 mb-4">
+                    <p class="text-gray-600 dark:text-gray-400 mb-4 text-lg">
                         Este tipo de archivo no se puede previsualizar en el navegador.
                     </p>
                     <x-filament::button
                         x-bind:href="fileUrl"
                         target="_blank"
                         color="primary"
-                        size="sm"
+                        size="md"
                         icon="heroicon-o-arrow-top-right-on-square"
                         tag="a"
                     >

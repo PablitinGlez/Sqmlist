@@ -9,7 +9,6 @@ use App\Models\Municipality;
 use App\Models\Colonia;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Url;
-use Illuminate\Support\Facades\Log;
 
 class HeroSearch extends Component
 {
@@ -108,27 +107,18 @@ class HeroSearch extends Component
 
     public function searchProperties(): void
     {
-        Log::info('HeroSearch: searchProperties called.', [
-            'operationType' => $this->operationType,
-            'selectedPropertyType' => $this->selectedPropertyType,
-            'locationSearch' => $this->locationSearch,
-        ]);
-
         if (empty($this->operationType)) {
             $this->dispatch('notify', ['message' => 'Por favor, selecciona un tipo de operación (En Venta o En Renta).', 'type' => 'error']);
-            Log::warning('HeroSearch: Validation failed - operationType is empty.');
             return;
         }
 
         if (empty($this->selectedPropertyType)) {
             $this->dispatch('notify', ['message' => 'Por favor, selecciona un tipo de propiedad.', 'type' => 'error']);
-            Log::warning('HeroSearch: Validation failed - selectedPropertyType is empty.');
             return;
         }
 
         if (empty($this->locationSearch)) {
             $this->dispatch('notify', ['message' => 'Por favor, ingresa una ubicación.', 'type' => 'error']);
-            Log::warning('HeroSearch: Validation failed - locationSearch is empty.');
             return;
         }
 
@@ -138,7 +128,6 @@ class HeroSearch extends Component
             'ubicacion' => $this->locationSearch,
         ];
 
-        Log::info('HeroSearch: Redirecting to properties.index with params.', ['params' => $params]);
         $this->redirect(route('properties.index', $params), navigate: true);
     }
 

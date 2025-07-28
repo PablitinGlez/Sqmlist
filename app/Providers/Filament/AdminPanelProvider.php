@@ -2,7 +2,12 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Admin\Widgets\ApplicationsStatsWidget;
+use App\Filament\Admin\Widgets\PropertiesMonthlyChart;
+use App\Filament\Admin\Widgets\PropertiesStatsWidget;
 use App\Http\Middleware\AdminMiddleware;
+use App\Filament\Admin\Widgets\UsersStatsWidget;  // Agregar esta línea
+use App\Filament\Admin\Widgets\UserTypesChart;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -12,6 +17,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+use Illuminate\Console\Application;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -27,22 +33,26 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-
             ->brandLogo(asset('images/logo.png'))
             ->colors([
                 'primary' => Color::Amber,
             ])
-         
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->pages([
                 Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
-          
             ->widgets([
-                Widgets\AccountWidget::class,
-            ])
+                // Widget de estadísticas de usuarios
+                UsersStatsWidget::class,
+                ApplicationsStatsWidget::class,
+                UserTypesChart::class,
+            PropertiesMonthlyChart::class,
+            PropertiesStatsWidget::class,
+
+
+        ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -53,12 +63,11 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-
                 AdminMiddleware::class,
             ])
             ->authMiddleware([
-                Authenticate::class, 
-                AdminMiddleware::class, 
+                Authenticate::class,
+                AdminMiddleware::class,
             ])
             ->authGuard('web')
             ->authPasswordBroker('users');

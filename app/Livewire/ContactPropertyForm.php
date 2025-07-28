@@ -6,7 +6,6 @@ use App\Models\Property;
 use App\Models\PropertyContact;
 use Livewire\Component;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log; 
 
 class ContactPropertyForm extends Component
 {
@@ -85,19 +84,6 @@ class ContactPropertyForm extends Component
         }
 
         try {
-            // --- INICIO DEL LOG DE DEPURACIÓN ---
-            Log::info('Solicitud de contacto recibida:', [
-                'property_id' => $this->property->id,
-                'property_title' => $this->property->title,
-                'advertiser_name' => $this->property->user->name ?? 'N/A',
-                'advertiser_email' => $this->property->user->email ?? 'N/A',
-                'sender_name' => $this->name,
-                'sender_email' => $this->email,
-                'sender_phone' => $this->phone,
-                'message_text' => $this->message,
-            ]);
-            // --- FIN DEL LOG DE DEPURACIÓN ---
-
             PropertyContact::create([
                 'property_id' => $this->property->id,
                 'sender_name' => $this->name,
@@ -119,12 +105,6 @@ class ContactPropertyForm extends Component
             session()->flash('success', '¡Mensaje enviado con éxito! El anunciante ha recibido tu mensaje. Ahora puedes ver su teléfono.');
         } catch (\Exception $e) {
             session()->flash('error', 'Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo.');
-
-            Log::error("Error al guardar PropertyContact: " . $e->getMessage(), [
-                'property_id' => $this->propertyId,
-                'sender_email' => $this->email,
-                'exception' => $e
-            ]);
         }
     }
 

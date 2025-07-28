@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('addresses', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('property_id')->unique()->constrained()->onDelete('cascade'); 
+          
 
             $table->foreignId('state_id')->constrained()->onDelete('restrict');
             $table->foreignId('municipality_id')->constrained()->onDelete('restrict');

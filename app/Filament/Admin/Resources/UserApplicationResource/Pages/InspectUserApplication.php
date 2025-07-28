@@ -49,12 +49,10 @@ class InspectUserApplication extends EditRecord
         $statusWasChangedFromPending = ($this->originalStatus === UserApplication::STATUS_PENDING) &&
             ($currentStatus !== UserApplication::STATUS_PENDING);
 
-        
         if ($statusWasChangedFromPending && in_array($currentStatus, [UserApplication::STATUS_APPROVED, UserApplication::STATUS_REJECTED])) {
             $this->sendUserNotification($user, $currentStatus);
         }
 
-    
         if ($statusWasChangedFromPending) {
             if ($currentStatus === UserApplication::STATUS_APPROVED) {
                 $this->handleApproval($user, $requestedUserType);
@@ -95,7 +93,6 @@ class InspectUserApplication extends EditRecord
             return;
         }
 
-       
         $role = match ($requestedUserType) {
             UserApplication::TYPE_OWNER => 'owner',
             UserApplication::TYPE_AGENT => 'agent',
@@ -107,7 +104,6 @@ class InspectUserApplication extends EditRecord
             $user->assignRole($role);
         }
 
-        
         $this->createOrUpdateProfile($user, $requestedUserType);
 
         Notification::make()
@@ -128,7 +124,6 @@ class InspectUserApplication extends EditRecord
             return;
         }
 
-        
         $role = match ($requestedUserType) {
             UserApplication::TYPE_OWNER => 'owner',
             UserApplication::TYPE_AGENT => 'agent',
@@ -140,7 +135,6 @@ class InspectUserApplication extends EditRecord
             $user->removeRole($role);
         }
 
-       
         $this->deleteProfileIfExists($user);
 
         Notification::make()
@@ -168,7 +162,6 @@ class InspectUserApplication extends EditRecord
             'approved_at' => now(),
         ];
 
-    
         ProfileDetails::updateOrCreate(
             ['user_id' => $user->id],
             $profileData

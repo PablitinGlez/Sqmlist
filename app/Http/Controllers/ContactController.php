@@ -8,10 +8,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\ContactFormMail;
 use App\Mail\ContactConfirmationMail;
 
-
 class ContactController extends Controller
 {
-
     public function create()
     {
         return view('pages.contact');

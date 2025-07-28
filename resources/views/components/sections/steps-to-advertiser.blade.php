@@ -238,7 +238,7 @@
         </div>
     </div>
 
-    <!-- Botón CTA -->
+
     <div class="text-center mt-8">
         <a href="/propiedades" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-200 transform hover:scale-105 text-sm">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

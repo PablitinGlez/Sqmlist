@@ -57,7 +57,6 @@ class UserApplicationForm extends Component
     }
 
     protected $messages = [
-        
         'required' => 'Campo obligatorio',
         'min' => [
             'string' => 'Mínimo :min caracteres',
@@ -70,7 +69,6 @@ class UserApplicationForm extends Component
         'email' => 'Ingrese un correo electrónico válido',
         'integer' => 'Debe ser un número entero',
 
-    
         'userType.in' => 'Seleccione un tipo de perfil válido',
 
         'phoneNumber.required' => 'El teléfono es requerido',
@@ -143,7 +141,6 @@ class UserApplicationForm extends Component
     {
         $this->validateOnly($propertyName);
 
-        // Manejo especial para archivos
         if ($propertyName === 'identificationFile' || $propertyName === 'licenseFile') {
             $this->handleFileValidation($propertyName);
         }
@@ -189,7 +186,6 @@ class UserApplicationForm extends Component
             $user = Auth::user();
             $userFolder = "user-applications/{$user->id}";
 
-          
             $pendingApplication = $user->userApplications()
                 ->whereIn('status', [UserApplication::STATUS_PENDING, UserApplication::STATUS_APPROVED])
                 ->exists();
@@ -198,13 +194,11 @@ class UserApplicationForm extends Component
                 throw new \Exception('Ya tienes una solicitud pendiente o aprobada.');
             }
 
-          
             $identificationPath = $this->identificationFile->store($userFolder, 'public');
             $licensePath = $this->needsLicense() && $this->licenseFile
                 ? $this->licenseFile->store($userFolder, 'public')
                 : null;
 
-        
             UserApplication::create([
                 'user_id' => $user->id,
                 'requested_user_type' => $this->userType,

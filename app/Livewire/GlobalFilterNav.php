@@ -385,7 +385,6 @@ class GlobalFilterNav extends Component
         $this->amenityFeatures = collect();
         $this->filteredFeatures = collect();
 
-        
         $this->minSuperficieConstruida = null;
         $this->maxSuperficieConstruida = null;
         $this->minSuperficieTerreno = null;
@@ -414,16 +413,14 @@ class GlobalFilterNav extends Component
         }
 
         foreach ($featuresToConsider as $feature) {
-       
             if (isset($oldFilters[$feature->slug])) {
                 $this->filters[$feature->slug] = $oldFilters[$feature->slug];
             } elseif ($feature->input_type === 'boolean') {
                 $this->filters[$feature->slug] = false;
             } else {
-                $this->filters[$feature->slug] = null; 
+                $this->filters[$feature->slug] = null;
             }
 
-           
             if ($feature->slug === 'num_recamaras' && !isset($oldFilters[$feature->slug])) {
                 $this->filters[$feature->slug] = 'Todos';
             } elseif ($feature->slug === 'num_banos' && !isset($oldFilters[$feature->slug])) {

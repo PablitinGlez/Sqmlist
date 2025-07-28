@@ -38,6 +38,7 @@
                     type="tel"
                     wire:model.live="phone"
                     placeholder="Teléfono"
+                      required
                 />
             </div>
         </div>

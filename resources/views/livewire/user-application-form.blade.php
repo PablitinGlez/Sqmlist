@@ -46,63 +46,83 @@
             @enderror
         </div>
 
-        <div class="border-t border-gray-200 pt-8">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">Datos de Contacto</h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="phoneNumber" class="block text-base font-medium text-gray-700 mb-2">
-                        Teléfono <span class="text-red-500">*</span>
-                    </label>
-                    <input type="tel" wire:model.blur="phoneNumber" id="phoneNumber"
-                                placeholder="Ej. 525512345678"
-
-                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('phoneNumber') border-red-500 @enderror">
-                    @error('phoneNumber')
-                        <p class="text-red-500 text-sm mt-2 flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="whatsappNumber" class="block text-base font-medium text-gray-700 mb-2">
-                        Número de WhatsApp (Opcional)
-                    </label>
-                    <input type="tel" wire:model.blur="whatsappNumber" id="whatsappNumber"
-                                placeholder="Ej. 525512345678"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('whatsappNumber') border-red-500 @enderror">
-                    @error('whatsappNumber')
-                        <p class="text-red-500 text-sm mt-2 flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
-
-                <div class="md:col-span-2">
-                    <label for="contactEmail" class="block text-base font-medium text-gray-700 mb-2">
-                        Email de Contacto (Opcional)
-                    </label>
-                    <input type="email" wire:model.blur="contactEmail" id="contactEmail"
-                                placeholder="tu@email.com"
-                                class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('contactEmail') border-red-500 @enderror">
-                    @error('contactEmail')
-                        <p class="text-red-500 text-sm mt-2 flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
+       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div>
+        <label for="phoneNumber" class="block text-base font-medium text-gray-700 mb-2">
+            Teléfono <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="fas fa-phone text-gray-400"></i>
             </div>
+            <div class="absolute inset-y-0 left-0 flex items-center pl-10 pointer-events-none">
+                <span class="text-gray-500 text-sm">+52</span>
+            </div>
+            <div class="absolute inset-y-0 left-0 flex items-center pl-20 pointer-events-none">
+                <div class="h-6 w-px bg-gray-300"></div>
+            </div>
+            <input type="tel" wire:model.blur="phoneNumber" id="phoneNumber" required
+                class="w-full pl-24 pr-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('phoneNumber') border-red-500 @enderror">
         </div>
+        @error('phoneNumber')
+            <p class="text-red-500 text-sm mt-2 flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                {{ $message }}
+            </p>
+        @enderror
+    </div>
+
+    <div>
+        <label for="whatsappNumber" class="block text-base font-medium text-gray-700 mb-2">
+            Número de WhatsApp <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="fab fa-whatsapp text-green-500"></i>
+            </div>
+            <div class="absolute inset-y-0 left-0 flex items-center pl-10 pointer-events-none">
+                <span class="text-gray-500 text-sm">+52</span>
+            </div>
+            <div class="absolute inset-y-0 left-0 flex items-center pl-20 pointer-events-none">
+                <div class="h-6 w-px bg-gray-300"></div>
+            </div>
+            <input type="tel" wire:model.blur="whatsappNumber" id="whatsappNumber" required
+                class="w-full pl-24 pr-6 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('whatsappNumber') border-red-500 @enderror">
+        </div>
+        @error('whatsappNumber')
+            <p class="text-red-500 text-sm mt-2 flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                {{ $message }}
+            </p>
+        @enderror
+    </div>
+
+    <div class="md:col-span-2">
+        <label for="contactEmail" class="block text-base font-medium text-gray-700 mb-2">
+            Email de Contacto <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="fas fa-envelope text-gray-400"></i>
+            </div>
+            <input type="email" wire:model.blur="contactEmail" id="contactEmail" required
+                placeholder="tu@email.com"
+                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('contactEmail') border-red-500 @enderror">
+        </div>
+        @error('contactEmail')
+            <p class="text-red-500 text-sm mt-2 flex items-center">
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                {{ $message }}
+            </p>
+        @enderror
+    </div>
+</div>
 
         @if($this->needsLicense())
         <div class="border-t border-gray-200 pt-8">
@@ -333,10 +353,6 @@
                     class="px-8 py-2 bg-blue-600 text-white font-semibold rounded-md shadow-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
                 <span wire:loading.remove wire:target="submit">Enviar Solicitud</span>
                 <span wire:loading wire:target="submit" class="flex items-center">
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
                     Enviando...
                 </span>
             </button>

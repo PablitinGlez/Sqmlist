@@ -1,4 +1,3 @@
-{{-- En resources/views/livewire/profile/update-advertiser-details-form.blade.php --}}
 
 <x-form-section submit="updateAdvertiserDetails">
     <x-slot name="title">

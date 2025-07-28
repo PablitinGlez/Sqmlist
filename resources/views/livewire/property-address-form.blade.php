@@ -1,6 +1,6 @@
 <div
     x-data="{
-      
+
     }"
     class="space-y-6 p-4 bg-white rounded-lg shadow-md"
 >

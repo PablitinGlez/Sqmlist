@@ -33,7 +33,7 @@ class NotificationResource extends Resource
      */
     public static function getEloquentQuery(): Builder
     {
-        // Obtener el query base
+        // 
         $query = parent::getEloquentQuery();
 
         //

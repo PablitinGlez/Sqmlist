@@ -38,24 +38,22 @@ class UserApplicationResource extends Resource
                     ->schema([
                         Forms\Components\Placeholder::make('user_name')
                             ->label('Nombre del Usuario')
-                            ->content(fn(?UserApplication $record) => new HtmlString(
-                                view('filament.forms.components.disabled-text-input-placeholder', [
-                                    'slot' => $record?->user?->name ?? '<span class="text-gray-500 dark:text-gray-400">No disponible</span>'
-                                ])->render()
-                            )),
+                            ->content(fn(?UserApplication $record): string => $record?->user?->name ?? 'No disponible')
+                            ->extraAttributes(['class' => 'border border-gray-200 rounded-lg px-3 py-2 text-gray-900 dark:border-gray-700 dark:text-gray-100']),
+
                         Forms\Components\Placeholder::make('user_email')
                             ->label('Email del Usuario')
-                            ->content(fn(?UserApplication $record) => new HtmlString(
-                                view('filament.forms.components.disabled-text-input-placeholder', [
-                                    'slot' => $record?->user?->email ?? '<span class="text-gray-500 dark:text-gray-400">No disponible</span>'
-                                ])->render()
-                            )),
+                            ->content(fn(?UserApplication $record): string => $record?->user?->email ?? 'No disponible')
+                            ->extraAttributes(['class' => 'border border-gray-200 rounded-lg px-3 py-2 text-gray-900 dark:border-gray-700 dark:text-gray-100']),
+
                         Forms\Components\Placeholder::make('requested_user_type_display')
                             ->label('Tipo de Perfil Solicitado')
                             ->content(
                                 fn(?UserApplication $record): string =>
                                 $record ? (UserApplication::TYPE_OPTIONS[$record->requested_user_type] ?? 'Desconocido') : 'No disponible'
-                            ),
+                            )
+                            ->extraAttributes(['class' => 'border border-gray-200 rounded-lg px-3 py-2 text-gray-900 dark:border-gray-700 dark:text-gray-100']),
+
                     ])
                     ->columns(3),
 
@@ -119,7 +117,7 @@ class UserApplicationResource extends Resource
                         Forms\Components\Placeholder::make('identification_document')
                             ->label('Documento de Identificación')
                             ->content(function (?UserApplication $record): HtmlString {
-                                if (!$record) {
+                                if (!$record || empty($record->identification_path)) {
                                     return new HtmlString('<p class="text-gray-500 dark:text-gray-400">Documento no disponible.</p>');
                                 }
                                 return new HtmlString(
@@ -132,6 +130,7 @@ class UserApplicationResource extends Resource
                                     ])->render()
                                 );
                             }),
+
                         Forms\Components\Placeholder::make('license_document')
                             ->label('Licencia / Certificación Profesional')
                             ->content(function (?UserApplication $record): HtmlString {

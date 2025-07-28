@@ -18,13 +18,11 @@ class UserApplicationController extends Controller
         $user = Auth::user();
         $userTypesOptions = UserApplication::TYPE_OPTIONS;
 
-        
         if ($user->hasAnyRole(['owner', 'agent', 'real_estate_company'])) {
             return redirect('dashboard')
                 ->with('info', 'Ya tienes un perfil de anunciante activo.');
         }
 
-        
         $preselectedType = null;
         $typeFromUrl = $request->query('type');
 
@@ -37,7 +35,6 @@ class UserApplicationController extends Controller
             }
         }
 
-      
         $latestApplication = $user->userApplications()->latest()->first();
 
         if ($latestApplication && in_array($latestApplication->status, [
