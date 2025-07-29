@@ -126,35 +126,30 @@
                             </div>
                         </div>
 
+                     
                         <div>
-                            <x-label for="subject" value="Motivo de Contacto" />
-                            <select
-                                id="subject"
-                                name="subject"
-                                class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
-                                required
-                            >
-                                <option value="">Selecciona un motivo</option>
-                                <option value="informacion_propiedad" {{ old('subject') == 'informacion_propiedad' ? 'selected' : '' }}>
-                                    Información sobre una propiedad específica
-                                </option>
-                                <option value="agendar_visita" {{ old('subject') == 'agendar_visita' ? 'selected' : '' }}>
-                                    Agendar una visita a una propiedad
-                                </option>
-                                <option value="vender_propiedad" {{ old('subject') == 'vender_propiedad' ? 'selected' : '' }}>
-                                    Quiero vender mi propiedad
-                                </option>
-                                <option value="alquilar_propiedad" {{ old('subject') == 'alquilar_propiedad' ? 'selected' : '' }}>
-                                    Quiero alquilar mi propiedad
-                                </option>
-                                <option value="asesoria_general" {{ old('subject') == 'asesoria_general' ? 'selected' : '' }}>
-                                    Asesoría general inmobiliaria
-                                </option>
-                                <option value="otros" {{ old('subject') == 'otros' ? 'selected' : '' }}>
-                                    Otro motivo
-                                </option>
-                            </select>
-                        </div>
+    <x-label for="subject" value="Motivo de Contacto" />
+    <select
+        id="subject"
+        name="subject"
+        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block mt-1 w-full"
+        required
+    >
+        <option value="">Selecciona un motivo</option>
+        <option value="consulta_general" {{ old('subject') == 'consulta_general' ? 'selected' : '' }}>
+            Consulta General
+        </option>
+        <option value="soporte_tecnico" {{ old('subject') == 'soporte_tecnico' ? 'selected' : '' }}>
+            Soporte Técnico
+        </option>
+        <option value="ventas" {{ old('subject') == 'ventas' ? 'selected' : '' }}>
+            Ventas
+        </option>
+        <option value="otros" {{ old('subject') == 'otros' ? 'selected' : '' }}>
+            Otros
+        </option>
+    </select>
+</div>
 
                         <div>
                             <x-label for="message" value="Mensaje" />
